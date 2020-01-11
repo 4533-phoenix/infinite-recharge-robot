@@ -37,13 +37,10 @@ public class DriveSystem extends SubsystemBase {
     leftSlave = new TalonSRX(Constants.LEFT_SLAVE_MOTOR);
     navXPort = SPI.Port.kMXP;
     navX = new AHRS(navXPort);
-    
-    //Allowable margin of error for accurate sensor measurement
-    
-    
+
     rightSlave.follow(rightMaster, FollowerType.AuxOutput1);
     leftSlave.follow(leftMaster, FollowerType.AuxOutput1);
-    
+
     rightMaster.setSensorPhase(true);
 
     leftMaster.setInverted(true);
@@ -52,13 +49,6 @@ public class DriveSystem extends SubsystemBase {
 
   public double getAngle() {
     return navX.getAngle();
-  }
-  
-  public void drivePercentOutput(double left,double right) {
-    rightMaster.set(ControlMode.PercentOutput,right);
-    leftMaster.set(ControlMode.PercentOutput,left);
-    //rightSlave.set(ControlMode.PercentOutput,Constants.RIGHT_MASTER_MOTOR);
-    //leftSlave.set(ControlMode.PercentOutput,Constants.LEFT_MASTER_MOTOR);
   }
 
   public void setPIDFValues(double p, double i, double d, double f){
@@ -82,6 +72,8 @@ public class DriveSystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    System.out.printf("Left: %d - Right: %d\n",
+    leftMaster.getSelectedSensorVelocity(0), 
+    rightMaster.getSelectedSensorVelocity(0));
   }
 }
