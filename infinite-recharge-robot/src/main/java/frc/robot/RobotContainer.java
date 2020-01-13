@@ -26,12 +26,12 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSystem driveSystem = new DriveSystem();
   Joystick joystick = new Joystick(Constants.DRIVER_CONTROLLER);
-  Joystick controller = new Joystick(1);
+  //Joystick controller = new Joystick(1);
 
   private final Command driveCommand = new RunCommand(
     () -> this.driveSystem.tank(
         this.joystick.getRawAxis(1),
-        this.controller.getRawAxis(1)
+        this.joystick.getRawAxis(3) //this.controller.getRawAxis(1)
       ),  
     this.driveSystem
     );
