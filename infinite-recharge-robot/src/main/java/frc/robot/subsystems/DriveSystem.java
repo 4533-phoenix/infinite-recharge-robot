@@ -27,7 +27,7 @@ public class DriveSystem extends SubsystemBase {
 
   public static double MAX_VELOCITY = 200;
 
-  private static final double PEAK_OUTPUT = 1.0;
+  private static final double PEAK_OUTPUT = 50.0;
 
   public DriveSystem() {
     // Initialize all of the drive systems motor controllers.
@@ -36,10 +36,12 @@ public class DriveSystem extends SubsystemBase {
     this.rightMaster = new TalonSRX(Constants.RIGHT_MASTER_MOTOR);
     this.rightSlave = new TalonSRX(Constants.RIGHT_SLAVE_MOTOR);
 
+    
     this.leftSlave.follow(leftMaster, FollowerType.AuxOutput1);
     this.rightSlave.follow(rightMaster, FollowerType.AuxOutput1);
 
     this.leftMaster.setInverted(true);
+    this.leftSlave.setInverted(true);
     this.rightMaster.setSensorPhase(true);
 
     this.leftMaster.configPeakOutputForward(PEAK_OUTPUT);
@@ -71,15 +73,17 @@ public class DriveSystem extends SubsystemBase {
     double targetLeft = left * MAX_VELOCITY * 4096/600.0;
     double targetRight = right * MAX_VELOCITY * 4096/600.0;
 
+    System.out.println("Left: "+left + " Right: " + right);
+
     this.leftMaster.set(ControlMode.Velocity, targetLeft);
     this.rightMaster.set(ControlMode.Velocity, targetRight);
   }
 
   @Override
   public void periodic() {
-    System.out.printf("Left: %d - Right: %d\n",
-      this.leftMaster.getSelectedSensorVelocity(0),
-      this.rightMaster.getSelectedSensorVelocity(0)
-    );
+    // System.out.printf("Left: %d - Right: %d\n",
+    //   this.leftMaster.getSelectedSensorVelocity(0),
+    //   this.rightMaster.getSelectedSensorVelocity(0)
+    // );
   }
 }
