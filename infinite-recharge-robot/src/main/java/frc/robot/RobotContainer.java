@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSystem driveSystem = new DriveSystem();
-  Joystick joystick = new Joystick(Constants.DRIVER_CONTROLLER);
+  public static Joystick joystick = new Joystick(Constants.DRIVER_CONTROLLER);
   //Joystick controller = new Joystick(1);
 
   private final Command driveCommand = new RunCommand(

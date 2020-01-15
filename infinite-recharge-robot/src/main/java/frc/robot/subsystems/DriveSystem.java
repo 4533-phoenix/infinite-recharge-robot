@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
@@ -18,16 +19,15 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SPI.Port;
 
 public class DriveSystem extends SubsystemBase {
-  private TalonSRX rightMaster;
+  public TalonSRX rightMaster;
   private TalonSRX rightSlave;
-  private TalonSRX leftMaster;
+  public TalonSRX leftMaster;
   private TalonSRX leftSlave;
   private AHRS navX;
   private Port navXPort;
 
   public static double MAX_VELOCITY = 200;
-
-  private static final double PEAK_OUTPUT = 50.0;
+  private static final double PEAK_OUTPUT = 0.5;
 
   public DriveSystem() {
     // Initialize all of the drive systems motor controllers.
@@ -45,10 +45,27 @@ public class DriveSystem extends SubsystemBase {
     this.rightMaster.setSensorPhase(true);
 
     this.leftMaster.configPeakOutputForward(PEAK_OUTPUT);
-    this.leftMaster.configPeakOutputReverse(PEAK_OUTPUT);
+    this.leftMaster.configPeakOutputReverse(-PEAK_OUTPUT);
+    this.leftSlave.configPeakOutputForward(PEAK_OUTPUT);
+    this.leftSlave.configPeakOutputReverse(-PEAK_OUTPUT);
 
     this.rightMaster.configPeakOutputForward(PEAK_OUTPUT);
-    this.rightMaster.configPeakOutputReverse(PEAK_OUTPUT);
+    this.rightMaster.configPeakOutputReverse(-PEAK_OUTPUT);
+    this.rightSlave.configPeakOutputForward(PEAK_OUTPUT);
+    this.rightSlave.configPeakOutputReverse(-PEAK_OUTPUT);
+
+    this.leftMaster.configNominalOutputForward(0, 30);
+    this.leftMaster.configNominalOutputReverse(0, 30);
+    this.leftSlave.configNominalOutputForward(0, 30);
+    this.leftSlave.configNominalOutputReverse(0, 30);
+    
+    this.rightMaster.configNominalOutputForward(0, 30);
+    this.rightMaster.configNominalOutputReverse(0, 30);
+    this.rightSlave.configNominalOutputForward(0, 30);
+    this.rightSlave.configNominalOutputReverse(0, 30);
+    
+    this.leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
+    this.rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
 
     // Initialize the NavX IMU sensor.
     this.navXPort = SPI.Port.kMXP;
