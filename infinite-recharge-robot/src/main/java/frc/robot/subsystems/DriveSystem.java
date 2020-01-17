@@ -26,7 +26,7 @@ public class DriveSystem extends SubsystemBase {
   private AHRS navX;
   private Port navXPort;
 
-  public static double MAX_VELOCITY = 200;
+  public static double MAX_VELOCITY = 450;
   private static final double PEAK_OUTPUT = 0.5;
 
   public DriveSystem() {
