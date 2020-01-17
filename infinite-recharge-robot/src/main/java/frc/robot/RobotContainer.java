@@ -42,9 +42,13 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
+    double pValue = 0.1;
+    double iValue = 0.001;
+    double dValue = 0.0;
+    double fValue = 0;
     configureButtonBindings();
     configureDefaultCommands();
-    this.driveSystem.setPIDF(0.15, 0, 0, 0);
+    this.driveSystem.setPIDF(pValue, iValue, dValue, fValue);
   }
 
   /**
