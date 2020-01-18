@@ -102,7 +102,7 @@ public class Robot extends TimedRobot {
       this.driveSystem.leftMaster.getSelectedSensorVelocity(0),
       this.driveSystem.rightMaster.getSelectedSensorVelocity(0)
     );
-    System.out.println("Left: "+ RobotContainer.joystick.getRawAxis(1) + " Right: " + RobotContainer.joystick.getRawAxis(3));
+    //System.out.println("Left: "+ RobotContainer.joystick.getRawAxis(1) + " Right: " + RobotContainer.joystick.getRawAxis(3));
   }
 
   @Override

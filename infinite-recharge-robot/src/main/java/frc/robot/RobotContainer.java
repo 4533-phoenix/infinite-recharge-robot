@@ -14,19 +14,24 @@ import frc.robot.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-/**
+/** 
  * This class is where the bulk of the robot should be declared.  Since
  * Command-based is a "declarative" paradigm, very little robot logic should
- * actually be handled in the {@link Robot} periodic methods (other than the
+ * actually be handl  in the {@link Robot} periodic methods (other than the
  * scheduler calls).  Instead, the structure of the robot (including subsystems,
  * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSystem driveSystem = new DriveSystem();
-  public static Joystick joystick = new Joystick(Constants.DRIVER_CONTROLLER);
-  //Joystick controller = new Joystick(1);
+
+  Joystick joystick = new Joystick(Constants.DRIVER_CONTROLLER);
+  Joystick controller = new Joystick(1);
+  JoystickButton aButton = new JoystickButton(joystick, 2);
+  JoystickButton bButton = new JoystickButton(joystick, 3);
 
   private final Command driveCommand = new RunCommand(
     () -> this.driveSystem.tank(
@@ -35,6 +40,18 @@ public class RobotContainer {
       ),  
     this.driveSystem
     );
+
+    // private final Command autoCommand = new StartEndCommand(
+    //   () -> this.driveSystem.drivePosition(driveSystem.getEncoderValues(-10)),
+    //   this.driveSystem
+    // );
+    private final Command autoCommand = new StartEndCommand(
+      // this is the onInit
+      () -> this.driveSystem.drivePosition(driveSystem.getEncoderValues(-155)),
+      // this is the onEnd
+      () -> this.driveSystem.tank(0,0),
+      // this is the Requirements
+      driveSystem);
   
   /**
    * The container for the robot.  Contains subsystems, OI devices, and
@@ -49,6 +66,7 @@ public class RobotContainer {
     configureButtonBindings();
     configureDefaultCommands();
     this.driveSystem.setPIDF(pValue, iValue, dValue, fValue);
+
   }
 
   /**
@@ -59,6 +77,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    aButton.whenPressed(autoCommand);
+    bButton.whenPressed(driveCommand);
   }
 
   private void configureDefaultCommands(){

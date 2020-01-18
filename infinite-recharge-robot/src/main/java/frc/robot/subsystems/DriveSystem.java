@@ -41,8 +41,10 @@ public class DriveSystem extends SubsystemBase {
     this.rightSlave.follow(rightMaster, FollowerType.AuxOutput1);
 
     this.leftMaster.setInverted(true);
-    this.leftSlave.setInverted(true);
+    leftSlave.setInverted(true);
+    this.leftMaster.setSensorPhase(true);
     // this.rightMaster.setSensorPhase(true);
+    this.rightMaster.setSensorPhase(true);
 
     this.leftMaster.configPeakOutputForward(PEAK_OUTPUT);
     this.leftMaster.configPeakOutputReverse(-PEAK_OUTPUT);
@@ -94,6 +96,36 @@ public class DriveSystem extends SubsystemBase {
 
     this.leftMaster.set(ControlMode.Velocity, targetLeft);
     this.rightMaster.set(ControlMode.Velocity, targetRight);
+  }
+
+  public void drivePosition(double position) {
+    leftMaster.setSelectedSensorPosition(0);
+    rightMaster.setSelectedSensorPosition(0);
+    leftMaster.set(ControlMode.Position, position);
+    rightMaster.set(ControlMode.Position, position);
+  }
+
+  public void setPosition(int position) {
+    leftMaster.setSelectedSensorPosition(position, 0, 100);
+    rightMaster.setSelectedSensorPosition(position, 0, 100);
+  }
+
+  public double getLeftPosition() {
+    return leftMaster.getSelectedSensorPosition(0);
+  }
+  public double getRightPosition() {
+    return rightMaster.getSelectedSensorPosition(0);
+  }
+  public double getEncoderValues(double distanceInInches) {
+    final double twelveFootTicks = 12098.7213;
+    final double baseDistanceInches = 144.0;
+    final double distanceEncoderValue = (distanceInInches * twelveFootTicks) / baseDistanceInches;
+    // double wheelSize = 6.0; // enter wheel size in inches decimal form
+    // double encoderTicks = 4096.0; // enter number of encoder ticks in decimal form
+    // final double CIRCUMFERENCE = wheelSize * Math.PI;
+    // final double UNITS_PER_INCH = encoderTicks / CIRCUMFERENCE;
+    // final double distance = distanceInInches * UNITS_PER_INCH;
+    return distanceEncoderValue;
   }
 
   @Override
