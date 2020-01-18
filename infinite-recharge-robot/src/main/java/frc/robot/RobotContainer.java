@@ -42,10 +42,10 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
-    double pValue = 0.1;
-    double iValue = 0.001;
-    double dValue = 0.0;
-    double fValue = 0;
+    double pValue = 0.15;
+    double iValue = 0.0;
+    double dValue = 2.5;
+    double fValue = 0.243;
     configureButtonBindings();
     configureDefaultCommands();
     this.driveSystem.setPIDF(pValue, iValue, dValue, fValue);
