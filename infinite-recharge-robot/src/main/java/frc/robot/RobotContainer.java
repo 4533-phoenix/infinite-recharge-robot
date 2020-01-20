@@ -10,6 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.subsystems.ClimbSystem;
 import frc.robot.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -25,7 +28,10 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSystem driveSystem = new DriveSystem();
+  private final ClimbSystem climbSystem = new ClimbSystem();
   public static Joystick joystick = new Joystick(Constants.DRIVER_CONTROLLER);
+  JoystickButton hookButton = new JoystickButton(joystick, Constants.X_BUTTON);
+  JoystickButton climbButton = new JoystickButton(joystick, Constants.Y_BUTTON);
   //Joystick controller = new Joystick(1);
 
   private final Command driveCommand = new RunCommand(
@@ -35,6 +41,9 @@ public class RobotContainer {
       ),  
     this.driveSystem
     );
+
+  private final Command climbCommand = new InstantCommand(() -> climbSystem.climb(), this.climbSystem);
+  
   
   /**
    * The container for the robot.  Contains subsystems, OI devices, and

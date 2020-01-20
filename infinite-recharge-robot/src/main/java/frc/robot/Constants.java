@@ -21,4 +21,12 @@ public final class Constants {
     public static final int RIGHT_SLAVE_MOTOR = 1;
     public static final int LEFT_SLAVE_MOTOR = 3;
     public static final int DRIVER_CONTROLLER = 0;
+    public static final int HOOK_MOTOR = 4;
+    public static final int CLIMB_MOTOR = 5;
+    public static final int HOOK_UPPER_LIMIT = 0;
+    public static final int HOOK_LOWER_LIMIT = 1;
+    public static final int A_BUTTON = 2;
+    public static final int B_BUTTON = 3;
+    public static final int Y_BUTTON = 4;
+    public static final int X_BUTTON = 1;
 }
