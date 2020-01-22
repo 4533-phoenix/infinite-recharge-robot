@@ -29,6 +29,16 @@ public class DriveSystem extends SubsystemBase {
   public static double MAX_VELOCITY = 450;
   private static final double PEAK_OUTPUT = 0.5;
 
+  private static final double TICKS_PER_ROTATION = 4096.0;
+  private static final double WHEEL_DIAMETER = 8.0;
+  private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
+  private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
+
+  /** Default timeout in milliseconds */
+  private static final int DEFAULT_TIMEOUT = 30;
+
+  private static double targetPosition = 0;
+
   public DriveSystem() {
     // Initialize all of the drive systems motor controllers.
     this.leftMaster = new TalonSRX(Constants.LEFT_MASTER_MOTOR);
@@ -36,13 +46,15 @@ public class DriveSystem extends SubsystemBase {
     this.rightMaster = new TalonSRX(Constants.RIGHT_MASTER_MOTOR);
     this.rightSlave = new TalonSRX(Constants.RIGHT_SLAVE_MOTOR);
 
-    
+
     this.leftSlave.follow(leftMaster, FollowerType.AuxOutput1);
     this.rightSlave.follow(rightMaster, FollowerType.AuxOutput1);
 
     this.leftMaster.setInverted(true);
     this.leftSlave.setInverted(true);
-    // this.rightMaster.setSensorPhase(true);
+
+    this.leftMaster.setSensorPhase(true);
+    this.rightMaster.setSensorPhase(true);
 
     this.leftMaster.configPeakOutputForward(PEAK_OUTPUT);
     this.leftMaster.configPeakOutputReverse(-PEAK_OUTPUT);
@@ -54,18 +66,18 @@ public class DriveSystem extends SubsystemBase {
     this.rightSlave.configPeakOutputForward(PEAK_OUTPUT);
     this.rightSlave.configPeakOutputReverse(-PEAK_OUTPUT);
 
-    this.leftMaster.configNominalOutputForward(0, 30);
-    this.leftMaster.configNominalOutputReverse(0, 30);
-    this.leftSlave.configNominalOutputForward(0, 30);
-    this.leftSlave.configNominalOutputReverse(0, 30);
-    
+    this.leftMaster.configNominalOutputForward(0, DEFAULT_TIMEOUT);
+    this.leftMaster.configNominalOutputReverse(0, DEFAULT_TIMEOUT);
+    this.leftSlave.configNominalOutputForward(0, DEFAULT_TIMEOUT);
+    this.leftSlave.configNominalOutputReverse(0, DEFAULT_TIMEOUT);
+
     this.rightMaster.configNominalOutputForward(0, 30);
     this.rightMaster.configNominalOutputReverse(0, 30);
     this.rightSlave.configNominalOutputForward(0, 30);
     this.rightSlave.configNominalOutputReverse(0, 30);
-    
-    this.leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
-    this.rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 30);
+
+    this.leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, DEFAULT_TIMEOUT);
+    this.rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, DEFAULT_TIMEOUT);
 
     // Initialize the NavX IMU sensor.
     this.navXPort = SPI.Port.kMXP;
@@ -86,6 +98,25 @@ public class DriveSystem extends SubsystemBase {
     this.rightMaster.config_kF(0, f, 100);
   }
 
+  public void resetPosition() {
+    this.rightMaster.setSelectedSensorPosition(0);
+    this.leftMaster.setSelectedSensorPosition(0);
+  }
+
+  public boolean reachedPosition() {
+    double leftPos = this.leftMaster.getSelectedSensorPosition();
+    double rightPos = this.rightMaster.getSelectedSensorPosition();
+    System.out.printf("Target: %f - Position: (%f, %f)\n", targetPosition, leftPos, rightPos);
+
+    return (leftPos >= targetPosition) && (rightPos >= targetPosition);
+  }
+
+  public void driveDistance(double inches) {
+    targetPosition = inches * TICKS_PER_INCH;
+    this.leftMaster.set(ControlMode.Position, targetPosition);
+    this.rightMaster.set(ControlMode.Position, targetPosition);
+  }
+
   public void tank(double left, double right) {
     double targetLeft = left * MAX_VELOCITY * 4096/600.0;
     double targetRight = right * MAX_VELOCITY * 4096/600.0;
@@ -98,9 +129,5 @@ public class DriveSystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // System.out.printf("Left: %d - Right: %d\n",
-    //   this.leftMaster.getSelectedSensorVelocity(0),
-    //   this.rightMaster.getSelectedSensorVelocity(0)
-    // );
   }
 }
