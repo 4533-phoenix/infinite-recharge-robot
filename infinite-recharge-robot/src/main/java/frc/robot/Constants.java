@@ -23,4 +23,10 @@ public final class Constants {
     public static final int DRIVER_CONTROLLER = 0;
     public static final int INTAKE_MOTOR = 6;
     public static final int CONVEYOR_MOTOR = 7;
+
+    public static final int POWER_CELL_1 = 0;
+    public static final int POWER_CELL_2 = 1;
+    public static final int POWER_CELL_3 = 2;
+    public static final int POWER_CELL_4 = 3;
+    public static final int POWER_CELL_5 = 4;
 }
