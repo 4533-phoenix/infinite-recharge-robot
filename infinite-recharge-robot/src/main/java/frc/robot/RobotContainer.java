@@ -12,11 +12,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.IntakeSystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -28,10 +30,13 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSystem driveSystem = new DriveSystem();
-  public static Joystick joystick = new Joystick(Constants.DRIVER_CONTROLLER);
+  private final IntakeSystem intakeSystem = new IntakeSystem();
 
-  public static JoystickButton intakeButton =
-		  new JoystickButton(joystick, Constants.LEFT_BUMPER);
+  public static Joystick joystick = new Joystick(Constants.DRIVER_CONTROLLER);
+  public static JoystickButton intakeInButton = new JoystickButton(joystick, Constants.LEFT_BUMPER);
+  public static JoystickButton swingUpButton = new JoystickButton(joystick, Constants.START_BUTTON);
+  public static JoystickButton swingDownButton = new JoystickButton(joystick, Constants.BACK_BUTTON);
+  //Joystick controller = new Joystick(1);
 
   private final Command driveCommand = new RunCommand(
     () -> this.driveSystem.tank(
@@ -48,7 +53,25 @@ public class RobotContainer {
     () -> this.driveSystem.reachedPosition(),
     this.driveSystem
   );
+  
+  private final Command intakeInCommand = new InstantCommand(
+    () -> this.intakeSystem.intakeIn(), 
+    this.intakeSystem
+  );
+  private final Command moveConveyor = new InstantCommand(
+    () -> this.intakeSystem.conveyor(),
+    this.intakeSystem
+  );
 
+  private final Command swingMotorUpCommand = new InstantCommand(
+    () -> this.intakeSystem.swingMotorUp(),
+    this.intakeSystem
+  );
+
+  private final Command swingMotorDownCommand = new InstantCommand(
+    () -> this.intakeSystem.swingMotorDown(),
+    this.intakeSystem
+  );
   /**
    * The container for the robot.  Contains subsystems, OI devices, and
    * commands.
@@ -72,9 +95,11 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
+    intakeInButton.whileHeld(intakeInCommand);
+    intakeInButton.whileHeld(moveConveyor);
+    swingUpButton.whileHeld(swingMotorUpCommand);
+    swingDownButton.whileHeld(swingMotorDownCommand);
   }
-
 
   private void configureDefaultCommands(){
     CommandScheduler.getInstance().setDefaultCommand(driveSystem, driveCommand);

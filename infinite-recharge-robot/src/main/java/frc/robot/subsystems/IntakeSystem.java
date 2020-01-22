@@ -54,18 +54,31 @@ public class IntakeSystem extends SubsystemBase {
   public void intakeIn(){
     this.intakeMotor.set(ControlMode.PercentOutput, INTAKE_MOTOR_PERCENT);
   }
+  
   public void conveyor(){
     this.conveyorMotor.set(ControlMode.PercentOutput, CONVEYOR_MOTOR_PERCENT);
   }
+  
   public void swingMotorUp(){
     this.swingMotor.set(ControlMode.PercentOutput, SWING_MOTOR_PERCENT);
   }
+  
   public void swingMotorDown(){
     this.swingMotor.set(ControlMode.PercentOutput, -SWING_MOTOR_PERCENT);
   }
+  
   public double position(){
     return poten.getValue();
   }
+
+  public double angle(){
+    return 0.04 * this.position() - 8.1;
+  }
+  
+  public void dartPercent(double output){
+    this.swingMotor.set(ControlMode.PercentOutput, output);
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
