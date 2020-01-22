@@ -10,7 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.ClimbSystem;
 import frc.robot.subsystems.DriveSystem;
@@ -30,7 +30,8 @@ public class RobotContainer {
   private final DriveSystem driveSystem = new DriveSystem();
   private final ClimbSystem climbSystem = new ClimbSystem();
   public static Joystick joystick = new Joystick(Constants.DRIVER_CONTROLLER);
-  JoystickButton hookButton = new JoystickButton(joystick, Constants.X_BUTTON);
+  JoystickButton hookUpButton = new JoystickButton(joystick, Constants.X_BUTTON);
+  JoystickButton hookDownButton = new JoystickButton(joystick, Constants.A_BUTTON);
   JoystickButton climbButton = new JoystickButton(joystick, Constants.Y_BUTTON);
   //Joystick controller = new Joystick(1);
 
@@ -43,6 +44,8 @@ public class RobotContainer {
     );
 
   private final Command climbCommand = new InstantCommand(() -> climbSystem.climb(), this.climbSystem);
+  private final Command hookUpCommand = new InstantCommand(()-> climbSystem.hookUp(), this.climbSystem);
+  private final Command hookDownCommand = new InstantCommand(()->climbSystem.hookDown(), this.climbSystem);
   
   
   /**
@@ -68,6 +71,9 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    climbButton.whileHeld(this.climbCommand);
+    hookUpButton.whileHeld(this.hookUpCommand);
+    hookDownButton.whileHeld(this.hookDownCommand);
   }
 
   private void configureDefaultCommands(){
