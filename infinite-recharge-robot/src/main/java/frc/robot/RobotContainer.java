@@ -49,6 +49,14 @@ public class RobotContainer {
     this.driveSystem
   );
 
+  private final Command angleTurn = new FunctionalCommand(
+    ()-> this.driveSystem.resetAngle(), 
+    ()-> this.driveSystem.turn(.25, "Left"), 
+    (interrupt)-> this.driveSystem.tank(0,0), 
+    ()-> this.driveSystem.getAngle() >= 180, 
+    this.driveSystem
+  );
+
   /**
    * The container for the robot.  Contains subsystems, OI devices, and
    * commands.
@@ -87,6 +95,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return this.crossLineCommand;
+    return this.angleTurn;
   }
 }

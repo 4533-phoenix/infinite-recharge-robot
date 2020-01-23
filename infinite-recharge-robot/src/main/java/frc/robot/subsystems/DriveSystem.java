@@ -127,7 +127,27 @@ public class DriveSystem extends SubsystemBase {
     this.rightMaster.set(ControlMode.Velocity, targetRight);
   }
 
+  public void percent(double left, double right) {
+    rightMaster.set(ControlMode.PercentOutput, right);
+    leftMaster.set(ControlMode.PercentOutput, left);
+    rightSlave.set(ControlMode.Follower, Constants.RIGHT_MASTER_MOTOR);
+    leftSlave.set(ControlMode.Follower, Constants.LEFT_MASTER_MOTOR);
+  }
+
+  public double getAngle(){
+    return Math.abs(navX.getAngle());
+  }
+
+  public void resetAngle(){
+    navX.reset();
+  }
+
+  public void turn(double speed, String direction){
+      this.percent(-speed, speed);
+  }
+
   @Override
   public void periodic() {
+    
   }
 }
