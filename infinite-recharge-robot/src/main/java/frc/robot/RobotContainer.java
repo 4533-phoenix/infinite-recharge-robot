@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -29,21 +31,21 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSystem driveSystem = new DriveSystem();
   public static Joystick joystick = new Joystick(Constants.DRIVER_CONTROLLER);
-
+  Joystick controller = new Joystick(1);
   public static JoystickButton intakeButton =
 		  new JoystickButton(joystick, Constants.LEFT_BUMPER);
 
   private final Command driveCommand = new RunCommand(
     () -> this.driveSystem.tank(
         this.joystick.getRawAxis(1),
-        this.joystick.getRawAxis(3)
+        this.controller.getRawAxis(1)
       ),
     this.driveSystem
     );
 
   private final Command crossLineCommand = new FunctionalCommand(
     () -> this.driveSystem.resetPosition(),
-    () -> this.driveSystem.driveDistance(72),
+    () -> this.driveSystem.driveDistance(-72),
     (interrupt) -> this.driveSystem.tank(0, 0),
     () -> this.driveSystem.reachedPosition(),
     this.driveSystem
@@ -51,11 +53,36 @@ public class RobotContainer {
 
   private final Command angleTurn = new FunctionalCommand(
     ()-> this.driveSystem.resetAngle(), 
-    ()-> this.driveSystem.turn(.25, "Left"), 
+    ()-> this.driveSystem.turn(.5, "Left"), 
     (interrupt)-> this.driveSystem.tank(0,0), 
-    ()-> this.driveSystem.getAngle() >= 180, 
+    ()-> this.driveSystem.getAngle() >= 90, 
     this.driveSystem
   );
+
+  private SequentialCommandGroup squareAuto = new SequentialCommandGroup(
+    new FunctionalCommand(
+      () -> this.driveSystem.resetPosition(),
+      () -> this.driveSystem.driveDistance(72),
+      (interrupt) -> this.driveSystem.tank(0, 0),
+      () -> this.driveSystem.reachedPosition(),
+      this.driveSystem
+    ),
+    new FunctionalCommand(
+      ()-> this.driveSystem.resetAngle(), 
+      ()-> this.driveSystem.turn(.5, "Left"), 
+      (interrupt)-> this.driveSystem.tank(0,0), 
+      ()-> this.driveSystem.getAngle() >= 90, 
+      this.driveSystem
+    ),
+    new FunctionalCommand(
+      () -> this.driveSystem.resetPosition(),
+      () -> this.driveSystem.driveDistance(72),
+      (interrupt) -> this.driveSystem.tank(0, 0),
+      () -> this.driveSystem.reachedPosition(),
+      this.driveSystem
+    )
+  );
+
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and
@@ -95,6 +122,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return this.angleTurn;
+    return  this.squareAuto;
   }
 }

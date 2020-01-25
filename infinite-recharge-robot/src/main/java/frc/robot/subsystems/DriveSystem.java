@@ -121,7 +121,7 @@ public class DriveSystem extends SubsystemBase {
     double targetLeft = left * MAX_VELOCITY * 4096/600.0;
     double targetRight = right * MAX_VELOCITY * 4096/600.0;
 
-    System.out.println("Left: "+left + " Right: " + right);
+    //System.out.println("Left: "+left + " Right: " + right);
 
     this.leftMaster.set(ControlMode.Velocity, targetLeft);
     this.rightMaster.set(ControlMode.Velocity, targetRight);
@@ -143,11 +143,18 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public void turn(double speed, String direction){
-      this.percent(-speed, speed);
+    int degree = 90;
+    if (degree - 25 <= this.getAngle()) {
+      this.tank(speed*.1, -speed*.1);
+      System.out.println("Angle A: " + this.getAngle());
+    } else {
+      this.tank(speed, -speed);
+      System.out.println("Angle B: " + this.getAngle());
+    }
   }
 
   @Override
   public void periodic() {
-    
+    //System.out.println("Angle: " + this.getAngle());
   }
 }
