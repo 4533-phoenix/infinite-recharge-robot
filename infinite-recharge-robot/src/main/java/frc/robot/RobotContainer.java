@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.CommandFactory;
 import frc.robot.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -19,6 +20,8 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+import frc.robot.commands.Direction;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -43,44 +46,10 @@ public class RobotContainer {
     this.driveSystem
     );
 
-  private final Command crossLineCommand = new FunctionalCommand(
-    () -> this.driveSystem.resetPosition(),
-    () -> this.driveSystem.driveDistance(-72),
-    (interrupt) -> this.driveSystem.tank(0, 0),
-    () -> this.driveSystem.reachedPosition(),
-    this.driveSystem
-  );
-
-  private final Command angleTurn = new FunctionalCommand(
-    ()-> this.driveSystem.resetAngle(), 
-    ()-> this.driveSystem.turn(.5, "Left"), 
-    (interrupt)-> this.driveSystem.tank(0,0), 
-    ()-> this.driveSystem.getAngle() >= 90, 
-    this.driveSystem
-  );
 
   private SequentialCommandGroup squareAuto = new SequentialCommandGroup(
-    new FunctionalCommand(
-      () -> this.driveSystem.resetPosition(),
-      () -> this.driveSystem.driveDistance(72),
-      (interrupt) -> this.driveSystem.tank(0, 0),
-      () -> this.driveSystem.reachedPosition(),
-      this.driveSystem
-    ),
-    new FunctionalCommand(
-      ()-> this.driveSystem.resetAngle(), 
-      ()-> this.driveSystem.turn(.5, "Left"), 
-      (interrupt)-> this.driveSystem.tank(0,0), 
-      ()-> this.driveSystem.getAngle() >= 90, 
-      this.driveSystem
-    ),
-    new FunctionalCommand(
-      () -> this.driveSystem.resetPosition(),
-      () -> this.driveSystem.driveDistance(72),
-      (interrupt) -> this.driveSystem.tank(0, 0),
-      () -> this.driveSystem.reachedPosition(),
-      this.driveSystem
-    )
+    CommandFactory.driveDistanceCommand(24, Direction.BACKWARD, driveSystem),
+    CommandFactory.angleTurnCommand(.35, 90, Direction.RIGHT, driveSystem)
   );
 
 

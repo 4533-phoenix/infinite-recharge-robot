@@ -7,16 +7,17 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.commands.Direction;
 
 public class DriveSystem extends SubsystemBase {
   public TalonSRX rightMaster;
@@ -38,6 +39,7 @@ public class DriveSystem extends SubsystemBase {
   private static final int DEFAULT_TIMEOUT = 30;
 
   private static double targetPosition = 0;
+  private static Direction targetDirection;
 
   public DriveSystem() {
     // Initialize all of the drive systems motor controllers.
@@ -106,16 +108,34 @@ public class DriveSystem extends SubsystemBase {
   public boolean reachedPosition() {
     double leftPos = this.leftMaster.getSelectedSensorPosition();
     double rightPos = this.rightMaster.getSelectedSensorPosition();
-    System.out.printf("Target: %f - Position: (%f, %f)\n", targetPosition, leftPos, rightPos);
-
-    return (leftPos >= targetPosition) && (rightPos >= targetPosition);
+    
+    if (targetDirection == Direction.FORWARD) {
+      return (leftPos <= targetPosition) && (rightPos <= targetPosition);
+    } else if (targetDirection == Direction.BACKWARD) {
+      return (leftPos >= targetPosition) && (rightPos >= targetPosition);
+    } else {
+      return true;
+    }
   }
 
-  public void driveDistance(double inches) {
-    targetPosition = inches * TICKS_PER_INCH;
+  public void driveDistance(double inches, Direction direction) {
+    targetDirection = direction;
+    if (direction == Direction.FORWARD) {
+      targetPosition = -1 * (inches * TICKS_PER_INCH);
+    } else if (direction == Direction.BACKWARD) {
+      targetPosition = inches * TICKS_PER_INCH;
+    } else {
+      targetPosition = 0;
+    }
+
     this.leftMaster.set(ControlMode.Position, targetPosition);
     this.rightMaster.set(ControlMode.Position, targetPosition);
   }
+
+  public double getPosition() {
+    return this.leftMaster.getSelectedSensorPosition() / TICKS_PER_INCH; 
+  }
+
 
   public void tank(double left, double right) {
     double targetLeft = left * MAX_VELOCITY * 4096/600.0;
@@ -142,14 +162,18 @@ public class DriveSystem extends SubsystemBase {
     navX.reset();
   }
 
-  public void turn(double speed, String direction){
-    int degree = 90;
-    if (degree - 25 <= this.getAngle()) {
-      this.tank(speed*.1, -speed*.1);
-      System.out.println("Angle A: " + this.getAngle());
-    } else {
-      this.tank(speed, -speed);
-      System.out.println("Angle B: " + this.getAngle());
+  public void turn(double speed, Direction direction){
+    switch(direction) {
+      case LEFT: 
+        this.tank(speed, -speed);
+        System.out.println("angle: " + getAngle());
+        break;
+      case RIGHT:
+        this.tank(-speed, speed);
+        System.out.println("angle: " + getAngle());
+        break;
+      default:
+        this.tank(0, 0);
     }
   }
 
