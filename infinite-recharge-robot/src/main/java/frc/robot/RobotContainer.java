@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CommandFactory;
 import frc.robot.subsystems.DriveSystem;
@@ -20,6 +21,8 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+
+import javax.naming.directory.DirContext;
 import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
 import frc.robot.commands.Direction;
 
@@ -48,11 +51,36 @@ public class RobotContainer {
 
 
   private SequentialCommandGroup squareAuto = new SequentialCommandGroup(
-    CommandFactory.driveDistanceCommand(24, Direction.BACKWARD, driveSystem),
-    CommandFactory.angleTurnCommand(.35, 90, Direction.RIGHT, driveSystem)
+    CommandFactory.driveDistanceCommand(24, Direction.FORWARD, driveSystem),
+    CommandFactory.angleTurnCommand(.25, 90, Direction.LEFT, driveSystem),
+    CommandFactory.driveDistanceCommand(24, Direction.FORWARD, driveSystem),
+    CommandFactory.angleTurnCommand(.25, 90, Direction.LEFT, driveSystem),
+    CommandFactory.driveDistanceCommand(24, Direction.FORWARD, driveSystem),
+    CommandFactory.angleTurnCommand(.25, 90, Direction.LEFT, driveSystem),
+    CommandFactory.driveDistanceCommand(24, Direction.FORWARD, driveSystem),
+    CommandFactory.angleTurnCommand(.25, 90, Direction.LEFT, driveSystem)
   );
 
+  private SequentialCommandGroup goalAuto = new SequentialCommandGroup(
+    CommandFactory.driveDistanceCommand(101, Direction.BACKWARD, driveSystem),
+    new WaitCommand(5),
+    CommandFactory.driveDistanceCommand(120, Direction.FORWARD, driveSystem),
+    CommandFactory.angleTurnCommand(0.35, 38.33, Direction.LEFT, driveSystem)
+  );
 
+  private SequentialCommandGroup midAuto = new SequentialCommandGroup(
+    CommandFactory.driveDistanceCommand(33.67, Direction.BACKWARD, driveSystem),
+    CommandFactory.angleTurnCommand(0.35, 26.69, Direction.RIGHT, driveSystem),
+    CommandFactory.driveDistanceCommand(74.953, Direction.BACKWARD, driveSystem),
+    CommandFactory.angleTurnCommand(0.35, 26.69, Direction.LEFT, driveSystem),
+    CommandFactory.driveDistanceCommand(33, Direction.BACKWARD, driveSystem),
+    new WaitCommand(5),
+    CommandFactory.driveDistanceCommand(33.67, Direction.FORWARD, driveSystem),
+    CommandFactory.angleTurnCommand(0.35, 26.69, Direction.RIGHT, driveSystem),
+    CommandFactory.driveDistanceCommand(74.953, Direction.FORWARD, driveSystem),
+    CommandFactory.angleTurnCommand(0.35, 26.69, Direction.LEFT, driveSystem),
+    CommandFactory.driveDistanceCommand(52, Direction.FORWARD, driveSystem)
+  );
   /**
    * The container for the robot.  Contains subsystems, OI devices, and
    * commands.

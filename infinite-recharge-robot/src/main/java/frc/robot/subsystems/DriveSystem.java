@@ -11,6 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -20,10 +21,10 @@ import frc.robot.Constants;
 import frc.robot.commands.Direction;
 
 public class DriveSystem extends SubsystemBase {
-  public TalonSRX rightMaster;
-  private TalonSRX rightSlave;
-  public TalonSRX leftMaster;
-  private TalonSRX leftSlave;
+  public WPI_TalonSRX rightMaster;
+  private WPI_TalonSRX rightSlave;
+  public WPI_TalonSRX leftMaster;
+  private WPI_TalonSRX leftSlave;
   private AHRS navX;
   private Port navXPort;
 
@@ -43,10 +44,10 @@ public class DriveSystem extends SubsystemBase {
 
   public DriveSystem() {
     // Initialize all of the drive systems motor controllers.
-    this.leftMaster = new TalonSRX(Constants.LEFT_MASTER_MOTOR);
-    this.leftSlave = new TalonSRX(Constants.LEFT_SLAVE_MOTOR);
-    this.rightMaster = new TalonSRX(Constants.RIGHT_MASTER_MOTOR);
-    this.rightSlave = new TalonSRX(Constants.RIGHT_SLAVE_MOTOR);
+    this.leftMaster = new WPI_TalonSRX(Constants.LEFT_MASTER_MOTOR);
+    this.leftSlave = new WPI_TalonSRX(Constants.LEFT_SLAVE_MOTOR);
+    this.rightMaster = new WPI_TalonSRX(Constants.RIGHT_MASTER_MOTOR);
+    this.rightSlave = new WPI_TalonSRX(Constants.RIGHT_SLAVE_MOTOR);
 
 
     this.leftSlave.follow(leftMaster, FollowerType.AuxOutput1);

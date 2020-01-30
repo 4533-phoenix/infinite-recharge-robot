@@ -19,7 +19,7 @@ public class CommandFactory {
             driveSystem
           );
     }
-    public static Command angleTurnCommand(double speed, int angle, Direction direction, DriveSystem driveSystem) {
+    public static Command angleTurnCommand(double speed, double angle, Direction direction, DriveSystem driveSystem) {
         return new FunctionalCommand(
             ()-> driveSystem.resetAngle(), 
             ()-> driveSystem.turn(speed, direction), 
