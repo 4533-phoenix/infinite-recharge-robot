@@ -19,6 +19,11 @@ import edu.wpi.first.wpilibj.SPI.Port;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.Direction;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
 public class DriveSystem extends SubsystemBase {
   public WPI_TalonSRX rightMaster;
@@ -32,9 +37,29 @@ public class DriveSystem extends SubsystemBase {
   private static final double PEAK_OUTPUT = 0.5;
 
   private static final double TICKS_PER_ROTATION = 4096.0;
-  private static final double WHEEL_DIAMETER = 8.0;
+  private static final double WHEEL_DIAMETER = 6.0;
+  private static final double WHEEL_DIAMETER_M = 0.1524;
   private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
+  private static final double WHEEL_CIRCUMFERENCE_M = WHEEL_DIAMETER_M * Math.PI;
   private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
+  private static final double TICKS_PER_METER = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE_M;
+
+
+  //Trajectory Constants
+  public static final double kS = 0.456;
+  public static final double kV = 0.145;
+  public static final double kA = 0.0227;
+  
+  public static final double kPVelocity = 0.00177;
+  public static final double trackWidthMeters = 0.537;
+
+  public static DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(trackWidthMeters);
+  public static final double kMaxSpeed = 3;
+  public static final double kMaxAcceleration = 3;
+  public static final double kRamseteB = 2;
+  public static final double kRamseteZeta = 0.7;
+
+  private final DifferentialDriveOdometry m_odometry;
 
   /** Default timeout in milliseconds */
   private static final int DEFAULT_TIMEOUT = 30;
@@ -85,6 +110,10 @@ public class DriveSystem extends SubsystemBase {
     // Initialize the NavX IMU sensor.
     this.navXPort = SPI.Port.kMXP;
     this.navX = new AHRS(navXPort);
+
+    //initializes odometry
+    m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(this.getAngle()));
+
   }
 
   public void setPIDF(double p, double i, double d, double f){
@@ -137,6 +166,14 @@ public class DriveSystem extends SubsystemBase {
     return this.leftMaster.getSelectedSensorPosition() / TICKS_PER_INCH; 
   }
 
+  public double getLeftDistance() {
+    return this.leftMaster.getSelectedSensorPosition() / TICKS_PER_METER;
+  }
+
+  public double getRightDistance() {
+    return this.rightMaster.getSelectedSensorPosition() / TICKS_PER_METER;
+  }
+
 
   public void tank(double left, double right) {
     double targetLeft = left * MAX_VELOCITY * 4096/600.0;
@@ -148,11 +185,11 @@ public class DriveSystem extends SubsystemBase {
     this.rightMaster.set(ControlMode.Velocity, targetRight);
   }
 
-  public void percent(double left, double right) {
-    rightMaster.set(ControlMode.PercentOutput, right);
-    leftMaster.set(ControlMode.PercentOutput, left);
-    rightSlave.set(ControlMode.Follower, Constants.RIGHT_MASTER_MOTOR);
+  public void tankVoltage(double left, double right) {
+    leftMaster.setVoltage(left);
+    rightMaster.setVoltage(right);
     leftSlave.set(ControlMode.Follower, Constants.LEFT_MASTER_MOTOR);
+    rightSlave.set(ControlMode.Follower, Constants.RIGHT_MASTER_MOTOR);
   }
 
   public double getAngle(){
@@ -177,9 +214,17 @@ public class DriveSystem extends SubsystemBase {
         this.tank(0, 0);
     }
   }
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(this.leftMaster.getSelectedSensorVelocity(), this.rightMaster.getSelectedSensorVelocity());
+  }
 
   @Override
   public void periodic() {
     //System.out.println("Angle: " + this.getAngle());
+    m_odometry.update(Rotation2d.fromDegrees(this.getAngle()), this.getLeftDistance(), this.getRightDistance());
   }
 }
