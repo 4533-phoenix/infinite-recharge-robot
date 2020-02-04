@@ -20,7 +20,11 @@ public final class Constants {
     public static final int LEFT_MASTER_MOTOR = 2;
     public static final int RIGHT_SLAVE_MOTOR = 1;
     public static final int LEFT_SLAVE_MOTOR = 3;
-    public static final int DRIVER_CONTROLLER = 0;
+
+    // Joystick port constants
+    public static final int DRIVER_JOYSTICK_LEFT = 0;
+    public static final int DRIVER_JOYSTICK_RIGHT = 1;
+
     public static final int INTAKE_MOTOR = 6;
     public static final int CONVEYOR_MOTOR = 7;
     public static final int SWING_MOTOR = 8;

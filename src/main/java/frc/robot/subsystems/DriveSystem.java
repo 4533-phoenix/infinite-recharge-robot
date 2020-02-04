@@ -10,32 +10,35 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
-import edu.wpi.first.wpilibj.SPI.Port;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.Direction;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 
 public class DriveSystem extends SubsystemBase {
-  public WPI_TalonSRX rightMaster;
+
+  // Drive train motor controllers
+  private WPI_TalonSRX rightMaster;
   private WPI_TalonSRX rightSlave;
-  public WPI_TalonSRX leftMaster;
+  private WPI_TalonSRX leftMaster;
   private WPI_TalonSRX leftSlave;
+
+  // Onboard IMU.
   private AHRS navX;
-  private Port navXPort;
 
   public static double MAX_VELOCITY = 450;
   private static final double PEAK_OUTPUT = 0.5;
 
+  // Wheel specific constants.
   private static final double TICKS_PER_ROTATION = 4096.0;
   private static final double WHEEL_DIAMETER = 6.0;
   private static final double WHEEL_DIAMETER_M = 0.1524;
@@ -44,20 +47,51 @@ public class DriveSystem extends SubsystemBase {
   private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
   private static final double TICKS_PER_METER = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE_M;
 
+  // Velocity PID Gains and Feed Forward values.
+  //
+  // The following values should be used when driving the robot in "Velocity"
+  // mode.
+  public static final double VELOCITY_P = 0.15;
+  public static final double VELOCITY_I = 0.0;
+  public static final double VELOCITY_D = 2.5;
+  public static final double VELOCITY_FEED_FORWARD = 0.243;
 
-  //Trajectory Constants
-  public static final double kS = 0.456;
-  public static final double kV = 0.145;
-  public static final double kA = 0.0227;
-  
+  // Position PID Gains and Feed Forward values.
+  //
+  // The following values should be used when driving the robot in "Position"
+  // mode.
+  public static final double POSITION_P = 0.15;
+  public static final double POSITION_I = 0.0;
+  public static final double POSITION_D = 2.5;
+  public static final double POSITION_FEED_FORWARD = 0.0;
+
+  // Feed Forward Gains
+  //
+  // kS - the voltage needed to overcome the motor's static friction (V).
+  // kV - the voltage needed to maintain a given constant velocity (V * s/m).
+  // kA - the voltage needed to induce a given acceleration (V * s^2/m).
+  public static final double FEED_FORWARD_KS = 0.456;
+  public static final double FEED_FORWARD_KV = 0.145;
+  public static final double FEED_FORWARD_KA = 0.0227;
+  public static final SimpleMotorFeedforward FEED_FORWARD =
+    new SimpleMotorFeedforward(FEED_FORWARD_KV, FEED_FORWARD_KV, FEED_FORWARD_KA);
+
+  // TODO: These values were calculated as part of the robot characterization
+  // process. We need to determine whether or not we want to keep them separate
+  // from the above PID and FF gains. Another consideration is whether or not
+  // we should track the left and right values separately.
   public static final double kPVelocity = 0.00177;
-  public static final double trackWidthMeters = 0.537;
+  public static final double kDVelocity = 0.0;
+  public static final double kPPosition = 0.0;
+  public static final double kDPosition = 0.0;
 
-  public static DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(trackWidthMeters);
+  // Kinematic constants.
+  public static final double TRACK_WIDTH = 0.537;
+  public static final DifferentialDriveKinematics KINEMATICS =
+      new DifferentialDriveKinematics(TRACK_WIDTH);
+
   public static final double kMaxSpeed = 3;
   public static final double kMaxAcceleration = 3;
-  public static final double kRamseteB = 2;
-  public static final double kRamseteZeta = 0.7;
 
   private final DifferentialDriveOdometry m_odometry;
 
@@ -108,8 +142,7 @@ public class DriveSystem extends SubsystemBase {
     this.rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, DEFAULT_TIMEOUT);
 
     // Initialize the NavX IMU sensor.
-    this.navXPort = SPI.Port.kMXP;
-    this.navX = new AHRS(navXPort);
+    this.navX = new AHRS(SPI.Port.kMXP);
 
     //initializes odometry
     m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(this.getAngle()));
@@ -138,7 +171,7 @@ public class DriveSystem extends SubsystemBase {
   public boolean reachedPosition() {
     double leftPos = this.leftMaster.getSelectedSensorPosition();
     double rightPos = this.rightMaster.getSelectedSensorPosition();
-    
+
     if (targetDirection == Direction.FORWARD) {
       return (leftPos <= targetPosition) && (rightPos <= targetPosition);
     } else if (targetDirection == Direction.BACKWARD) {
@@ -163,7 +196,7 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public double getPosition() {
-    return this.leftMaster.getSelectedSensorPosition() / TICKS_PER_INCH; 
+    return this.leftMaster.getSelectedSensorPosition() / TICKS_PER_INCH;
   }
 
   public double getLeftDistance() {
@@ -202,7 +235,7 @@ public class DriveSystem extends SubsystemBase {
 
   public void turn(double speed, Direction direction){
     switch(direction) {
-      case LEFT: 
+      case LEFT:
         this.tank(speed, -speed);
         System.out.println("angle: " + getAngle());
         break;

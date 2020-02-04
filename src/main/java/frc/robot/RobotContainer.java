@@ -1,54 +1,33 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The  code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.CommandFactory;
-import frc.robot.subsystems.DriveSystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-
-import javax.naming.directory.DirContext;
-import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.CommandFactory;
 import frc.robot.commands.Direction;
+import frc.robot.subsystems.DriveSystem;
 
-/**
- * This class is where the bulk of the robot should be declared.  Since
- * Command-based is a "declarative" paradigm, very little robot logic should
- * actually be handled in the {@link Robot} periodic methods (other than the
- * scheduler calls).  Instead, the structure of the robot (including subsystems,
- * commands, and button mappings) should be declared here.
- */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
+  // Initialize the robots subsystems
   private final DriveSystem driveSystem = new DriveSystem();
-  public static Joystick joystick = new Joystick(Constants.DRIVER_CONTROLLER);
-  Joystick controller = new Joystick(1);
-  public static JoystickButton intakeButton =
-		  new JoystickButton(joystick, Constants.LEFT_BUMPER);
 
+  // Initialize the driver controls
+  private Joystick leftStick = new Joystick(Constants.DRIVER_JOYSTICK_LEFT);
+  private Joystick rightStick = new Joystick(Constants.DRIVER_JOYSTICK_RIGHT);
+
+  // Initialize the drive command
   private final Command driveCommand = new RunCommand(
     () -> this.driveSystem.tank(
-        this.joystick.getRawAxis(1),
-        this.controller.getRawAxis(1)
+        this.leftStick.getRawAxis(1),
+        this.rightStick.getRawAxis(1)
       ),
     this.driveSystem
-    );
-
+  );
 
   private SequentialCommandGroup squareAuto = new SequentialCommandGroup(
     CommandFactory.driveDistanceCommand(24, Direction.FORWARD, driveSystem),
@@ -87,13 +66,10 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
-    double pValue = 0.15;
-    double iValue = 0.0;
-    double dValue = 2.5;
-    double fValue = 0.243;
     configureButtonBindings();
+
+    // Configure the default commands
     configureDefaultCommands();
-    this.driveSystem.setPIDF(pValue, iValue, dValue, fValue);
   }
 
   /**
