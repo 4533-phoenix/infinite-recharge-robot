@@ -83,6 +83,9 @@ public class RobotContainer {
 
   }
 
+  public DriveSystem getDriveSystem() {
+    return this.driveSystem;
+  }
 
   private void configureDefaultCommands(){
     CommandScheduler.getInstance().setDefaultCommand(driveSystem, driveCommand);

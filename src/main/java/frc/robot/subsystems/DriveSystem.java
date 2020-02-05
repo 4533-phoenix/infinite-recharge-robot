@@ -51,18 +51,18 @@ public class DriveSystem extends SubsystemBase {
   //
   // The following values should be used when driving the robot in "Velocity"
   // mode.
-  public static final double VELOCITY_P = 0.15;
+  public static final double VELOCITY_P = 0.0;//0.000213;
   public static final double VELOCITY_I = 0.0;
-  public static final double VELOCITY_D = 2.5;
+  public static final double VELOCITY_D = 0.0;
   public static final double VELOCITY_FEED_FORWARD = 0.243;
 
   // Position PID Gains and Feed Forward values.
   //
   // The following values should be used when driving the robot in "Position"
   // mode.
-  public static final double POSITION_P = 0.15;
+  public static final double POSITION_P = 4.5 * Math.pow(10, -5);
   public static final double POSITION_I = 0.0;
-  public static final double POSITION_D = 2.5;
+  public static final double POSITION_D = 2.15 * Math.pow(10, -5);
   public static final double POSITION_FEED_FORWARD = 0.0;
 
   // Feed Forward Gains
@@ -252,12 +252,18 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(this.leftMaster.getSelectedSensorVelocity(), this.rightMaster.getSelectedSensorVelocity());
+    return new DifferentialDriveWheelSpeeds(
+      this.leftMaster.getSelectedSensorVelocity() * TICKS_PER_METER * 10, 
+      this.rightMaster.getSelectedSensorVelocity() * TICKS_PER_METER * 10
+    );
   }
 
   @Override
   public void periodic() {
-    //System.out.println("Angle: " + this.getAngle());
-    m_odometry.update(Rotation2d.fromDegrees(this.getAngle()), this.getLeftDistance(), this.getRightDistance());
+    m_odometry.update(
+      Rotation2d.fromDegrees(this.getAngle()),
+      this.getLeftDistance(),
+      this.getRightDistance()
+    );
   }
 }

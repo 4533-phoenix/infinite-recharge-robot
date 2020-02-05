@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.subsystems.DriveSystem;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 
 public class CommandFactory {
 
@@ -58,31 +60,53 @@ public class CommandFactory {
         Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
             new Pose2d(0, 0, new Rotation2d(0)),
             List.of(
-                new Translation2d(-5, 1)
+                new Translation2d(1, 2),
+                new Translation2d(3, 2)
             ),
-            new Pose2d(0, 0, new Rotation2d(90)),
+            new Pose2d(0, 4, new Rotation2d(0)),
             config
         );
 
         // Define the Ramsete command to execute the configured trajectory.
+        RamseteController ramseteController = new RamseteController() {
+            @Override
+            public ChassisSpeeds calculate(Pose2d current, Pose2d ref, double linearV, double angularV){
+                return new ChassisSpeeds(linearV, 0.0, angularV);
+            }
+        };
+
+        PIDController leftController = new PIDController(
+            DriveSystem.VELOCITY_P,
+            DriveSystem.VELOCITY_I,
+            DriveSystem.VELOCITY_D
+        );
+
+        PIDController rightController = new PIDController(
+            DriveSystem.VELOCITY_P,
+            DriveSystem.VELOCITY_I,
+            DriveSystem.VELOCITY_D
+        );
+
         RamseteCommand command = new RamseteCommand(
             trajectory,
             driveSystem::getPose,
-            new RamseteController(),
+            ramseteController,//new RamseteController(),
             DriveSystem.FEED_FORWARD,
             DriveSystem.KINEMATICS,
             driveSystem::getWheelSpeeds,
-            new PIDController(
-                DriveSystem.VELOCITY_P,
-                DriveSystem.VELOCITY_I,
-                DriveSystem.VELOCITY_D
-            ),
-            new PIDController(
-                DriveSystem.VELOCITY_P,
-                DriveSystem.VELOCITY_I,
-                DriveSystem.VELOCITY_D
-            ),
-            driveSystem::tankVoltage,
+            leftController,
+            rightController,
+            (left, right) -> {
+                System.out.printf("Left: Measure - %f :: Ref - %f\n",
+                    driveSystem.getWheelSpeeds().leftMetersPerSecond,
+                    leftController.getSetpoint()
+                );
+                System.out.printf("Right: Measure - %f :: Ref - %f\n",
+                    driveSystem.getWheelSpeeds().rightMetersPerSecond,
+                    rightController.getSetpoint()
+                );
+                driveSystem.tankVoltage(left, right);
+            },
             driveSystem
         );
 

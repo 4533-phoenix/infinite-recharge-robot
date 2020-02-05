@@ -22,7 +22,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  DriveSystem driveSystem = new DriveSystem();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -63,6 +62,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    DriveSystem driveSystem = m_robotContainer.getDriveSystem();
+    driveSystem.resetAngle();
+    driveSystem.resetPosition();
+
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -81,6 +84,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    DriveSystem driveSystem = m_robotContainer.getDriveSystem();
+    driveSystem.resetAngle();
+    driveSystem.resetPosition();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -95,11 +101,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    System.out.printf("Left: %d - Right: %d\n",
-      this.driveSystem.leftMaster.getSelectedSensorVelocity(0),
-      this.driveSystem.rightMaster.getSelectedSensorVelocity(0)
-    );
-    System.out.println("Left: "+ RobotContainer.joystick.getRawAxis(1) + " Right: " + RobotContainer.joystick.getRawAxis(3));
+    // System.out.printf("Left: %d - Right: %d\n",
+    //   this.driveSystem.leftMaster.getSelectedSensorVelocity(0),
+    //   this.driveSystem.rightMaster.getSelectedSensorVelocity(0)
+    // );.
+    //System.out.println("Left: "+ RobotContainer.joystick.getRawAxis(1) + " Right: " + RobotContainer.joystick.getRawAxis(3));
   }
 
   @Override
