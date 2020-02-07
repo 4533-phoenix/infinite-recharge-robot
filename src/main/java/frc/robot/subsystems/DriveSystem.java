@@ -46,12 +46,13 @@ public class DriveSystem extends SubsystemBase {
   private static final double WHEEL_CIRCUMFERENCE_M = WHEEL_DIAMETER_M * Math.PI;
   private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
   private static final double TICKS_PER_METER = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE_M;
+  private static final double METERS_PER_PULSE = WHEEL_CIRCUMFERENCE_M / TICKS_PER_ROTATION;
 
   // Velocity PID Gains and Feed Forward values.
   //
   // The following values should be used when driving the robot in "Velocity"
   // mode.
-  public static final double VELOCITY_P = 0.0;//0.000213;
+  public static final double VELOCITY_P = 0.000213;
   public static final double VELOCITY_I = 0.0;
   public static final double VELOCITY_D = 0.0;
   public static final double VELOCITY_FEED_FORWARD = 0.243;
@@ -207,7 +208,6 @@ public class DriveSystem extends SubsystemBase {
     return this.rightMaster.getSelectedSensorPosition() / TICKS_PER_METER;
   }
 
-
   public void tank(double left, double right) {
     double targetLeft = left * MAX_VELOCITY * 4096/600.0;
     double targetRight = right * MAX_VELOCITY * 4096/600.0;
@@ -252,10 +252,20 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-    return new DifferentialDriveWheelSpeeds(
-      this.leftMaster.getSelectedSensorVelocity() * TICKS_PER_METER * 10, 
-      this.rightMaster.getSelectedSensorVelocity() * TICKS_PER_METER * 10
-    );
+    // Convert the measured rate of velocity to meters per second.
+    //
+    // The function 'getSelectedSensorVelocity' returns values that are raw
+    // units (pulses or ticks) per 100ms. We need to convert this value into
+    // meters per second.
+    //
+    // First we must convert the raw units in to meters. This is done by
+    // multiplying measured value by the value of METERS_PER_PULSE. The result
+    // of this will be the measured value in meters per 100ms. Since 1 s =
+    // 1000ms, we know that we need to multiply the value by 10, which will give
+    // us the meters per second value.
+    double left = this.leftMaster.getSelectedSensorVelocity() * METERS_PER_PULSE * 10;
+    double right = this.rightMaster.getSelectedSensorVelocity() * METERS_PER_PULSE * 10;
+    return new DifferentialDriveWheelSpeeds(left, right);
   }
 
   @Override

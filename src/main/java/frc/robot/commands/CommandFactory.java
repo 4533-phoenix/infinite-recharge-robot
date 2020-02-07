@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.subsystems.DriveSystem;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
 
 public class CommandFactory {
 
@@ -67,14 +65,6 @@ public class CommandFactory {
             config
         );
 
-        // Define the Ramsete command to execute the configured trajectory.
-        RamseteController ramseteController = new RamseteController() {
-            @Override
-            public ChassisSpeeds calculate(Pose2d current, Pose2d ref, double linearV, double angularV){
-                return new ChassisSpeeds(linearV, 0.0, angularV);
-            }
-        };
-
         PIDController leftController = new PIDController(
             DriveSystem.VELOCITY_P,
             DriveSystem.VELOCITY_I,
@@ -90,23 +80,13 @@ public class CommandFactory {
         RamseteCommand command = new RamseteCommand(
             trajectory,
             driveSystem::getPose,
-            ramseteController,//new RamseteController(),
+            new RamseteController(),
             DriveSystem.FEED_FORWARD,
             DriveSystem.KINEMATICS,
             driveSystem::getWheelSpeeds,
             leftController,
             rightController,
-            (left, right) -> {
-                System.out.printf("Left: Measure - %f :: Ref - %f\n",
-                    driveSystem.getWheelSpeeds().leftMetersPerSecond,
-                    leftController.getSetpoint()
-                );
-                System.out.printf("Right: Measure - %f :: Ref - %f\n",
-                    driveSystem.getWheelSpeeds().rightMetersPerSecond,
-                    rightController.getSetpoint()
-                );
-                driveSystem.tankVoltage(left, right);
-            },
+            driveSystem::tankVoltage,
             driveSystem
         );
 
