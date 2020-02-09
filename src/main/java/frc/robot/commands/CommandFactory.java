@@ -18,78 +18,67 @@ import frc.robot.subsystems.DriveSystem;
 
 public class CommandFactory {
 
-    public CommandFactory() {}
+	public CommandFactory() {
+	}
 
-    public static Command driveDistanceCommand(double distance, Direction direction, DriveSystem driveSystem) {
-        return new FunctionalCommand(
-            () -> driveSystem.resetPosition(),
-            () -> driveSystem.driveDistance(distance, direction),
-            (interrupt) -> driveSystem.tank(0, 0),
-            () -> driveSystem.reachedPosition(),
-            driveSystem
-          );
-    }
-    public static Command angleTurnCommand(double speed, double angle, Direction direction, DriveSystem driveSystem) {
-        return new FunctionalCommand(
-            ()-> driveSystem.resetAngle(),
-            ()-> driveSystem.turn(speed, direction),
-            (interrupt)-> driveSystem.tank(0,0),
-            ()-> driveSystem.getAngle() >= angle,
-            driveSystem
-          );
-    }
+	public static Command driveDistanceCommand(double distance, Direction direction, DriveSystem driveSystem) {
+		return new FunctionalCommand(() -> driveSystem.resetPosition(),
+				() -> driveSystem.driveDistance(distance, direction), (interrupt) -> driveSystem.tank(0, 0),
+				() -> driveSystem.reachedPosition(), driveSystem);
+	}
 
-    public static Command getTrajectoryCommand(DriveSystem driveSystem) {
-        // Define the voltage constraints for the trajectory.
-        DifferentialDriveVoltageConstraint constraint =
-            new DifferentialDriveVoltageConstraint(
-                DriveSystem.FEED_FORWARD,
-                DriveSystem.KINEMATICS,
-                10
-            );
+	public static Command angleTurnCommand(double speed, double angle, Direction direction, DriveSystem driveSystem) {
+		return new FunctionalCommand(() -> driveSystem.resetAngle(), () -> driveSystem.turn(speed, direction),
+				(interrupt) -> driveSystem.tank(0, 0), () -> driveSystem.getAngle() >= angle, driveSystem);
+	}
 
-        // Define the trajectory configuration.
-        TrajectoryConfig config =
-            new TrajectoryConfig(DriveSystem.kMaxSpeed, DriveSystem.kMaxAcceleration)
-                .setKinematics(DriveSystem.KINEMATICS)
-                .addConstraint(constraint);
+	public static Command getTrajectoryCommand(DriveSystem driveSystem) {
+		// Define the voltage constraints for the trajectory.
+		DifferentialDriveVoltageConstraint constraint =
+			new DifferentialDriveVoltageConstraint(DriveSystem.FEED_FORWARD,
+				DriveSystem.KINEMATICS, 10);
 
-        // Define and generate the trajectory.
-        Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, new Rotation2d(0)),
-            List.of(
-                new Translation2d(1, 2),
-                new Translation2d(3, 2)
-            ),
-            new Pose2d(0, 4, new Rotation2d(0)),
-            config
-        );
+		// Define the trajectory configuration.
+		TrajectoryConfig config =
+			new TrajectoryConfig(DriveSystem.kMaxSpeed, DriveSystem.kMaxAcceleration)
+				.setKinematics(DriveSystem.KINEMATICS).addConstraint(constraint);
 
-        PIDController leftController = new PIDController(
-            DriveSystem.VELOCITY_P,
-            DriveSystem.VELOCITY_I,
-            DriveSystem.VELOCITY_D
-        );
+		// Define and generate the trajectory.
+		Trajectory trajectory =
+			TrajectoryGenerator.generateTrajectory(
+				new Pose2d(0, 0, new Rotation2d(0)),
+				List.of(new Translation2d(1, 2), new Translation2d(3, 2)),
+				new Pose2d(0, 4, new Rotation2d(0)),
+				config
+			);
 
-        PIDController rightController = new PIDController(
-            DriveSystem.VELOCITY_P,
-            DriveSystem.VELOCITY_I,
-            DriveSystem.VELOCITY_D
-        );
+		PIDController leftController =
+			new PIDController(
+				DriveSystem.VELOCITY_P,
+				DriveSystem.VELOCITY_I,
+				DriveSystem.VELOCITY_D
+			);
 
-        RamseteCommand command = new RamseteCommand(
-            trajectory,
-            driveSystem::getPose,
-            new RamseteController(),
-            DriveSystem.FEED_FORWARD,
-            DriveSystem.KINEMATICS,
-            driveSystem::getWheelSpeeds,
-            leftController,
-            rightController,
-            driveSystem::tankVoltage,
-            driveSystem
-        );
+		PIDController rightController =
+			new PIDController(
+				DriveSystem.VELOCITY_P,
+				DriveSystem.VELOCITY_I,
+				DriveSystem.VELOCITY_D
+			);
 
-        return command;
-    }
+		RamseteCommand command = new RamseteCommand(
+			trajectory,
+			driveSystem::getPose,
+			new RamseteController(),
+			DriveSystem.FEED_FORWARD,
+			DriveSystem.KINEMATICS,
+			driveSystem::getWheelSpeeds,
+			leftController,
+			rightController,
+			driveSystem::tankVoltage,
+			driveSystem
+		);
+
+		return command;
+	}
 }
