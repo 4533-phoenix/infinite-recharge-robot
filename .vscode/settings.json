@@ -11,5 +11,12 @@
     "**/.project": true,
     "**/.settings": true,
     "**/.factorypath": true
+  },
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java",
+    "editor.useTabStops": true,
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": false
   }
 }
