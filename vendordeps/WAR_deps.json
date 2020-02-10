@@ -17,6 +17,11 @@
             "groupId": "com.evanlennick",
             "artifactId": "retry4j",
             "version": "0.15.0"
+        },
+        {
+            "groupId": "org.apache.logging.log4j",
+            "artifactId": "log4j-core",
+            "version": "2.13.0"
         }
     ],
     "jniDependencies": [],
