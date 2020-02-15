@@ -174,6 +174,19 @@ public class DriveSystem extends SubsystemBase {
 		}
 	}
 
+	public boolean reachedCurve(double targetL, double targetR) {
+		double leftPos = this.leftMaster.getSelectedSensorPosition();
+		double rightPos = this.rightMaster.getSelectedSensorPosition();
+
+		if (targetDirection == Direction.FORWARD) {
+			return (leftPos >= targetL) && (rightPos >= targetR);
+		} else if (targetDirection == Direction.BACKWARD) {
+			return (leftPos <= targetL) && (rightPos <= targetR);
+		} else {
+			return true;
+		}
+	}
+
 	public void driveDistance(double inches, Direction direction) {
 		targetDirection = direction;
 		if (direction == Direction.FORWARD) {
@@ -188,6 +201,22 @@ public class DriveSystem extends SubsystemBase {
 		this.rightMaster.set(ControlMode.Position, targetPosition);
 	}
 
+	public void driveCurve(double leftDist, double rightDist, Direction direction) {
+		targetDirection = direction;
+		if (direction == Direction.FORWARD) {
+			leftDist = -1 * (leftDist * TICKS_PER_INCH);
+			rightDist = -1 * (rightDist * TICKS_PER_INCH);
+		} else if (direction == Direction.BACKWARD) {
+			leftDist = leftDist * TICKS_PER_INCH;
+			rightDist = rightDist * TICKS_PER_INCH;
+		} else {
+			leftDist = 0;
+			rightDist = 0;
+		}
+		this.leftMaster.set(ControlMode.Position, leftDist);
+		this.rightMaster.set(ControlMode.Position, rightDist);
+		//System.out.println("Left Dist: " + leftDist + "\tRight Dist: " + rightDist);
+	}
 	public double getPosition() {
 		return this.leftMaster.getSelectedSensorPosition() / TICKS_PER_INCH;
 	}
@@ -263,6 +292,6 @@ public class DriveSystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		m_odometry.update(Rotation2d.fromDegrees(this.getAngle()), this.getLeftDistance(), this.getRightDistance());
+		//m_odometry.update(Rotation2d.fromDegrees(this.getAngle()), this.getLeftDistance(), this.getRightDistance());
 	}
 }

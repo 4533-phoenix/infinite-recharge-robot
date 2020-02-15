@@ -28,15 +28,8 @@ public class RobotContainer {
 					this.driveSystem
 				  );
 
-	private SequentialCommandGroup squareAuto = new SequentialCommandGroup(
-			CommandFactory.driveDistanceCommand(24, Direction.FORWARD, driveSystem),
-			CommandFactory.angleTurnCommand(.25, 90, Direction.LEFT, driveSystem),
-			CommandFactory.driveDistanceCommand(24, Direction.FORWARD, driveSystem),
-			CommandFactory.angleTurnCommand(.25, 90, Direction.LEFT, driveSystem),
-			CommandFactory.driveDistanceCommand(24, Direction.FORWARD, driveSystem),
-			CommandFactory.angleTurnCommand(.25, 90, Direction.LEFT, driveSystem),
-			CommandFactory.driveDistanceCommand(24, Direction.FORWARD, driveSystem),
-			CommandFactory.angleTurnCommand(.25, 90, Direction.LEFT, driveSystem));
+	private SequentialCommandGroup crossLineAuto = new SequentialCommandGroup(
+			CommandFactory.driveDistanceCommand(36, Direction.BACKWARD, driveSystem));
 
 	private SequentialCommandGroup goalAuto = new SequentialCommandGroup(
 			CommandFactory.driveDistanceCommand(101, Direction.BACKWARD, driveSystem), new WaitCommand(5),
@@ -54,6 +47,14 @@ public class RobotContainer {
 			CommandFactory.driveDistanceCommand(74.953, Direction.FORWARD, driveSystem),
 			CommandFactory.angleTurnCommand(0.35, 26.69, Direction.LEFT, driveSystem),
 			CommandFactory.driveDistanceCommand(52, Direction.FORWARD, driveSystem));
+
+	private SequentialCommandGroup curveAuto = new SequentialCommandGroup(
+		CommandFactory.driveCurveCommand(
+			(84.8528 + (21.0/2)) * .50 * Math.PI,
+			(84.8528 - (21.0/2)) * .50 * Math.PI,
+			Direction.FORWARD,
+			driveSystem)
+	);
 
 	/**
 	 * The container for the robot.  Contains subsystems, OI devices, and
@@ -93,6 +94,6 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand() {
 		// An ExampleCommand will run in autonomous
-		return CommandFactory.getTrajectoryCommand(driveSystem);
+		return this.curveAuto;
 	}
 }
