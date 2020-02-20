@@ -239,11 +239,18 @@ public class DriveSystem extends SubsystemBase {
 		this.rightMaster.set(ControlMode.Velocity, targetRight);
 	}
 
-	public void tankVoltage(double left, double right) {
-		leftMaster.setVoltage(left);
-		rightMaster.setVoltage(right);
+	public void voltage(double left, double right) {
+		leftMaster.setVoltage(left * 12.0);
+		rightMaster.setVoltage(right * 12.0);
 		leftSlave.set(ControlMode.Follower, Constants.LEFT_MASTER_MOTOR);
 		rightSlave.set(ControlMode.Follower, Constants.RIGHT_MASTER_MOTOR);
+	}
+
+	public void percent(double left, double right) {
+		this.leftMaster.set(ControlMode.PercentOutput, left);
+		this.rightMaster.set(ControlMode.PercentOutput, right);
+		this.leftSlave.set(ControlMode.Follower, Constants.LEFT_MASTER_MOTOR);
+		this.rightSlave.set(ControlMode.Follower, Constants.RIGHT_MASTER_MOTOR);
 	}
 
 	public double getAngle() {
