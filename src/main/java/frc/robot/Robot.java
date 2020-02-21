@@ -34,7 +34,7 @@ public class Robot extends TimedRobot {
 		this.container = new RobotContainer();
 
 		this.robotState = new RobotState()
-			.withPDP(new PowerDistributionPanel())
+			.withPDP(new PowerDistributionPanel(10))
 			.withDriveSystem(container.getDriveSystem())
 			.withIntakeSystem(container.getIntakeSystem());
 	}

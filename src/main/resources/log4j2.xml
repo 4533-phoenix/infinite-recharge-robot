@@ -2,8 +2,8 @@
 <Configuration status="WARN">
     <Appenders>
         <RollingFile name="RobotFile"
-            fileName="robot.log"
-            filePattern="robot-%d{MM-dd-yyyy_HH:mm:ss}.log.gz">
+            fileName="/tmp/robot.log"
+            filePattern="./robot-%d{MM-dd-yyyy_HH:mm:ss}.log.gz">
             <PatternLayout>
                 <Pattern>%d{ISO8601} %msg%n</Pattern>
             </PatternLayout>
@@ -11,13 +11,13 @@
                 <OnStartupTriggeringPolicy />
             </Policies>
         </RollingFile>
-        <Async name="Async">
+        <Async name="R">
             <AppenderRef ref="RobotFile"/>
         </Async>
     </Appenders>
     <Loggers>
         <Root level="error">
-            <AppenderRef ref="Async"/>
+            <AppenderRef ref="R"/>
         </Root>
     </Loggers>
 </Configuration>
