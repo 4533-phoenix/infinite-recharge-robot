@@ -38,9 +38,13 @@ public class RobotContainer {
 	private SequentialCommandGroup goalScoreTrenchAuto = new SequentialCommandGroup(
 		CommandFactory.driveDistanceCommand(101, Direction.BACKWARD, driveSystem), new WaitCommand(5),
 		CommandFactory.driveDistanceCommand(120, Direction.FORWARD, driveSystem),
-		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.LEFT, driveSystem));
+		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.LEFT, driveSystem),
+		CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD, driveSystem), 
+		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT, driveSystem),
+		CommandFactory.driveDistanceCommand(72, Direction.FORWARD, driveSystem)
+		);
 
-	private SequentialCommandGroup midScoreGeneratorAuto = new SequentialCommandGroup(
+	private SequentialCommandGroup midScoreAuto = new SequentialCommandGroup(
 		CommandFactory.driveDistanceCommand(33.67, Direction.BACKWARD, driveSystem),
 		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.RIGHT, driveSystem),
 		CommandFactory.driveDistanceCommand(74.953, Direction.BACKWARD, driveSystem),
@@ -50,7 +54,8 @@ public class RobotContainer {
 		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.RIGHT, driveSystem),
 		CommandFactory.driveDistanceCommand(74.953, Direction.FORWARD, driveSystem),
 		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.LEFT, driveSystem),
-		CommandFactory.driveDistanceCommand(52, Direction.FORWARD, driveSystem));
+		CommandFactory.driveDistanceCommand(52, Direction.FORWARD, driveSystem)
+		);
 
 	private SequentialCommandGroup homeTrenchPickupScoreAuto = new SequentialCommandGroup(
 		CommandFactory.driveDistanceCommand(158.88, Direction.FORWARD, driveSystem),
@@ -69,10 +74,17 @@ public class RobotContainer {
 		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT, driveSystem),
 		CommandFactory.driveDistanceCommand(90, Direction.FORWARD, driveSystem)
 	);
-	private SequentialCommandGroup forwardTurn = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(48, Direction.FORWARD, driveSystem)
-		//CommandFactory.angleTurnCommand(0.35, 90, Direction.RIGHT, driveSystem)
+
+	private SequentialCommandGroup awayTrenchPickupScoreAuto = new SequentialCommandGroup(
+		CommandFactory.driveDistanceCommand(111.11, Direction.FORWARD, driveSystem),
+		CommandFactory.driveDistanceCommand(111.11, Direction.BACKWARD, driveSystem),
+		CommandFactory.angleTurnCommand(0.35, 63.97, Direction.RIGHT, driveSystem),
+		CommandFactory.driveDistanceCommand(205.11, Direction.BACKWARD, driveSystem),
+		CommandFactory.angleTurnCommand(0.35, 63.97, Direction.LEFT, driveSystem),
+		CommandFactory.driveDistanceCommand(10.75, Direction.BACKWARD, driveSystem),
+		CommandFactory.driveDistanceCommand(140, Direction.FORWARD, driveSystem)
 	);
+
 	private SequentialCommandGroup curveAuto = new SequentialCommandGroup(
 		CommandFactory.driveCurveCommand(
 			//distaces for each side allowing robot to travel a displacement of 120 inches
@@ -88,7 +100,8 @@ public class RobotContainer {
 		Map.entry("trench_pickup_score", homeTrenchPickupScoreAuto),
 		Map.entry("cross_initiation_line", crossLineAuto),
 		Map.entry("score_trench", goalScoreTrenchAuto),
-		Map.entry("score_pickup_generator", midScoreGeneratorAuto)
+		Map.entry("score_pickup_generator", midScoreAuto),
+		Map.entry("collect_trench_powercells", awayTrenchPickupScoreAuto)
 	);
 
 	/**
