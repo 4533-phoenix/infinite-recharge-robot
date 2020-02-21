@@ -10,14 +10,16 @@ public class CommandFactory {
 	}
 
 	public static Command driveDistanceCommand(double distance, Direction direction, DriveSystem driveSystem) {
-		return new FunctionalCommand(() -> driveSystem.resetPosition(),
-				() -> driveSystem.driveDistance(distance, direction), (interrupt) -> driveSystem.tank(0, 0),
-				() -> driveSystem.reachedPosition(), driveSystem);
+		return new FunctionalCommand(
+			() -> driveSystem.resetPosition(),
+			() -> driveSystem.driveDistance(distance, direction),
+			(interrupt) -> driveSystem.tank(0, 0),
+			() -> driveSystem.reachedPosition(),
+			driveSystem
+		);
 	}
 
 	public static Command driveCurveCommand(double left, double right, Direction direction, DriveSystem driveSystem) {
-		System.out.println("HERE");
-
 		return new FunctionalCommand(
 			() -> driveSystem.resetPosition(),
 			() -> driveSystem.driveCurve(left, right, direction),
@@ -26,8 +28,14 @@ public class CommandFactory {
 			driveSystem
 		);
 	}
+
 	public static Command angleTurnCommand(double speed, double angle, Direction direction, DriveSystem driveSystem) {
-		return new FunctionalCommand(() -> driveSystem.resetAngle(), () -> driveSystem.turn(speed, direction),
-				(interrupt) -> driveSystem.tank(0, 0), () -> driveSystem.getAngle() >= angle, driveSystem);
+		return new FunctionalCommand(
+			() -> driveSystem.resetAngle(),
+			() -> driveSystem.turn(speed, direction),
+			(interrupt) -> driveSystem.tank(0, 0),
+			() -> driveSystem.getAngle() >= angle,
+			driveSystem
+		);
 	}
 }
