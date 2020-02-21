@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.Map;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -11,11 +13,12 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.CommandFactory;
 import frc.robot.commands.Direction;
 import frc.robot.subsystems.DriveSystem;
-import java.util.Map;
+import frc.robot.subsystems.IntakeSystem;
 
 public class RobotContainer {
 	// Initialize the robots subsystems
 	private final DriveSystem driveSystem = new DriveSystem();
+	private final IntakeSystem intakeSystem = new IntakeSystem();
 
 	// Initialize the driver controls
 	private Joystick leftStick = new Joystick(Constants.DRIVER_JOYSTICK_LEFT);
@@ -113,6 +116,10 @@ public class RobotContainer {
 
 	public DriveSystem getDriveSystem() {
 		return this.driveSystem;
+	}
+
+	public IntakeSystem getIntakeSystem() {
+		return this.intakeSystem;
 	}
 
 	private void configureDefaultCommands() {
