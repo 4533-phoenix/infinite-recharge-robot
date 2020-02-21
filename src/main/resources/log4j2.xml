@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <Appenders>
-        <File name="RobotFile" fileName="robot.log">
-            <PatternLayout pattern="%d{ISO8601} %msg%n"/>
-        </File>
+        <RollingFile name="RobotFile"
+            fileName="robot.log"
+            filePattern="robot-%d{MM-dd-yyyy_HH:mm:ss}.log.gz">
+            <PatternLayout>
+                <Pattern>%d{ISO8601} %msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+            </Policies>
+        </RollingFile>
         <Async name="Async">
             <AppenderRef ref="RobotFile"/>
         </Async>
