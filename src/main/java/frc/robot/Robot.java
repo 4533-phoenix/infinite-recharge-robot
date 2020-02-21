@@ -17,8 +17,6 @@ public class Robot extends TimedRobot {
 
 	private ObjectMapper mapper = new ObjectMapper();
 
-	private PowerDistributionPanel pdp = new PowerDistributionPanel();
-
 	private Command autoCommand = null;
 
 	private RobotContainer container = null;
