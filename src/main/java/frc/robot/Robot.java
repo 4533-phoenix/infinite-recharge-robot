@@ -19,7 +19,7 @@ public class Robot extends TimedRobot {
 
 	private PowerDistributionPanel pdp = new PowerDistributionPanel();
 
-	private Command m_autonomousCommand = null;
+	private Command autoCommand = null;
 
 	private RobotContainer container = null;
 
@@ -74,11 +74,11 @@ public class Robot extends TimedRobot {
 		driveSystem.resetAngle();
 		driveSystem.resetPosition();
 
-		m_autonomousCommand =  this.container.getAutonomousCommand("");
+		this.autoCommand = this.container.getAutonomousCommand("");
 
 		// schedule the autonomous command (example)
-		if (m_autonomousCommand != null) {
-			m_autonomousCommand.schedule();
+		if (this.autoCommand != null) {
+			this.autoCommand.schedule();
 		}
 	}
 
@@ -100,8 +100,8 @@ public class Robot extends TimedRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
-		if (m_autonomousCommand != null) {
-			m_autonomousCommand.cancel();
+		if (this.autoCommand != null) {
+			this.autoCommand.cancel();
 		}
 	}
 
