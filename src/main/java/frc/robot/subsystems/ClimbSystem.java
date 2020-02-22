@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,33 +19,25 @@ public class ClimbSystem extends SubsystemBase {
   /**
    * Creates a new ClimbSystem.
    */
-  private VictorSPX hookMotor;
+  private WPI_TalonSRX hookMotor;
   private VictorSPX climbMotor;
-  private DigitalInput hookUpperLimit;
-  private DigitalInput hookLowerLimit;
   private final double HOOK_PERCENT_OUTPUT = 0.5;
   private final double CLIMB_PERCENT_OUTPUT = 0.5;
 
   public ClimbSystem() {
-    this.hookMotor = new VictorSPX(Constants.HOOK_MOTOR);
-    this.climbMotor = new VictorSPX(Constants.CLIMB_MOTOR);
-    this.hookUpperLimit = new DigitalInput(Constants.HOOK_UPPER_LIMIT);
-    this.hookLowerLimit = new DigitalInput(Constants.HOOK_LOWER_LIMIT);
+    this.hookMotor = new WPI_TalonSRX(Constants.ELEVATOR_MOTOR);
+    this.climbMotor = new VictorSPX(Constants.WINCH_MOTOR);
   }
 
   public void hookUp(){
-    if(!hookUpperLimit.get()){
-      this.hookMotor.set(ControlMode.PercentOutput, HOOK_PERCENT_OUTPUT);
-    } else {
-      this.hookMotor.set(ControlMode.PercentOutput, 0);
-    }
+    this.hookMotor.set(ControlMode.PercentOutput, HOOK_PERCENT_OUTPUT);
   }
   public void hookDown(){
-    if(!hookLowerLimit.get()){
-      this.hookMotor.set(ControlMode.PercentOutput, -HOOK_PERCENT_OUTPUT);
-    } else {
-      this.hookMotor.set(ControlMode.PercentOutput, 0);
-    }
+    this.hookMotor.set(ControlMode.PercentOutput, -HOOK_PERCENT_OUTPUT);
+  }
+
+  public void hookStop() {
+	  this.hookMotor.set(ControlMode.PercentOutput, 0);
   }
 
   public void climb(){

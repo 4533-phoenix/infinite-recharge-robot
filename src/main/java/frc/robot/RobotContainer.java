@@ -5,6 +5,7 @@ import java.util.Map;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -124,7 +125,25 @@ public class RobotContainer {
 	 * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
 	 */
 	private void configureButtonBindings() {
+		JoystickButton intakeIn = new JoystickButton(rightStick, Constants.TRIGGER);
+		intakeIn.whileHeld(CommandFactory.intakeInCommand(intakeSystem));
+		intakeIn.whenReleased(CommandFactory.intakeStopCommand(intakeSystem));
+		
+		JoystickButton intakeOut = new JoystickButton(rightStick, Constants.BUTTON_5);
+		intakeOut.whileHeld(CommandFactory.intakeOutCommand(intakeSystem));
+		intakeOut.whenReleased(CommandFactory.intakeStopCommand(intakeSystem));
+		
+		JoystickButton conveyorOut = new JoystickButton(rightStick, Constants.THUMB_BUTTON);
+		conveyorOut.whileHeld(CommandFactory.conveyorOutCommand(intakeSystem));
+		conveyorOut.whenReleased(CommandFactory.conveyorStopCommand(intakeSystem));
 
+		JoystickButton conveyorIn = new JoystickButton(rightStick, Constants.BUTTON_3);
+		conveyorIn.whileHeld(CommandFactory.conveyorInCommand(intakeSystem));
+		conveyorIn.whenReleased(CommandFactory.conveyorStopCommand(intakeSystem));
+		
+		JoystickButton conveyorEmpty = new JoystickButton(rightStick, Constants.BUTTON_4);
+		conveyorEmpty.whileHeld(CommandFactory.emptyConveyorCommand(intakeSystem));
+		conveyorEmpty.whenReleased(CommandFactory.conveyorStopCommand(intakeSystem));
 	}
 
 	public DriveSystem getDriveSystem() {
