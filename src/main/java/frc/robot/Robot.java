@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -23,6 +26,8 @@ public class Robot extends TimedRobot {
 
 	private RobotState robotState = null;
 
+	private ScheduledThreadPoolExecutor executor = null;
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -33,22 +38,32 @@ public class Robot extends TimedRobot {
 		// bindings, and put our autonomous chooser on the dashboard.
 		this.container = new RobotContainer();
 
+		this.executor = new ScheduledThreadPoolExecutor(2);
+
 		this.robotState = new RobotState()
 			.withPDP(new PowerDistributionPanel(10))
 			.withDriveSystem(container.getDriveSystem())
 			.withIntakeSystem(container.getIntakeSystem());
+
+		this.executor.scheduleAtFixedRate(
+			() -> {
+				this.robotState.update();
+				try {
+					String state = this.mapper.writeValueAsString(this.robotState);
+					this.logger.info(state);
+				} catch (JsonProcessingException e) {
+					this.logger.error(e.toString());
+				}
+			},
+			0,   // initial delay
+			100, // delay
+			TimeUnit.MILLISECONDS
+		);
 	}
 
 	@Override
 	public void robotPeriodic() {
 		CommandScheduler.getInstance().run();
-		this.robotState.update();
-		try {
-			String state = this.mapper.writeValueAsString(this.robotState);
-			this.logger.info(state);
-		} catch (JsonProcessingException e) {
-			this.logger.error(e.toString());
-		}
 	}
 
 	/**
