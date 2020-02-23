@@ -21,22 +21,51 @@ import frc.robot.subsystems.IntakeSystem;
 public class Robot extends TimedRobot {
 	private Logger logger = LogManager.getLogger(Robot.class.getName());
 
+	// TODO: this seems like it would be better encapsulated by the robot state
+	// updater.
 	private ObjectMapper mapper = new ObjectMapper();
 
+	/**
+	 * The robot's configured autonomous command.
+	 */
 	private Command autoCommand = null;
 
+	// TODO: While it's purpose and intention is understood, the 'container'
+	// concept still doesn't sit well. It would be ideal if we could determine a
+	// better approach and take that instead. This is a just a note to remind us
+	// to consider it as we move forward.
 	private RobotContainer container = null;
 
+	/**
+	 * Tracks the current state of the robot.
+	 */
 	private RobotState robotState = null;
 
-	private ScheduledThreadPoolExecutor executor = null;
+	/**
+	 * Thread pool for handling interval based tasks that are outside of the
+	 * typical robot lifecyle. In other words, things that should not be on the
+	 * robot's main loop/thread.
+	 */
+	private ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2);
 
+	/**
+	 * The robot's drive train subsystem.
+	 */
 	public final static DriveSystem drive = new DriveSystem();
 
+	/**
+	 * The robot's intake subsystem.
+	 */
 	public final static IntakeSystem intake = new IntakeSystem();
 
+	/**
+	 * The robot's conveyor subsystem.
+	 */
 	public final static ConveyorSystem conveyor = new ConveyorSystem();
 
+	/**
+	 * The robot's climber subsystem.
+	 */
 	public final static ClimbSystem climber = new ClimbSystem();
 
 	/**
@@ -49,13 +78,15 @@ public class Robot extends TimedRobot {
 		// bindings, and put our autonomous chooser on the dashboard.
 		this.container = new RobotContainer();
 
-		this.executor = new ScheduledThreadPoolExecutor(2);
-
+		// TODO: since subsystems are now static properties of the robot, do we
+		// really need to construct this object in this manner?
 		this.robotState = new RobotState()
 			.withPDP(new PowerDistributionPanel())
 			.withDriveSystem(Robot.drive)
 			.withIntakeSystem(Robot.intake);
 
+		// TODO: should this be refactored such that the runnable is defined
+		// elsewhere?
 		this.executor.scheduleAtFixedRate(
 			() -> {
 				this.robotState.update();
