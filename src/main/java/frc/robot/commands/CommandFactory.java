@@ -64,28 +64,28 @@ public class CommandFactory {
 
 	public static Command conveyorInCommand() {
 		return new InstantCommand(
-			() -> Robot.conveyor.conveyorIn(),
+			() -> Robot.conveyor.forward(),
 			Robot.conveyor
 		);
 	}
 
 	public static Command conveyorOutCommand() {
 		return new InstantCommand(
-			() -> Robot.conveyor.conveyorOut(),
+			() -> Robot.conveyor.forward(),
 			Robot.conveyor
 		);
 	}
 
 	public static Command emptyConveyorCommand() {
 		return new InstantCommand(
-			() -> Robot.conveyor.enmptyConveyor(),
+			() -> Robot.conveyor.empty(),
 			Robot.conveyor
 		);
 	}
 
 	public static Command conveyorStopCommand(){
 		return new InstantCommand(
-			() -> Robot.conveyor.conveyorStop(),
+			() -> Robot.conveyor.stop(),
 			Robot.conveyor
 		);
 	}

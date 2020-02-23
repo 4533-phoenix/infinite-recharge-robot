@@ -7,9 +7,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CommandFactory;
 import frc.robot.commands.Direction;
@@ -28,16 +30,21 @@ public class RobotContainer {
 		Robot.drive
 	);
 
-	private final Command intakeCommand = new RunCommand(
-		() -> {
-			if (Robot.intake.hasPowerCell()) {
-				Robot.conveyor.conveyorIn();
-			} else {
-				Robot.conveyor.conveyorStop();
-			}
-		},
-		Robot.conveyor
-	);
+	/**
+	 * ingestPowerCell waits until a power cell is available to be ingested.
+	 * Once one is available, the 'ready' check will be 'true'. It will then
+	 * step the conveyor to 'ingest' or take in the power cell.
+	 */
+	private final Command ingestPowerCell = new SequentialCommandGroup(
+		new WaitUntilCommand(Robot.conveyor::ready),
+		new FunctionalCommand(
+			() -> Robot.conveyor.reset(),
+			() -> Robot.conveyor.step(),
+			(interrupt) -> Robot.conveyor.stop(),
+			() -> Robot.conveyor.stepComplete(),
+			Robot.conveyor
+		)
+	).perpetually();
 
 	private SequentialCommandGroup crossLineAuto = new SequentialCommandGroup(
 		CommandFactory.driveDistanceCommand(120, Direction.BACKWARD));
@@ -149,7 +156,7 @@ public class RobotContainer {
 		CommandScheduler scheduler = CommandScheduler.getInstance();
 
 		scheduler.setDefaultCommand(Robot.drive, driveCommand);
-		scheduler.setDefaultCommand(Robot.conveyor, intakeCommand);
+		scheduler.setDefaultCommand(Robot.conveyor, ingestPowerCell);
 	}
 
 	/**
