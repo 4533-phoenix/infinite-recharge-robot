@@ -10,6 +10,8 @@ public final class Constants {
 	public static final int DRIVER_JOYSTICK_LEFT = 0;
 	public static final int DRIVER_JOYSTICK_RIGHT = 1;
 
+	public static final int PDP_CHANNEL = 10;
+
 	public static final int INTAKE_MOTOR = 6;
 	public static final int CONVEYOR_MOTOR = 7;
 	public static final int ELEVATOR_MOTOR = 8;

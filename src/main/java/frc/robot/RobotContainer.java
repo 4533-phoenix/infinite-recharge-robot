@@ -5,94 +5,93 @@ import java.util.Map;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CommandFactory;
 import frc.robot.commands.Direction;
-import frc.robot.subsystems.DriveSystem;
-import frc.robot.subsystems.IntakeSystem;
 
 public class RobotContainer {
-	// Initialize the robots subsystems
-	private final DriveSystem driveSystem = new DriveSystem();
-	private final IntakeSystem intakeSystem = new IntakeSystem();
-
 	// Initialize the driver controls
 	private Joystick leftStick = new Joystick(Constants.DRIVER_JOYSTICK_LEFT);
 	private Joystick rightStick = new Joystick(Constants.DRIVER_JOYSTICK_RIGHT);
 
 	// Initialize the drive command
 	private final Command driveCommand = new RunCommand(
-			() -> this.driveSystem.tank(
-					this.leftStick.getRawAxis(1),
-					this.rightStick.getRawAxis(1)),
-					this.driveSystem
-				  );
+		() -> Robot.drive.tank(
+			this.leftStick.getRawAxis(1),
+			this.rightStick.getRawAxis(1)
+		),
+		Robot.drive
+	);
+
+	private final Command intakeCommand = new RunCommand(
+		() -> {
+			if (Robot.intake.hasPowerCell()) {
+				Robot.conveyor.conveyorIn();
+			} else {
+				Robot.conveyor.conveyorStop();
+			}
+		},
+		Robot.conveyor
+	);
 
 	private SequentialCommandGroup crossLineAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(120, Direction.BACKWARD, driveSystem));
+		CommandFactory.driveDistanceCommand(120, Direction.BACKWARD));
 
 	private SequentialCommandGroup goalScoreTrenchAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(101, Direction.BACKWARD, driveSystem), new WaitCommand(5),
-		CommandFactory.driveDistanceCommand(120, Direction.FORWARD, driveSystem),
-		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.LEFT, driveSystem),
-		CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD, driveSystem), 
-		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT, driveSystem),
-		CommandFactory.driveDistanceCommand(72, Direction.FORWARD, driveSystem)
+		CommandFactory.driveDistanceCommand(101, Direction.BACKWARD),
+		new WaitCommand(5),
+		CommandFactory.driveDistanceCommand(120, Direction.FORWARD),
+		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.LEFT),
+		CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD),
+		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT),
+		CommandFactory.driveDistanceCommand(72, Direction.FORWARD)
 		);
 
 	private SequentialCommandGroup midScoreAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(33.67, Direction.BACKWARD, driveSystem),
-		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.RIGHT, driveSystem),
-		CommandFactory.driveDistanceCommand(74.953, Direction.BACKWARD, driveSystem),
-		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.LEFT, driveSystem),
-		CommandFactory.driveDistanceCommand(33, Direction.BACKWARD, driveSystem), new WaitCommand(5),
-		CommandFactory.driveDistanceCommand(33.67, Direction.FORWARD, driveSystem),
-		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.RIGHT, driveSystem),
-		CommandFactory.driveDistanceCommand(74.953, Direction.FORWARD, driveSystem),
-		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.LEFT, driveSystem),
-		CommandFactory.driveDistanceCommand(52, Direction.FORWARD, driveSystem)
+		CommandFactory.driveDistanceCommand(33.67, Direction.BACKWARD),
+		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.RIGHT),
+		CommandFactory.driveDistanceCommand(74.953, Direction.BACKWARD),
+		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.LEFT),
+		CommandFactory.driveDistanceCommand(33, Direction.BACKWARD),
+		new WaitCommand(5),
+		CommandFactory.driveDistanceCommand(33.67, Direction.FORWARD),
+		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.RIGHT),
+		CommandFactory.driveDistanceCommand(74.953, Direction.FORWARD),
+		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.LEFT),
+		CommandFactory.driveDistanceCommand(52, Direction.FORWARD)
 		);
 
 	private SequentialCommandGroup homeTrenchPickupScoreAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(158.88, Direction.FORWARD, driveSystem),
+		CommandFactory.driveDistanceCommand(158.88, Direction.FORWARD),
 		//add parallel command for intake while moving
 		//new WaitCommand(10),
-		CommandFactory.driveDistanceCommand(218.88, Direction.BACKWARD, driveSystem),
+		CommandFactory.driveDistanceCommand(218.88, Direction.BACKWARD),
 		new WaitCommand(1),
-		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT, driveSystem),
-		CommandFactory.driveDistanceCommand(77.95, Direction.BACKWARD, driveSystem),
-		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT, driveSystem),
-		CommandFactory.driveDistanceCommand(1.5, Direction.BACKWARD, driveSystem),
+		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT),
+		CommandFactory.driveDistanceCommand(77.95, Direction.BACKWARD),
+		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT),
+		CommandFactory.driveDistanceCommand(1.5, Direction.BACKWARD),
 		new WaitCommand(3),
-		CommandFactory.driveDistanceCommand(1.5, Direction.FORWARD, driveSystem),
-		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT, driveSystem),
-		CommandFactory.driveDistanceCommand(77.95, Direction.FORWARD, driveSystem),
-		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT, driveSystem),
-		CommandFactory.driveDistanceCommand(90, Direction.FORWARD, driveSystem)
+		CommandFactory.driveDistanceCommand(1.5, Direction.FORWARD),
+		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT),
+		CommandFactory.driveDistanceCommand(77.95, Direction.FORWARD),
+		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT),
+		CommandFactory.driveDistanceCommand(90, Direction.FORWARD)
 	);
 
 	private SequentialCommandGroup awayTrenchPickupScoreAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(111.11, Direction.FORWARD, driveSystem),
-		CommandFactory.driveDistanceCommand(111.11, Direction.BACKWARD, driveSystem),
-		CommandFactory.angleTurnCommand(0.35, 63.97, Direction.RIGHT, driveSystem),
-		CommandFactory.driveDistanceCommand(205.11, Direction.BACKWARD, driveSystem),
-		CommandFactory.angleTurnCommand(0.35, 63.97, Direction.LEFT, driveSystem),
-		CommandFactory.driveDistanceCommand(10.75, Direction.BACKWARD, driveSystem),
-		CommandFactory.driveDistanceCommand(140, Direction.FORWARD, driveSystem)
-	);
-
-	private SequentialCommandGroup curveAuto = new SequentialCommandGroup(
-		CommandFactory.driveCurveCommand(
-			//distaces for each side allowing robot to travel a displacement of 120 inches
-			(84.8528 + (21.0/2)) * .50 * Math.PI,
-			(84.8528 - (21.0/2)) * .50 * Math.PI,
-			Direction.FORWARD,
-			driveSystem)
+		CommandFactory.driveDistanceCommand(111.11, Direction.FORWARD),
+		CommandFactory.driveDistanceCommand(111.11, Direction.BACKWARD),
+		CommandFactory.angleTurnCommand(0.35, 63.97, Direction.RIGHT),
+		CommandFactory.driveDistanceCommand(205.11, Direction.BACKWARD),
+		CommandFactory.angleTurnCommand(0.35, 63.97, Direction.LEFT),
+		CommandFactory.driveDistanceCommand(10.75, Direction.BACKWARD),
+		CommandFactory.driveDistanceCommand(140, Direction.FORWARD)
 	);
 
 	//creates a hashMap
@@ -126,36 +125,31 @@ public class RobotContainer {
 	 */
 	private void configureButtonBindings() {
 		JoystickButton intakeIn = new JoystickButton(rightStick, Constants.TRIGGER);
-		intakeIn.whileHeld(CommandFactory.intakeInCommand(intakeSystem));
-		intakeIn.whenReleased(CommandFactory.intakeStopCommand(intakeSystem));
-		
+		intakeIn.whileHeld(CommandFactory.intakeInCommand());
+		intakeIn.whenReleased(CommandFactory.intakeStopCommand());
+
 		JoystickButton intakeOut = new JoystickButton(rightStick, Constants.BUTTON_5);
-		intakeOut.whileHeld(CommandFactory.intakeOutCommand(intakeSystem));
-		intakeOut.whenReleased(CommandFactory.intakeStopCommand(intakeSystem));
-		
+		intakeOut.whileHeld(CommandFactory.intakeOutCommand());
+		intakeOut.whenReleased(CommandFactory.intakeStopCommand());
+
 		JoystickButton conveyorOut = new JoystickButton(rightStick, Constants.THUMB_BUTTON);
-		conveyorOut.whileHeld(CommandFactory.conveyorOutCommand(intakeSystem));
-		conveyorOut.whenReleased(CommandFactory.conveyorStopCommand(intakeSystem));
+		conveyorOut.whileHeld(CommandFactory.conveyorOutCommand());
+		conveyorOut.whenReleased(CommandFactory.conveyorStopCommand());
 
 		JoystickButton conveyorIn = new JoystickButton(rightStick, Constants.BUTTON_3);
-		conveyorIn.whileHeld(CommandFactory.conveyorInCommand(intakeSystem));
-		conveyorIn.whenReleased(CommandFactory.conveyorStopCommand(intakeSystem));
-		
+		conveyorIn.whileHeld(CommandFactory.conveyorInCommand());
+		conveyorIn.whenReleased(CommandFactory.conveyorStopCommand());
+
 		JoystickButton conveyorEmpty = new JoystickButton(rightStick, Constants.BUTTON_4);
-		conveyorEmpty.whileHeld(CommandFactory.emptyConveyorCommand(intakeSystem));
-		conveyorEmpty.whenReleased(CommandFactory.conveyorStopCommand(intakeSystem));
-	}
-
-	public DriveSystem getDriveSystem() {
-		return this.driveSystem;
-	}
-
-	public IntakeSystem getIntakeSystem() {
-		return this.intakeSystem;
+		conveyorEmpty.whileHeld(CommandFactory.emptyConveyorCommand());
+		conveyorEmpty.whenReleased(CommandFactory.conveyorStopCommand());
 	}
 
 	private void configureDefaultCommands() {
-		CommandScheduler.getInstance().setDefaultCommand(driveSystem, driveCommand);
+		CommandScheduler scheduler = CommandScheduler.getInstance();
+
+		scheduler.setDefaultCommand(Robot.drive, driveCommand);
+		scheduler.setDefaultCommand(Robot.conveyor, intakeCommand);
 	}
 
 	/**

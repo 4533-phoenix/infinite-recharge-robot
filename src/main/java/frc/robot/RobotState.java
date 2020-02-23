@@ -20,7 +20,7 @@ public class RobotState {
 	private IntakeSystem intakeSystem = null;
 
 	@JsonProperty
-	private long timestamp;
+	private long timestamp = 0;
 
 	@JsonProperty
 	private double[] current = new double[16];
@@ -42,6 +42,12 @@ public class RobotState {
 
 	@JsonProperty
 	private double leftDistance = 0.0;
+
+	@JsonProperty
+	private boolean[] powerCells = new boolean[5];
+
+	@JsonProperty
+	private double pdpTemperature = 0.0;
 
 	public RobotState() {}
 
@@ -70,6 +76,7 @@ public class RobotState {
 
 			this.totalCurrent = this.pdp.getTotalCurrent();
 			this.voltage = this.pdp.getVoltage();
+			this.pdpTemperature = this.pdp.getTemperature();
 		}
 
 		if (this.driveSystem != null) {
@@ -82,6 +89,7 @@ public class RobotState {
 		}
 
 		if (this.intakeSystem != null) {
+			this.powerCells = this.intakeSystem.getPowerCells();
 		}
 	}
 }

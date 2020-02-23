@@ -13,7 +13,10 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ClimbSystem;
+import frc.robot.subsystems.ConveyorSystem;
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.IntakeSystem;
 
 public class Robot extends TimedRobot {
 	private Logger logger = LogManager.getLogger(Robot.class.getName());
@@ -28,6 +31,14 @@ public class Robot extends TimedRobot {
 
 	private ScheduledThreadPoolExecutor executor = null;
 
+	public final static DriveSystem drive = new DriveSystem();
+
+	public final static IntakeSystem intake = new IntakeSystem();
+
+	public final static ConveyorSystem conveyor = new ConveyorSystem();
+
+	public final static ClimbSystem climber = new ClimbSystem();
+
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -41,9 +52,9 @@ public class Robot extends TimedRobot {
 		this.executor = new ScheduledThreadPoolExecutor(2);
 
 		this.robotState = new RobotState()
-			.withPDP(new PowerDistributionPanel(10))
-			.withDriveSystem(container.getDriveSystem())
-			.withIntakeSystem(container.getIntakeSystem());
+			.withPDP(new PowerDistributionPanel())
+			.withDriveSystem(Robot.drive)
+			.withIntakeSystem(Robot.intake);
 
 		this.executor.scheduleAtFixedRate(
 			() -> {
@@ -83,9 +94,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		DriveSystem driveSystem =  this.container.getDriveSystem();
-		driveSystem.resetAngle();
-		driveSystem.resetPosition();
+		Robot.drive.resetAngle();
+		Robot.drive.resetPosition();
 
 		this.autoCommand = this.container.getAutonomousCommand("");
 
@@ -105,9 +115,8 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		DriveSystem driveSystem = this.container.getDriveSystem();
-		driveSystem.resetAngle();
-		driveSystem.resetPosition();
+		Robot.drive.resetAngle();
+		Robot.drive.resetPosition();
 
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
@@ -136,5 +145,10 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+	}
+
+	@Override
+	public void startCompetition() {
+		super.startCompetition();
 	}
 }

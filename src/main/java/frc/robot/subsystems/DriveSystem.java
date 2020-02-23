@@ -8,10 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -87,8 +84,6 @@ public class DriveSystem extends SubsystemBase {
 	public static final double kMaxSpeed = 3;
 	public static final double kMaxAcceleration = 3;
 
-	private final DifferentialDriveOdometry m_odometry;
-
 	/** Default timeout in milliseconds */
 	private static final int DEFAULT_TIMEOUT = 30;
 
@@ -136,10 +131,6 @@ public class DriveSystem extends SubsystemBase {
 
 		// Initialize the NavX IMU sensor.
 		this.navX = new AHRS(SPI.Port.kMXP);
-
-		//initializes odometry
-		m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(this.getAngle()));
-
 	}
 
 	public void setPIDF(double p, double i, double d, double f) {
@@ -215,8 +206,8 @@ public class DriveSystem extends SubsystemBase {
 		}
 		this.leftMaster.set(ControlMode.Position, leftDist);
 		this.rightMaster.set(ControlMode.Position, rightDist);
-		//System.out.println("Left Dist: " + leftDist + "\tRight Dist: " + rightDist);
 	}
+
 	public double getPosition() {
 		return this.leftMaster.getSelectedSensorPosition() / TICKS_PER_INCH;
 	}
@@ -232,8 +223,6 @@ public class DriveSystem extends SubsystemBase {
 	public void tank(double left, double right) {
 		double targetLeft = left * MAX_VELOCITY * 4096 / 600.0;
 		double targetRight = right * MAX_VELOCITY * 4096 / 600.0;
-
-		//System.out.println("Left: "+left + " Right: " + right);
 
 		this.leftMaster.set(ControlMode.Velocity, targetLeft);
 		this.rightMaster.set(ControlMode.Velocity, targetRight);
@@ -276,10 +265,6 @@ public class DriveSystem extends SubsystemBase {
 		}
 	}
 
-	public Pose2d getPose() {
-		return m_odometry.getPoseMeters();
-	}
-
 	public DifferentialDriveWheelSpeeds getWheelSpeeds() {
 		// Convert the measured rate of velocity to meters per second.
 		//
@@ -299,6 +284,5 @@ public class DriveSystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-		//m_odometry.update(Rotation2d.fromDegrees(this.getAngle()), this.getLeftDistance(), this.getRightDistance());
 	}
 }

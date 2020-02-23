@@ -3,7 +3,7 @@
     <Appenders>
         <RollingFile name="Robot_Log_File"
             fileName="${sys:user.home}/logs/robot.log"
-            filePattern="${sys:user.home}/logs/robot-%d{MM-dd-yyyy_HH:mm:ss}.log.gz"
+            filePattern="${sys:user.home}/logs/robot-%d{MMddyyyy_HHmmss}.log.gz"
             immediateFlush="true">
             <PatternLayout>
                 <Pattern>[%d{ISO8601}]: %msg%n</Pattern>
@@ -17,7 +17,7 @@
         </Async>
     </Appenders>
     <Loggers>
-        <Root name="robot" level="INFO">
+        <Root level="INFO">
             <AppenderRef ref="Async_Appender"/>
         </Root>
     </Loggers>
