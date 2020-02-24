@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CommandFactory;
 import frc.robot.commands.Direction;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 
 public class RobotContainer {
 	// Initialize the driver controls
@@ -51,13 +52,19 @@ public class RobotContainer {
 
 	private SequentialCommandGroup goalScoreTrenchAuto = new SequentialCommandGroup(
 		CommandFactory.driveDistanceCommand(101, Direction.BACKWARD),
-		new WaitCommand(5),
+		CommandFactory.emptyConveyorCommand(),
 		CommandFactory.driveDistanceCommand(120, Direction.FORWARD),
 		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.LEFT),
-		CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD),
+		new ParallelDeadlineGroup(
+			CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD),
+			CommandFactory.intakeInCommand()
+		),	
 		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT),
-		CommandFactory.driveDistanceCommand(72, Direction.FORWARD)
-		);
+		new ParallelDeadlineGroup(
+			CommandFactory.driveDistanceCommand(72, Direction.FORWARD),
+			CommandFactory.intakeInCommand()
+		)
+	);
 
 	private SequentialCommandGroup midScoreAuto = new SequentialCommandGroup(
 		CommandFactory.driveDistanceCommand(33.67, Direction.BACKWARD),
@@ -65,7 +72,7 @@ public class RobotContainer {
 		CommandFactory.driveDistanceCommand(74.953, Direction.BACKWARD),
 		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.LEFT),
 		CommandFactory.driveDistanceCommand(33, Direction.BACKWARD),
-		new WaitCommand(5),
+		CommandFactory.emptyConveyorCommand(),
 		CommandFactory.driveDistanceCommand(33.67, Direction.FORWARD),
 		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.RIGHT),
 		CommandFactory.driveDistanceCommand(74.953, Direction.FORWARD),
@@ -74,16 +81,16 @@ public class RobotContainer {
 		);
 
 	private SequentialCommandGroup homeTrenchPickupScoreAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(158.88, Direction.FORWARD),
-		//add parallel command for intake while moving
-		//new WaitCommand(10),
+		new ParallelDeadlineGroup(
+			CommandFactory.driveDistanceCommand(158.88, Direction.FORWARD),
+			CommandFactory.intakeInCommand()
+		),
 		CommandFactory.driveDistanceCommand(218.88, Direction.BACKWARD),
-		new WaitCommand(1),
 		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT),
 		CommandFactory.driveDistanceCommand(77.95, Direction.BACKWARD),
 		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT),
 		CommandFactory.driveDistanceCommand(1.5, Direction.BACKWARD),
-		new WaitCommand(3),
+		CommandFactory.emptyConveyorCommand(),
 		CommandFactory.driveDistanceCommand(1.5, Direction.FORWARD),
 		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT),
 		CommandFactory.driveDistanceCommand(77.95, Direction.FORWARD),
@@ -92,12 +99,16 @@ public class RobotContainer {
 	);
 
 	private SequentialCommandGroup awayTrenchPickupScoreAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(111.11, Direction.FORWARD),
+		new ParallelDeadlineGroup(
+			CommandFactory.driveDistanceCommand(111.11, Direction.FORWARD),
+			CommandFactory.intakeInCommand()
+		),
 		CommandFactory.driveDistanceCommand(111.11, Direction.BACKWARD),
 		CommandFactory.angleTurnCommand(0.35, 63.97, Direction.RIGHT),
 		CommandFactory.driveDistanceCommand(205.11, Direction.BACKWARD),
 		CommandFactory.angleTurnCommand(0.35, 63.97, Direction.LEFT),
 		CommandFactory.driveDistanceCommand(10.75, Direction.BACKWARD),
+		CommandFactory.emptyConveyorCommand(),
 		CommandFactory.driveDistanceCommand(140, Direction.FORWARD)
 	);
 
@@ -150,6 +161,18 @@ public class RobotContainer {
 		JoystickButton conveyorEmpty = new JoystickButton(rightStick, Constants.BUTTON_4);
 		conveyorEmpty.whileHeld(CommandFactory.emptyConveyorCommand());
 		conveyorEmpty.whenReleased(CommandFactory.conveyorStopCommand());
+
+		JoystickButton hookUp = new JoystickButton(rightStick, Constants.BUTTON_6);
+		hookUp.whileHeld(CommandFactory.hookUpCommand());
+		hookUp.whenReleased(CommandFactory.hookStopCommand());
+
+		JoystickButton hookDown = new JoystickButton(rightStick, Constants.BUTTON_7);
+		hookDown.whileHeld(CommandFactory.hookDownCommand());
+		hookDown.whenReleased(CommandFactory.hookStopCommand());
+
+		JoystickButton climb = new JoystickButton(rightStick, Constants.BUTTON_8);
+		climb.whileHeld(CommandFactory.climbCommand());
+		climb.whenReleased(CommandFactory.climbStopCommand());
 	}
 
 	private void configureDefaultCommands() {

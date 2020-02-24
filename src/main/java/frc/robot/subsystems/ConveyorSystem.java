@@ -51,6 +51,10 @@ public class ConveyorSystem extends SubsystemBase {
 			0,
 			30
 		);
+		this.motor.config_kP(0, 0.04, 100);
+		this.motor.config_kI(0, 0.0, 100);
+		this.motor.config_kD(0, 0.0, 100);
+		this.motor.config_kF(0, 0.0, 100);
 
 		this.motor.setInverted(InvertType.InvertMotorOutput);
 

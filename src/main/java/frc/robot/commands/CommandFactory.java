@@ -90,31 +90,38 @@ public class CommandFactory {
 		);
 	}
 
-	public static Command hookUpCommand(ClimbSystem climbSystem){
+	public static Command hookUpCommand(){
 		return new InstantCommand(
-			() -> climbSystem.hookUp(),
-			climbSystem
+			() -> Robot.climber.hookUp(),
+			Robot.climber
 		);
 	}
 
-	public static Command hookDownCommand(ClimbSystem climbSystem) {
+	public static Command hookDownCommand() {
 		return new InstantCommand(
-			() -> climbSystem.hookDown(),
-			climbSystem
+			() -> Robot.climber.hookDown(),
+			Robot.climber
 		);
 	}
 
-	public static Command hookStopCommand(ClimbSystem climbSystem) {
+	public static Command hookStopCommand() {
 		return new InstantCommand(
-			() -> climbSystem.hookStop(),
-			climbSystem
+			() -> Robot.climber.hookStop(),
+			Robot.climber
 		);
 	}
 
-	public static Command climbCommand(ClimbSystem climbSystem) {
+	public static Command climbCommand() {
 		return new InstantCommand(
-			() -> climbSystem.climb(),
-			climbSystem
+			() -> Robot.climber.climb(),
+			Robot.climber
+		);
+	}
+
+	public static Command climbStopCommand() {
+		return new InstantCommand(
+			() -> Robot.climber.climbStop(),
+			Robot.climber
 		);
 	}
 }

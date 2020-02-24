@@ -26,7 +26,7 @@ public class DriveSystem extends SubsystemBase {
 	private AHRS navX;
 
 	public static double MAX_VELOCITY = 450;
-	private static final double PEAK_OUTPUT = 0.5;
+	private static final double PEAK_OUTPUT = 1.0;
 
 	// Wheel specific constants.
 	private static final double TICKS_PER_ROTATION = 4096.0;
