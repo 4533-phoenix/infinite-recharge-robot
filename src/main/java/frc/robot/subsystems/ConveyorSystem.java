@@ -173,10 +173,12 @@ public class ConveyorSystem extends SubsystemBase {
 		return voltage > 0.6 && voltage < 1.0;
 	}
 
-	public int getPosition() {
-		return this.motor.getSelectedSensorPosition();
-	}
-
+	/**
+	 * Returns whether the conveyor is actively moving.
+	 *
+	 * @return <code>true</code> if the conveyor is moving, otherwise
+	 * <code>false</code>.
+	 */
 	public boolean isActive() {
 		return this.isActive;
 	}
