@@ -9,6 +9,7 @@ public final class Constants {
 	// Joystick port constants
 	public static final int DRIVER_JOYSTICK_LEFT = 0;
 	public static final int DRIVER_JOYSTICK_RIGHT = 1;
+	public static final int SECOND_DRIVER_JOYSTICK = 2;
 
 	public static final int PDP_CHANNEL = 10;
 
