@@ -89,7 +89,6 @@ public class RobotState {
 		}
 
 		if (this.intakeSystem != null) {
-			this.powerCells = this.intakeSystem.getPowerCells();
 		}
 	}
 }

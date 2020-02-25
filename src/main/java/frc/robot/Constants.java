@@ -17,12 +17,6 @@ public final class Constants {
 	public static final int ELEVATOR_MOTOR = 8;
 	public static final int WINCH_MOTOR = 9;
 
-	public static final int POWER_CELL_1 = 0;
-	public static final int POWER_CELL_2 = 1;
-	public static final int POWER_CELL_3 = 2;
-	public static final int POWER_CELL_4 = 3;
-	public static final int POWER_CELL_5 = 4;
-
 	public static final int TRIGGER = 1;
 	public static final int THUMB_BUTTON = 2;
 	public static final int BUTTON_3 = 3;
@@ -35,4 +29,4 @@ public final class Constants {
 	public static final int BUTTON_10 = 10;
 	public static final int BUTTON_11 = 11;
 	public static final int BUTTON_12 = 12;
-}	
+}
