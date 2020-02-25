@@ -7,15 +7,12 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CommandFactory;
 import frc.robot.commands.Direction;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 
 public class RobotContainer {
 	// Initialize the driver controls
@@ -23,7 +20,7 @@ public class RobotContainer {
 	private Joystick rightStick = new Joystick(Constants.DRIVER_JOYSTICK_RIGHT);
 
 	// Initialize the drive command
-	private final Command driveCommand = new RunCommand(
+	private final Command defaultDriveCommand = new RunCommand(
 		() -> Robot.drive.tank(
 			this.leftStick.getRawAxis(1),
 			this.rightStick.getRawAxis(1)
@@ -31,21 +28,24 @@ public class RobotContainer {
 		Robot.drive
 	);
 
-	/**
-	 * ingestPowerCell waits until a power cell is available to be ingested.
-	 * Once one is available, the 'ready' check will be 'true'. It will then
-	 * step the conveyor to 'ingest' or take in the power cell.
-	 */
-	private final Command ingestPowerCell = new SequentialCommandGroup(
-		new WaitUntilCommand(Robot.conveyor::ready),
-		new FunctionalCommand(
-			() -> Robot.conveyor.reset(),
-			() -> Robot.conveyor.step(),
-			(interrupt) -> Robot.conveyor.stop(),
-			() -> Robot.conveyor.stepComplete(),
-			Robot.conveyor
-		)
-	).perpetually();
+	// Since the default command must never 'end' we will use a RunCommand as it
+	// does not have an 'end' condition by default.
+	private final Command defaultConveyorCommand = new RunCommand(
+		() -> {
+			// If a power cell is ready for the conveyor OR if the conveyor is
+			// currently ingesting a powercell, then we need continue stepping
+			// the conveyor forward. Otherwise, we need to ensure that the
+			// conveyor is not moving and that the step position is zero.
+			if (Robot.conveyor.ready() ||
+			   (Robot.conveyor.isActive() && Robot.conveyor.isStepComplete())) {
+				Robot.conveyor.step();
+			} else {
+				Robot.conveyor.stop();
+				Robot.conveyor.reset();
+			}
+		},
+		Robot.conveyor
+	);
 
 	private SequentialCommandGroup crossLineAuto = new SequentialCommandGroup(
 		CommandFactory.driveDistanceCommand(120, Direction.BACKWARD));
@@ -58,7 +58,7 @@ public class RobotContainer {
 		new ParallelDeadlineGroup(
 			CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD),
 			CommandFactory.intakeInCommand()
-		),	
+		),
 		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT),
 		new ParallelDeadlineGroup(
 			CommandFactory.driveDistanceCommand(72, Direction.FORWARD),
@@ -178,8 +178,8 @@ public class RobotContainer {
 	private void configureDefaultCommands() {
 		CommandScheduler scheduler = CommandScheduler.getInstance();
 
-		scheduler.setDefaultCommand(Robot.drive, driveCommand);
-		scheduler.setDefaultCommand(Robot.conveyor, ingestPowerCell);
+		scheduler.setDefaultCommand(Robot.drive, defaultDriveCommand);
+		scheduler.setDefaultCommand(Robot.conveyor, defaultConveyorCommand);
 	}
 
 	/**

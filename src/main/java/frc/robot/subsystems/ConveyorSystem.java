@@ -14,6 +14,26 @@ import frc.robot.Constants;
  */
 public class ConveyorSystem extends SubsystemBase {
 	/**
+	 * The DIO channel for the left ready sensor.
+	 */
+	private static final int READY_LEFT = 0;
+
+	/**
+	 * The DIO channel for the center ready sensor.
+	 */
+	private static final int READY_CENTER = 1;
+
+	/**
+	 * The DIO channel for the right ready sensor.
+	 */
+	private static final int READY_RIGHT = 2;
+
+	/**
+	 * The DIO channel for the full sensor.
+	 */
+	private static final int FULL = 3;
+
+	/**
 	 * The default value used to drive the conveyor motor.
 	 */
 	private final static double DEFAULT_CONVEYOR_MOTOR_OUTPUT = 0.5;
@@ -21,7 +41,7 @@ public class ConveyorSystem extends SubsystemBase {
 	/**
 	 * The size of a single step of the conveyor.
 	 */
-	private final static int STEP_SIZE = 4096;
+	private final static int STEP_SIZE = 4096 * 5;
 
 	/**
 	 * The motor that drives the conveyor.
@@ -29,16 +49,22 @@ public class ConveyorSystem extends SubsystemBase {
 	private WPI_TalonSRX motor = null;
 
 	/**
-	 * ready is the sensor that determins if a powercell is ready to be
-	 * ingested.
+	 * A flag to indicate whether the conveyor is active or not.
 	 */
-	private DigitalInput ready = new DigitalInput(5);
+	private boolean isActive = false;
+
+	/**
+	 * The ready sensors that determine if a power cell is ready to be ingested.
+	 */
+	private DigitalInput readyLeft = new DigitalInput(READY_LEFT);
+	private DigitalInput readyCenter = new DigitalInput(READY_CENTER);
+	private DigitalInput readyRight = new DigitalInput(READY_RIGHT);
 
 	/**
 	 * full is the sensor that determines if the conveyor is full and cannot
 	 * receive any further power cells.
 	 */
-	private DigitalInput full = new DigitalInput(6);
+	private DigitalInput full = new DigitalInput(FULL);
 
 	/**
 	 * Create a new conveyor system.
@@ -51,7 +77,8 @@ public class ConveyorSystem extends SubsystemBase {
 			0,
 			30
 		);
-		this.motor.config_kP(0, 0.04, 100);
+
+		this.motor.config_kP(0, 1.0, 100);
 		this.motor.config_kI(0, 0.0, 100);
 		this.motor.config_kD(0, 0.0, 100);
 		this.motor.config_kF(0, 0.0, 100);
@@ -80,6 +107,7 @@ public class ConveyorSystem extends SubsystemBase {
 	 * @param percent the percent output the motor driving the conveyor.
 	 */
 	public void forward(double percent) {
+		this.isActive = true;
 		this.motor.set(ControlMode.PercentOutput, percent);
 	}
 
@@ -103,6 +131,7 @@ public class ConveyorSystem extends SubsystemBase {
 	 * @param percent the percent output of the motor driving the conveyor.
 	 */
 	public void reverse(double percent) {
+		this.isActive = true;
 		this.motor.set(ControlMode.PercentOutput, percent);
 	}
 
@@ -110,6 +139,7 @@ public class ConveyorSystem extends SubsystemBase {
 	 * Stop the conveyor.
 	 */
 	public void stop() {
+		this.isActive = false;
 		this.motor.stopMotor();
 	}
 
@@ -117,7 +147,8 @@ public class ConveyorSystem extends SubsystemBase {
 	 * Advance the conveyor by the configured step size.
 	 */
 	public void step() {
-		this.motor.set(ControlMode.Position, 4096);
+		this.isActive = true;
+		this.motor.set(ControlMode.Position, STEP_SIZE);
 	}
 
 	/**
@@ -134,7 +165,19 @@ public class ConveyorSystem extends SubsystemBase {
 	 * <code>false</code>.
 	 */
 	public boolean ready() {
-		return !this.ready.get();
+		boolean ready = !this.readyLeft.get()
+					 || !this.readyCenter.get()
+					 || !this.readyRight.get();
+
+		return ready;
+	}
+
+	public int getPosition() {
+		return this.motor.getSelectedSensorPosition();
+	}
+
+	public boolean isActive() {
+		return this.isActive;
 	}
 
 	/**
@@ -146,8 +189,9 @@ public class ConveyorSystem extends SubsystemBase {
 	 * @return <code>true</code> if the step is complete, otherwise
 	 * <code>false</code>.
 	 */
-	public boolean stepComplete() {
+	public boolean isStepComplete() {
 		int position = this.motor.getSelectedSensorPosition();
-		return position >= STEP_SIZE || this.full.get();
+
+		return position >= STEP_SIZE; //|| !this.full.get();
 	}
 }
