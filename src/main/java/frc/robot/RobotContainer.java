@@ -177,41 +177,6 @@ public class RobotContainer {
 		JoystickButton climb = new JoystickButton(rightStick, Constants.THUMB_BUTTON);
 		climb.whileHeld(CommandFactory.climbCommand());
 		climb.whenReleased(CommandFactory.climbStopCommand());
-
-		//Button bindings for second driver here
-		// JoystickButton intakeIn2 = new JoystickButton(second, Constants.BUTTON_5);
-		// intakeIn2.whileHeld(CommandFactory.intakeInCommand());
-		// intakeIn2.whenReleased(CommandFactory.intakeStopCommand());
-
-		// JoystickButton intakeOut2 = new JoystickButton(second, Constants.BUTTON_3);
-		// intakeOut2.whileHeld(CommandFactory.intakeOutCommand());
-		// intakeOut2.whenReleased(CommandFactory.intakeStopCommand());
-
-		// JoystickButton conveyorOut2 = new JoystickButton(second, Constants.BUTTON_11);
-		// conveyorOut2.whileHeld(CommandFactory.conveyorOutCommand());
-		// conveyorOut2.whenReleased(CommandFactory.conveyorStopCommand());
-
-		// JoystickButton conveyorIn2 = new JoystickButton(second, Constants.BUTTON_9);
-		// conveyorIn2.whileHeld(CommandFactory.conveyorInCommand());
-		// conveyorIn2.whenReleased(CommandFactory.conveyorStopCommand());
-
-		// JoystickButton conveyorEmpty2 = new JoystickButton(second, Constants.TRIGGER);
-		// conveyorEmpty2.whileHeld(CommandFactory.emptyConveyorCommand());
-		// conveyorEmpty2.whenReleased(CommandFactory.conveyorStopCommand());
-
-		// JoystickButton hookUp2 = new JoystickButton(second, Constants.BUTTON_6);
-		// hookUp2.whileHeld(CommandFactory.hookUpCommand());
-		// hookUp2.whenReleased(CommandFactory.hookStopCommand());
-
-		// JoystickButton hookDown2 = new JoystickButton(second, Constants.BUTTON_4);
-		// hookDown2.whileHeld(CommandFactory.hookDownCommand());
-		// hookDown2.whenReleased(CommandFactory.hookStopCommand());
-
-		// JoystickButton climb2 = new JoystickButton(second, Constants.THUMB_BUTTON);
-		// climb2.whileHeld(CommandFactory.climbCommand());
-		// climb2.whenReleased(CommandFactory.climbStopCommand());
-
-		
 	}
 
 	private void configureDefaultCommands() {
