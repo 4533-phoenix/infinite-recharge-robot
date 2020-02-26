@@ -40,8 +40,8 @@ public class RobotContainer {
 			// the conveyor forward. Otherwise, we need to ensure that the
 			// conveyor is not moving and that the step position is zero.
 			if (Robot.conveyor.ready() ||
-			   (Robot.conveyor.isActive() && Robot.conveyor.isStepComplete())) {
-				Robot.conveyor.step();
+			   (Robot.conveyor.isActive() && !Robot.conveyor.isStepComplete())) {
+				Robot.conveyor.forward(0.75);
 			} else {
 				Robot.conveyor.stop();
 				Robot.conveyor.reset();
@@ -146,72 +146,72 @@ public class RobotContainer {
 	 */
 	private void configureButtonBindings() {
 		//Button bindings for Driver here
-		JoystickButton intakeIn = new JoystickButton(second, Constants.BUTTON_5);
+		JoystickButton intakeIn = new JoystickButton(leftStick, Constants.TRIGGER);
 		intakeIn.whileHeld(CommandFactory.intakeInCommand());
 		intakeIn.whenReleased(CommandFactory.intakeStopCommand());
 
-		JoystickButton intakeOut = new JoystickButton(second, Constants.BUTTON_3);
+		JoystickButton intakeOut = new JoystickButton(rightStick, Constants.BUTTON_7);
 		intakeOut.whileHeld(CommandFactory.intakeOutCommand());
 		intakeOut.whenReleased(CommandFactory.intakeStopCommand());
 
-		JoystickButton conveyorOut = new JoystickButton(second, Constants.BUTTON_11);
+		JoystickButton conveyorOut = new JoystickButton(rightStick, Constants.BUTTON_3);
 		conveyorOut.whileHeld(CommandFactory.conveyorOutCommand());
 		conveyorOut.whenReleased(CommandFactory.conveyorStopCommand());
 
-		JoystickButton conveyorIn = new JoystickButton(second, Constants.BUTTON_9);
+		JoystickButton conveyorIn = new JoystickButton(rightStick, Constants.BUTTON_5);
 		conveyorIn.whileHeld(CommandFactory.conveyorInCommand());
 		conveyorIn.whenReleased(CommandFactory.conveyorStopCommand());
 
-		JoystickButton conveyorEmpty = new JoystickButton(second, Constants.TRIGGER);
+		JoystickButton conveyorEmpty = new JoystickButton(rightStick, Constants.TRIGGER);
 		conveyorEmpty.whileHeld(CommandFactory.emptyConveyorCommand());
 		conveyorEmpty.whenReleased(CommandFactory.conveyorStopCommand());
 
-		JoystickButton hookUp = new JoystickButton(second, Constants.BUTTON_6);
+		JoystickButton hookUp = new JoystickButton(rightStick, Constants.BUTTON_6);
 		hookUp.whileHeld(CommandFactory.hookUpCommand());
 		hookUp.whenReleased(CommandFactory.hookStopCommand());
 
-		JoystickButton hookDown = new JoystickButton(second, Constants.BUTTON_4);
+		JoystickButton hookDown = new JoystickButton(rightStick, Constants.BUTTON_4);
 		hookDown.whileHeld(CommandFactory.hookDownCommand());
 		hookDown.whenReleased(CommandFactory.hookStopCommand());
 
-		JoystickButton climb = new JoystickButton(second, Constants.THUMB_BUTTON);
+		JoystickButton climb = new JoystickButton(rightStick, Constants.THUMB_BUTTON);
 		climb.whileHeld(CommandFactory.climbCommand());
 		climb.whenReleased(CommandFactory.climbStopCommand());
-
 
 		//Button bindings for second driver here
+		// JoystickButton intakeIn2 = new JoystickButton(second, Constants.BUTTON_5);
+		// intakeIn2.whileHeld(CommandFactory.intakeInCommand());
+		// intakeIn2.whenReleased(CommandFactory.intakeStopCommand());
 
-		JoystickButton intakeIn2 = new JoystickButton(second, Constants.TRIGGER);
-		intakeIn.whileHeld(CommandFactory.intakeInCommand());
-		intakeIn.whenReleased(CommandFactory.intakeStopCommand());
+		// JoystickButton intakeOut2 = new JoystickButton(second, Constants.BUTTON_3);
+		// intakeOut2.whileHeld(CommandFactory.intakeOutCommand());
+		// intakeOut2.whenReleased(CommandFactory.intakeStopCommand());
 
-		JoystickButton intakeOut2 = new JoystickButton(rightStick, Constants.BUTTON_7);
-		intakeOut.whileHeld(CommandFactory.intakeOutCommand());
-		intakeOut.whenReleased(CommandFactory.intakeStopCommand());
+		// JoystickButton conveyorOut2 = new JoystickButton(second, Constants.BUTTON_11);
+		// conveyorOut2.whileHeld(CommandFactory.conveyorOutCommand());
+		// conveyorOut2.whenReleased(CommandFactory.conveyorStopCommand());
 
-		JoystickButton conveyorOut2 = new JoystickButton(rightStick, Constants.BUTTON_3);
-		conveyorOut.whileHeld(CommandFactory.conveyorOutCommand());
-		conveyorOut.whenReleased(CommandFactory.conveyorStopCommand());
+		// JoystickButton conveyorIn2 = new JoystickButton(second, Constants.BUTTON_9);
+		// conveyorIn2.whileHeld(CommandFactory.conveyorInCommand());
+		// conveyorIn2.whenReleased(CommandFactory.conveyorStopCommand());
 
-		JoystickButton conveyorIn2 = new JoystickButton(rightStick, Constants.BUTTON_5);
-		conveyorIn.whileHeld(CommandFactory.conveyorInCommand());
-		conveyorIn.whenReleased(CommandFactory.conveyorStopCommand());
+		// JoystickButton conveyorEmpty2 = new JoystickButton(second, Constants.TRIGGER);
+		// conveyorEmpty2.whileHeld(CommandFactory.emptyConveyorCommand());
+		// conveyorEmpty2.whenReleased(CommandFactory.conveyorStopCommand());
 
-		JoystickButton conveyorEmpty2 = new JoystickButton(rightStick, Constants.TRIGGER);
-		conveyorEmpty.whileHeld(CommandFactory.emptyConveyorCommand());
-		conveyorEmpty.whenReleased(CommandFactory.conveyorStopCommand());
+		// JoystickButton hookUp2 = new JoystickButton(second, Constants.BUTTON_6);
+		// hookUp2.whileHeld(CommandFactory.hookUpCommand());
+		// hookUp2.whenReleased(CommandFactory.hookStopCommand());
 
-		JoystickButton hookUp2 = new JoystickButton(rightStick, Constants.BUTTON_6);
-		hookUp.whileHeld(CommandFactory.hookUpCommand());
-		hookUp.whenReleased(CommandFactory.hookStopCommand());
+		// JoystickButton hookDown2 = new JoystickButton(second, Constants.BUTTON_4);
+		// hookDown2.whileHeld(CommandFactory.hookDownCommand());
+		// hookDown2.whenReleased(CommandFactory.hookStopCommand());
 
-		JoystickButton hookDown2 = new JoystickButton(rightStick, Constants.BUTTON_4);
-		hookDown.whileHeld(CommandFactory.hookDownCommand());
-		hookDown.whenReleased(CommandFactory.hookStopCommand());
+		// JoystickButton climb2 = new JoystickButton(second, Constants.THUMB_BUTTON);
+		// climb2.whileHeld(CommandFactory.climbCommand());
+		// climb2.whenReleased(CommandFactory.climbStopCommand());
 
-		JoystickButton climb2 = new JoystickButton(rightStick, Constants.THUMB_BUTTON);
-		climb.whileHeld(CommandFactory.climbCommand());
-		climb.whenReleased(CommandFactory.climbStopCommand());
+		
 	}
 
 	private void configureDefaultCommands() {

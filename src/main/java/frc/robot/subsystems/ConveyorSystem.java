@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -41,7 +42,7 @@ public class ConveyorSystem extends SubsystemBase {
 	/**
 	 * The size of a single step of the conveyor.
 	 */
-	private final static int STEP_SIZE = 4096 * 5;
+	private final static int STEP_SIZE = 4096 * 10;
 
 	/**
 	 * The motor that drives the conveyor.
@@ -56,9 +57,9 @@ public class ConveyorSystem extends SubsystemBase {
 	/**
 	 * The ready sensors that determine if a power cell is ready to be ingested.
 	 */
-	private DigitalInput readyLeft = new DigitalInput(READY_LEFT);
-	private DigitalInput readyCenter = new DigitalInput(READY_CENTER);
-	private DigitalInput readyRight = new DigitalInput(READY_RIGHT);
+	private AnalogInput readyLeft = new AnalogInput(READY_LEFT);
+	private AnalogInput readyCenter = new AnalogInput(READY_CENTER);
+	private AnalogInput readyRight = new AnalogInput(READY_RIGHT);
 
 	/**
 	 * full is the sensor that determines if the conveyor is full and cannot
@@ -78,7 +79,7 @@ public class ConveyorSystem extends SubsystemBase {
 			30
 		);
 
-		this.motor.config_kP(0, 1.0, 100);
+		this.motor.config_kP(0, 0.04, 100);
 		this.motor.config_kI(0, 0.0, 100);
 		this.motor.config_kD(0, 0.0, 100);
 		this.motor.config_kF(0, 0.0, 100);
@@ -164,12 +165,12 @@ public class ConveyorSystem extends SubsystemBase {
 	 * @return <code>true</code> if a power is ready to be ingested, otherwise
 	 * <code>false</code>.
 	 */
-	public boolean ready() {
-		boolean ready = !this.readyLeft.get()
-					 || !this.readyCenter.get()
-					 || !this.readyRight.get();
 
-		return ready;
+	public static final double voltsPerUnit = 5.0 / 4096.0;
+	public boolean ready() {
+		double voltage = this.readyCenter.getVoltage();
+		System.out.printf("%f : %f\n", voltage, voltage * voltsPerUnit);
+		return voltage > 0.6 && voltage < 1.0;
 	}
 
 	public int getPosition() {
