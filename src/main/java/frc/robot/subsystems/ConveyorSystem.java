@@ -20,14 +20,9 @@ public class ConveyorSystem extends SubsystemBase {
 	private static final int READY_LEFT = 0;
 
 	/**
-	 * The DIO channel for the center ready sensor.
-	 */
-	private static final int READY_CENTER = 1;
-
-	/**
 	 * The DIO channel for the right ready sensor.
 	 */
-	private static final int READY_RIGHT = 2;
+	private static final int READY_RIGHT = 1;
 
 	/**
 	 * The DIO channel for the full sensor.
@@ -58,7 +53,6 @@ public class ConveyorSystem extends SubsystemBase {
 	 * The ready sensors that determine if a power cell is ready to be ingested.
 	 */
 	private AnalogInput readyLeft = new AnalogInput(READY_LEFT);
-	private AnalogInput readyCenter = new AnalogInput(READY_CENTER);
 	private AnalogInput readyRight = new AnalogInput(READY_RIGHT);
 
 	/**
@@ -168,9 +162,11 @@ public class ConveyorSystem extends SubsystemBase {
 
 	public static final double voltsPerUnit = 5.0 / 4096.0;
 	public boolean ready() {
-		double voltage = this.readyCenter.getVoltage();
+		double voltageL = this.readyLeft.getVoltage();
+		double voltageR = this.readyRight.getVoltage();
+
 		System.out.printf("%f : %f\n", voltage, voltage * voltsPerUnit);
-		return voltage > 0.6 && voltage < 1.0;
+		return (voltageL > 0.6 && voltageL < 1.0) || (voltageR > 0.6 && voltageR < 1.0);
 	}
 
 	/**
