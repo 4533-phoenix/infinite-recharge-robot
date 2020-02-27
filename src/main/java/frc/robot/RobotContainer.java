@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CommandFactory;
 import frc.robot.commands.Direction;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class RobotContainer {
 	// Initialize the driver controls
@@ -27,6 +28,14 @@ public class RobotContainer {
 		() -> Robot.drive.tank(
 			this.leftStick.getRawAxis(1),
 			this.rightStick.getRawAxis(1)
+		),
+		Robot.drive
+	);
+
+	private final Command invertDriveCommand = new RunCommand(
+		() -> Robot.drive.tank(
+			-this.leftStick.getRawAxis(1),
+			-this.rightStick.getRawAxis(1)
 		),
 		Robot.drive
 	);
@@ -145,6 +154,13 @@ public class RobotContainer {
 	 * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
 	 */
 	private void configureButtonBindings() {
+		JoystickButton invertButton = new JoystickButton(leftStick, Constants.BUTTON_3);
+		invertButton.whenPressed(new InstantCommand(
+			()-> Robot.drive.toggleDriveMode(),
+			Robot.drive)
+		);
+
+		
 		//Button bindings for Driver here
 		JoystickButton intakeIn = new JoystickButton(leftStick, Constants.TRIGGER);
 		intakeIn.whileHeld(CommandFactory.intakeInCommand());

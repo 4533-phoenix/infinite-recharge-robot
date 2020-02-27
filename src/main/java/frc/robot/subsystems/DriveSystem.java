@@ -90,6 +90,12 @@ public class DriveSystem extends SubsystemBase {
 	private static double targetPosition = 0;
 	private static Direction targetDirection;
 
+	public enum DriveMode {
+		Normal, Inverted
+	}
+
+	private static DriveMode driveMode = DriveMode.Normal;
+
 	public DriveSystem() {
 		// Initialize all of the drive systems motor controllers.
 		this.leftMaster = new WPI_TalonSRX(Constants.LEFT_MASTER_MOTOR);
@@ -131,6 +137,18 @@ public class DriveSystem extends SubsystemBase {
 
 		// Initialize the NavX IMU sensor.
 		this.navX = new AHRS(SPI.Port.kMXP);
+	}
+	
+	public void setDriveMode(DriveMode mode) {
+		this.driveMode = mode;
+	}
+
+	public void toggleDriveMode() {
+		if (this.driveMode == DriveMode.Normal) {
+			this.driveMode = DriveMode.Inverted;
+		} else {
+			this.driveMode = DriveMode.Normal;
+		}
 	}
 
 	public void setPIDF(double p, double i, double d, double f) {
@@ -223,6 +241,11 @@ public class DriveSystem extends SubsystemBase {
 	public void tank(double left, double right) {
 		double targetLeft = left * MAX_VELOCITY * 4096 / 600.0;
 		double targetRight = right * MAX_VELOCITY * 4096 / 600.0;
+
+		if (this.driveMode == DriveMode.Inverted) {
+			targetLeft = -targetLeft;
+			targetRight = -targetRight;
+		}
 
 		this.leftMaster.set(ControlMode.Velocity, targetLeft);
 		this.rightMaster.set(ControlMode.Velocity, targetRight);

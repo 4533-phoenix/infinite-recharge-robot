@@ -164,8 +164,6 @@ public class ConveyorSystem extends SubsystemBase {
 	public boolean ready() {
 		double voltageL = this.readyLeft.getVoltage();
 		double voltageR = this.readyRight.getVoltage();
-
-		System.out.printf("%f : %f\n", voltage, voltage * voltsPerUnit);
 		return (voltageL > 0.6 && voltageL < 1.0) || (voltageR > 0.6 && voltageR < 1.0);
 	}
 
