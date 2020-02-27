@@ -37,7 +37,7 @@ public class ConveyorSystem extends SubsystemBase {
 	/**
 	 * The size of a single step of the conveyor.
 	 */
-	private final static int STEP_SIZE = 4096 * 10;
+	private final static int STEP_SIZE = 4096 * 5;
 
 	/**
 	 * The motor that drives the conveyor.
@@ -164,7 +164,8 @@ public class ConveyorSystem extends SubsystemBase {
 	public boolean ready() {
 		double voltageL = this.readyLeft.getVoltage();
 		double voltageR = this.readyRight.getVoltage();
-		return (voltageL > 0.6 && voltageL < 1.0) || (voltageR > 0.6 && voltageR < 1.0);
+
+		return (voltageL > 2.0) || (voltageR > 2.0);
 	}
 
 	/**
