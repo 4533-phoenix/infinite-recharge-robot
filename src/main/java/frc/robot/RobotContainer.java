@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CommandFactory;
 import frc.robot.commands.Direction;
@@ -60,22 +61,24 @@ public class RobotContainer {
 	);
 
 	private SequentialCommandGroup crossLineAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(120, Direction.BACKWARD));
+		CommandFactory.driveDistanceCommand(24, Direction.FORWARD));
 
 	private SequentialCommandGroup goalScoreTrenchAuto = new SequentialCommandGroup(
 		CommandFactory.driveDistanceCommand(101, Direction.BACKWARD),
+		new WaitCommand(0.5),
 		CommandFactory.emptyConveyorCommand(),
-		CommandFactory.driveDistanceCommand(120, Direction.FORWARD),
-		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.LEFT),
-		new ParallelDeadlineGroup(
-			CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD),
-			CommandFactory.intakeInCommand()
-		),
-		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT),
-		new ParallelDeadlineGroup(
-			CommandFactory.driveDistanceCommand(72, Direction.FORWARD),
-			CommandFactory.intakeInCommand()
-		)
+		new WaitCommand(0.5),
+		CommandFactory.driveDistanceCommand(127, Direction.FORWARD)
+		// CommandFactory.angleTurnCommand(0.35, 38.33, Direction.LEFT),
+		// new ParallelDeadlineGroup(
+		// 	CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD),
+		// 	CommandFactory.intakeInCommand()
+		// ),
+		// CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT),
+		// new ParallelDeadlineGroup(
+		// 	CommandFactory.driveDistanceCommand(72, Direction.FORWARD),
+		// 	CommandFactory.intakeInCommand()
+		// )
 	);
 
 	private SequentialCommandGroup midScoreAuto = new SequentialCommandGroup(
@@ -93,21 +96,23 @@ public class RobotContainer {
 		);
 
 	private SequentialCommandGroup homeTrenchPickupScoreAuto = new SequentialCommandGroup(
+		CommandFactory.driveDistanceCommand(24, Direction.FORWARD),
+		new WaitCommand(1),
 		new ParallelDeadlineGroup(
-			CommandFactory.driveDistanceCommand(158.88, Direction.FORWARD),
+			CommandFactory.driveDistanceCommand(134.88, Direction.FORWARD),
 			CommandFactory.intakeInCommand()
-		),
-		CommandFactory.driveDistanceCommand(218.88, Direction.BACKWARD),
-		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT),
-		CommandFactory.driveDistanceCommand(77.95, Direction.BACKWARD),
-		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT),
-		CommandFactory.driveDistanceCommand(1.5, Direction.BACKWARD),
-		CommandFactory.emptyConveyorCommand(),
-		CommandFactory.driveDistanceCommand(1.5, Direction.FORWARD),
-		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT),
-		CommandFactory.driveDistanceCommand(77.95, Direction.FORWARD),
-		CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT),
-		CommandFactory.driveDistanceCommand(90, Direction.FORWARD)
+		)
+		// CommandFactory.driveDistanceCommand(218.88, Direction.BACKWARD),
+		// CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT),
+		// CommandFactory.driveDistanceCommand(77.95, Direction.BACKWARD),
+		// CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT),
+		// CommandFactory.driveDistanceCommand(1.5, Direction.BACKWARD),
+		// CommandFactory.emptyConveyorCommand(),
+		// CommandFactory.driveDistanceCommand(1.5, Direction.FORWARD),
+		// CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT),
+		// CommandFactory.driveDistanceCommand(77.95, Direction.FORWARD),
+		// CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT),
+		// CommandFactory.driveDistanceCommand(90, Direction.FORWARD)
 	);
 
 	private SequentialCommandGroup awayTrenchPickupScoreAuto = new SequentialCommandGroup(

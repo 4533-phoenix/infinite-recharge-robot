@@ -25,7 +25,7 @@ public class DriveSystem extends SubsystemBase {
 	// Onboard IMU.
 	private AHRS navX;
 
-	public static double MAX_VELOCITY = 450;
+	public static double MAX_VELOCITY = 300;
 	private static final double PEAK_OUTPUT = 1.0;
 
 	// Wheel specific constants.

@@ -128,7 +128,7 @@ public class Robot extends TimedRobot {
 		Robot.drive.resetAngle();
 		Robot.drive.resetPosition();
 
-		this.autoCommand = this.container.getAutonomousCommand("");
+		this.autoCommand = this.container.getAutonomousCommand("score_trench");
 
 		// schedule the autonomous command (example)
 		if (this.autoCommand != null) {
