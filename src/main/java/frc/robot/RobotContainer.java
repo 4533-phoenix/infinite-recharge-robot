@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -14,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CommandFactory;
 import frc.robot.commands.Direction;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class RobotContainer {
 	// Initialize the driver controls
@@ -61,7 +61,8 @@ public class RobotContainer {
 	);
 
 	private SequentialCommandGroup crossLineAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(24, Direction.FORWARD));
+		CommandFactory.driveDistanceCommand(24, Direction.FORWARD)
+	);
 
 	private SequentialCommandGroup goalScoreTrenchAuto = new SequentialCommandGroup(
 		CommandFactory.driveDistanceCommand(101, Direction.BACKWARD),
@@ -165,7 +166,7 @@ public class RobotContainer {
 			Robot.drive)
 		);
 
-		
+
 		//Button bindings for Driver here
 		JoystickButton intakeIn = new JoystickButton(rightStick, Constants.TRIGGER);
 		intakeIn.whileHeld(CommandFactory.intakeInCommand());
@@ -218,6 +219,6 @@ public class RobotContainer {
 		if(command == null){
 			command = crossLineAuto;
 		}
-		return command;
+		return crossLineAuto;
 	}
 }

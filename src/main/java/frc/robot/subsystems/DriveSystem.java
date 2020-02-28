@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
+import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
@@ -51,9 +52,9 @@ public class DriveSystem extends SubsystemBase {
 	//
 	// The following values should be used when driving the robot in "Position"
 	// mode.
-	public static final double POSITION_P = 4.5 * Math.pow(10, -5);
+	public static final double POSITION_P = 0.4;
 	public static final double POSITION_I = 0.0;
-	public static final double POSITION_D = 2.15 * Math.pow(10, -5);
+	public static final double POSITION_D = 0.0;
 	public static final double POSITION_FEED_FORWARD = 0.0;
 
 	// Feed Forward Gains
@@ -74,6 +75,7 @@ public class DriveSystem extends SubsystemBase {
 	// we should track the left and right values separately.
 	public static final double kPVelocity = 0.00177;
 	public static final double kDVelocity = 0.0;
+
 	public static final double kPPosition = 0.0;
 	public static final double kDPosition = 0.0;
 
@@ -94,7 +96,7 @@ public class DriveSystem extends SubsystemBase {
 		Normal, Inverted
 	}
 
-	private static DriveMode driveMode = DriveMode.Normal;
+	private DriveMode driveMode = DriveMode.Normal;
 
 	public DriveSystem() {
 		// Initialize all of the drive systems motor controllers.
@@ -138,7 +140,7 @@ public class DriveSystem extends SubsystemBase {
 		// Initialize the NavX IMU sensor.
 		this.navX = new AHRS(SPI.Port.kMXP);
 	}
-	
+
 	public void setDriveMode(DriveMode mode) {
 		this.driveMode = mode;
 	}
@@ -163,6 +165,18 @@ public class DriveSystem extends SubsystemBase {
 		this.rightMaster.config_kI(0, i, 100);
 		this.rightMaster.config_kD(0, d, 100);
 		this.rightMaster.config_kF(0, f, 100);
+	}
+
+	public SlotConfiguration[] getPID() {
+		SlotConfiguration[] slots = new SlotConfiguration[]{
+			new SlotConfiguration(),
+			new SlotConfiguration()
+		};
+
+		this.leftMaster.getSlotConfigs(slots[0], 0, 30);
+		this.rightMaster.getSlotConfigs(slots[1], 0, 30);
+
+		return slots;
 	}
 
 	public void resetPosition() {

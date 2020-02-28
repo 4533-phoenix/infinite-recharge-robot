@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -19,7 +20,8 @@ import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeSystem;
 
 public class Robot extends TimedRobot {
-	private Logger logger = LogManager.getLogger(Robot.class.getName());
+	private Logger stateLogger = LogManager.getLogger("robot_state");
+	private Logger robotLogger = LogManager.getLogger("robot");
 
 	// TODO: this seems like it would be better encapsulated by the robot state
 	// updater.
@@ -92,15 +94,23 @@ public class Robot extends TimedRobot {
 				this.robotState.update();
 				try {
 					String state = this.mapper.writeValueAsString(this.robotState);
-					this.logger.info(state);
+					this.stateLogger.info(state);
 				} catch (JsonProcessingException e) {
-					this.logger.error(e.toString());
+					this.stateLogger.error(e.toString());
 				}
 			},
 			0,   // initial delay
 			100, // delay
 			TimeUnit.MILLISECONDS
 		);
+
+		SlotConfiguration[] slots = Robot.drive.getPID();
+
+		for (int i = 0; i < slots.length; i++) {
+			this.robotLogger.info("Slot: {} - P: {} I: {} D: {} F: {}",
+				i, slots[i].kP, slots[i].kI, slots[i].kD, slots[i].kF
+			);
+		}
 	}
 
 	@Override
@@ -125,7 +135,16 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		Robot.drive.setPIDF(
+			DriveSystem.POSITION_P,
+			DriveSystem.POSITION_I,
+			DriveSystem.POSITION_D,
+			DriveSystem.POSITION_FEED_FORWARD
+		);
+
 		Robot.drive.resetAngle();
+		this.robotLogger.info("reset drive system angle: {}", Robot.drive.getAngle());
+
 		Robot.drive.resetPosition();
 
 		this.autoCommand = this.container.getAutonomousCommand("score_trench");
@@ -146,6 +165,13 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
+		Robot.drive.setPIDF(
+			DriveSystem.VELOCITY_P,
+			DriveSystem.VELOCITY_I,
+			DriveSystem.VELOCITY_D,
+			DriveSystem.VELOCITY_FEED_FORWARD
+		);
+
 		Robot.drive.resetAngle();
 		Robot.drive.resetPosition();
 
