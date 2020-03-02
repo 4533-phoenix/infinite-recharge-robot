@@ -65,12 +65,12 @@ public class RobotContainer {
 	);
 
 	private SequentialCommandGroup goalScoreTrenchAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(101, Direction.BACKWARD),
-		new WaitCommand(0.5),
-		CommandFactory.emptyConveyorCommand(),
-		new WaitCommand(0.5),
-		CommandFactory.driveDistanceCommand(127, Direction.FORWARD)
-		// CommandFactory.angleTurnCommand(0.35, 38.33, Direction.LEFT),
+		new WaitCommand(9),
+		CommandFactory.driveDistanceCommand(136
+		, Direction.BACKWARD),
+		new WaitCommand(1),
+		new RunCommand(() -> Robot.conveyor.empty(), Robot.conveyor)
+		// CommandFactory.angleTurnCommand(0.35, 38.33, Direction.LEFT),s
 		// new ParallelDeadlineGroup(
 		// 	CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD),
 		// 	CommandFactory.intakeInCommand()
@@ -180,6 +180,14 @@ public class RobotContainer {
 		conveyorOut.whileHeld(CommandFactory.conveyorOutCommand());
 		conveyorOut.whenReleased(CommandFactory.conveyorStopCommand());
 
+		JoystickButton intakeOut2 = new JoystickButton(rightStick, Constants.BUTTON_5);
+		intakeOut2.whileHeld(CommandFactory.intakeOutCommand());
+		intakeOut2.whenReleased(CommandFactory.intakeStopCommand());
+
+		JoystickButton conveyorOut2 = new JoystickButton(rightStick, Constants.BUTTON_3);
+		conveyorOut2.whileHeld(CommandFactory.conveyorOutCommand());
+		conveyorOut2.whenReleased(CommandFactory.conveyorStopCommand());
+
 		JoystickButton conveyorIn = new JoystickButton(rightStick, Constants.BUTTON_12);
 		conveyorIn.whileHeld(CommandFactory.conveyorInCommand());
 		conveyorIn.whenReleased(CommandFactory.conveyorStopCommand());
@@ -199,6 +207,12 @@ public class RobotContainer {
 		JoystickButton climb = new JoystickButton(leftStick, Constants.BUTTON_6);
 		climb.whileHeld(CommandFactory.climbCommand());
 		climb.whenReleased(CommandFactory.climbStopCommand());
+
+		JoystickButton turboButton = new JoystickButton(rightStick, Constants.THUMB_BUTTON);
+		turboButton.whenPressed(new InstantCommand(
+			()-> Robot.drive.toggleTurbo(),
+			Robot.drive)
+		);
 	}
 
 	private void configureDefaultCommands() {
@@ -219,6 +233,6 @@ public class RobotContainer {
 		if(command == null){
 			command = crossLineAuto;
 		}
-		return crossLineAuto;
+		return command;
 	}
 }

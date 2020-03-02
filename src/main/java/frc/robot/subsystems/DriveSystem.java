@@ -26,8 +26,10 @@ public class DriveSystem extends SubsystemBase {
 	// Onboard IMU.
 	private AHRS navX;
 
-	public static double MAX_VELOCITY = 300;
+	public static double MAX_VELOCITY = 325;
+	private static final double TURBO_VELOCITY = 400;
 	private static final double PEAK_OUTPUT = 1.0;
+	private boolean turbo = false;
 
 	// Wheel specific constants.
 	private static final double TICKS_PER_ROTATION = 4096.0;
@@ -52,7 +54,7 @@ public class DriveSystem extends SubsystemBase {
 	//
 	// The following values should be used when driving the robot in "Position"
 	// mode.
-	public static final double POSITION_P = 0.4;
+	public static final double POSITION_P = 0.055;
 	public static final double POSITION_I = 0.0;
 	public static final double POSITION_D = 0.0;
 	public static final double POSITION_FEED_FORWARD = 0.0;
@@ -252,13 +254,25 @@ public class DriveSystem extends SubsystemBase {
 		return this.rightMaster.getSelectedSensorPosition() / TICKS_PER_METER;
 	}
 
+	public void toggleTurbo() {
+		this.turbo = !this.turbo;
+	}
 	public void tank(double left, double right) {
-		double targetLeft = left * MAX_VELOCITY * 4096 / 600.0;
-		double targetRight = right * MAX_VELOCITY * 4096 / 600.0;
+		double targetLeft;
+		double targetRight;
+
+		double targetVelocity = MAX_VELOCITY;
+		if (this.turbo) {
+			targetVelocity = TURBO_VELOCITY;
+		}
+
+		targetLeft = left * targetVelocity * 4096 / 600.0;
+		targetRight = right * targetVelocity * 4096 / 600.0;
 
 		if (this.driveMode == DriveMode.Inverted) {
-			targetLeft = -targetLeft;
-			targetRight = -targetRight;
+			double temp = targetLeft;
+			targetLeft = -targetRight;
+			targetRight = -temp;
 		}
 
 		this.leftMaster.set(ControlMode.Velocity, targetLeft);

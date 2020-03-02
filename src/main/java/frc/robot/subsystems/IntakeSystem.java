@@ -8,7 +8,7 @@ import frc.robot.Constants;
 
 public class IntakeSystem extends SubsystemBase {
 
-	private final double INTAKE_MOTOR_PERCENT = 0.5;
+	private final double INTAKE_MOTOR_PERCENT = 0.65;
 
 	private WPI_TalonSRX intakeMotor;
 

@@ -70,7 +70,7 @@ public class CommandFactory {
 
 	public static Command conveyorOutCommand() {
 		return new InstantCommand(
-			() -> Robot.conveyor.forward(),
+			() -> Robot.conveyor.reverse(),
 			Robot.conveyor
 		);
 	}

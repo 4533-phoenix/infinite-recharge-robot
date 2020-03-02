@@ -40,8 +40,9 @@ public class ClimbSystem extends SubsystemBase {
   }
 
   public void climb(){
-    this.climbMotor.set(ControlMode.PercentOutput, CLIMB_PERCENT_OUTPUT);
+    this.climbMotor.set(ControlMode.PercentOutput, -CLIMB_PERCENT_OUTPUT);
   }
+  
   public void climbStop(){
     this.climbMotor.set(ControlMode.PercentOutput, 0);
   }
