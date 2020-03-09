@@ -15,6 +15,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.commands.Direction;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 public class DriveSystem extends SubsystemBase {
 
 	// Drive train motor controllers
@@ -138,6 +140,11 @@ public class DriveSystem extends SubsystemBase {
 
 		this.leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, DEFAULT_TIMEOUT);
 		this.rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, DEFAULT_TIMEOUT);
+		
+		this.rightMaster.setNeutralMode(NeutralMode.Brake);
+		this.rightSlave.setNeutralMode(NeutralMode.Brake);
+		this.leftMaster.setNeutralMode(NeutralMode.Brake);
+		this.leftSlave.setNeutralMode(NeutralMode.Brake);
 
 		// Initialize the NavX IMU sensor.
 		this.navX = new AHRS(SPI.Port.kMXP);
@@ -262,6 +269,7 @@ public class DriveSystem extends SubsystemBase {
 		double targetRight;
 
 		double targetVelocity = MAX_VELOCITY;
+
 		if (this.turbo) {
 			targetVelocity = TURBO_VELOCITY;
 		}

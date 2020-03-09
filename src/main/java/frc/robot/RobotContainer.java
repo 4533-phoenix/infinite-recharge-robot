@@ -213,6 +213,11 @@ public class RobotContainer {
 			()-> Robot.drive.toggleTurbo(),
 			Robot.drive)
 		);
+
+		turboButton.whenReleased(new InstantCommand(
+			()-> Robot.drive.toggleTurbo(),
+			Robot.drive)
+		);
 	}
 
 	private void configureDefaultCommands() {

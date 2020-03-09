@@ -14,6 +14,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 public class ClimbSystem extends SubsystemBase {
   /**
    * Creates a new ClimbSystem.
@@ -25,7 +27,10 @@ public class ClimbSystem extends SubsystemBase {
 
   public ClimbSystem() {
     this.hookMotor = new WPI_TalonSRX(Constants.ELEVATOR_MOTOR);
-    this.climbMotor = new VictorSPX(Constants.WINCH_MOTOR);
+	this.climbMotor = new VictorSPX(Constants.WINCH_MOTOR);
+	
+	this.hookMotor.setNeutralMode(NeutralMode.Brake);
+	this.climbMotor.setNeutralMode(NeutralMode.Brake);
   }
 
   public void hookUp(){

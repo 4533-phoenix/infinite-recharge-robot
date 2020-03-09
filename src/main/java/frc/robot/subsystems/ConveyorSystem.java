@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+
 /**
  * Conveyor System represents the conveyor system of the robot.
  */
@@ -85,6 +87,8 @@ public class ConveyorSystem extends SubsystemBase {
 
 		this.motor.configNominalOutputForward(0.0);
 		this.motor.configNominalOutputReverse(0.0);
+
+		this.motor.setNeutralMode(NeutralMode.Brake);
 	}
 
 	/**
