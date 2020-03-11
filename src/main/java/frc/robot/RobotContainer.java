@@ -65,16 +65,15 @@ public class RobotContainer {
 	);
 
 	private SequentialCommandGroup goalScoreTrenchAuto = new SequentialCommandGroup(
-		new WaitCommand(9),
-		CommandFactory.driveDistanceCommand(136
-		, Direction.BACKWARD),
+		//new WaitCommand(5),
+		CommandFactory.driveDistanceCommand(136, Direction.BACKWARD),
 		new WaitCommand(1),
-		new RunCommand(() -> Robot.conveyor.empty(), Robot.conveyor)
-		// CommandFactory.angleTurnCommand(0.35, 38.33, Direction.LEFT),s
-		// new ParallelDeadlineGroup(
-		// 	CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD),
-		// 	CommandFactory.intakeInCommand()
-		// ),
+		// CommandFactory.emptyConveyorCommand(),
+		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT),
+		new ParallelDeadlineGroup(
+			CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD),
+			CommandFactory.intakeInCommand()
+		)
 		// CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT),
 		// new ParallelDeadlineGroup(
 		// 	CommandFactory.driveDistanceCommand(72, Direction.FORWARD),
