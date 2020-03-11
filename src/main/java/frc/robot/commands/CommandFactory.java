@@ -123,4 +123,14 @@ public class CommandFactory {
 			Robot.climber
 		);
 	}
+
+	public static Command rotationControlCommand() {
+		return new FunctionalCommand(
+			() -> Robot.controlPanel.stopControlPanel(),
+			() -> Robot.controlPanel.spinControlPanel(4),
+			(interrupt) -> Robot.controlPanel.stopControlPanel(),
+			() -> Robot.controlPanel.reachedCPPosition(),
+			Robot.controlPanel
+		);
+	}
 }

@@ -18,6 +18,7 @@ import frc.robot.subsystems.ClimbSystem;
 import frc.robot.subsystems.ConveyorSystem;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeSystem;
+import frc.robot.subsystems.ControlPanelSystem;
 
 public class Robot extends TimedRobot {
 	private Logger stateLogger = LogManager.getLogger("robot_state");
@@ -70,6 +71,10 @@ public class Robot extends TimedRobot {
 	 */
 	public final static ClimbSystem climber = new ClimbSystem();
 
+	/**
+	 * The robot's controlpanel subsystem.
+	 */
+	public final static ControlPanelSystem controlPanel = new ControlPanelSystem();
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
