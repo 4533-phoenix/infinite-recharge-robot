@@ -276,7 +276,7 @@ public class DriveSystem extends SubsystemBase {
 
 		targetLeft = left * targetVelocity * 4096 / 600.0;
 		targetRight = right * targetVelocity * 4096 / 600.0;
-
+		System.out.println("right velocity: " + targetRight);
 		if (this.driveMode == DriveMode.Inverted) {
 			double temp = targetLeft;
 			targetLeft = -targetRight;
@@ -310,6 +310,7 @@ public class DriveSystem extends SubsystemBase {
 	}
 
 	public void turn(double speed, Direction direction) {
+		System.out.println("Speed: " + speed + "\tDirection: " + direction);
 		switch (direction) {
 		case LEFT:
 			this.tank(speed, -speed);

@@ -69,10 +69,10 @@ public class RobotContainer {
 		CommandFactory.driveDistanceCommand(136, Direction.BACKWARD),
 		new WaitCommand(1),
 		// CommandFactory.emptyConveyorCommand(),
-		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT),
+		CommandFactory.angleTurnCommand(0.5, 38.33, Direction.RIGHT),
 		new ParallelDeadlineGroup(
-			CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD),
-			CommandFactory.intakeInCommand()
+			CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD)
+			//CommandFactory.intakeInCommand()
 		)
 		// CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT),
 		// new ParallelDeadlineGroup(
@@ -128,6 +128,26 @@ public class RobotContainer {
 		CommandFactory.emptyConveyorCommand(),
 		CommandFactory.driveDistanceCommand(140, Direction.FORWARD)
 	);
+
+	public SequentialCommandGroup newAutoCommand() {
+		double[] dist = {10, -10, 10, -10};
+		double[] ang = {60, -60, 60, -60};
+		String[] type = {"drive", "turn","drive", "turn","drive", "turn","drive", "turn"};
+		SequentialCommandGroup commandGroup = new SequentialCommandGroup(CommandFactory.driveDistanceCommand(1, Direction.FORWARD));
+		int distIterator = 0;
+		int angIterator = 0;
+		for (int i = 0; i < type.length; i++) {
+			String t = type[i];
+			if (t == "drive") {
+				commandGroup.addCommands(CommandFactory.driveDistanceCommand(dist[distIterator], Direction.FORWARD));
+				distIterator++;
+			} else if (t == "turn") {
+				commandGroup.addCommands(CommandFactory.angleTurnCommand(0.35, ang[angIterator], Direction.RIGHT));
+				angIterator++;
+			}
+		}
+		return commandGroup;
+	}
 
 	//creates a hashMap
 
@@ -237,6 +257,6 @@ public class RobotContainer {
 		if(command == null){
 			command = crossLineAuto;
 		}
-		return command;
+		return newAutoCommand();
 	}
 }

@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.DriveSystem;
 
 public class CommandFactory {
 
@@ -12,7 +13,15 @@ public class CommandFactory {
 
 	public static Command driveDistanceCommand(double distance, Direction direction) {
 		return new FunctionalCommand(
-			() -> Robot.drive.resetPosition(),
+			() -> {
+				Robot.drive.setPIDF(
+					DriveSystem.POSITION_P,
+					DriveSystem.POSITION_I,
+					DriveSystem.POSITION_D,
+					DriveSystem.POSITION_FEED_FORWARD
+				);
+				Robot.drive.resetPosition();
+			},
 			() -> Robot.drive.driveDistance(distance, direction),
 			(interrupt) -> Robot.drive.tank(0, 0),
 			() -> Robot.drive.reachedPosition(),
@@ -32,7 +41,15 @@ public class CommandFactory {
 
 	public static Command angleTurnCommand(double speed, double angle, Direction direction) {
 		return new FunctionalCommand(
-			() -> Robot.drive.resetAngle(),
+			() -> {
+				Robot.drive.setPIDF(
+					DriveSystem.VELOCITY_P,
+					DriveSystem.VELOCITY_I,
+					DriveSystem.VELOCITY_D,
+					DriveSystem.VELOCITY_FEED_FORWARD
+				);
+				Robot.drive.resetAngle();
+			},
 			() -> Robot.drive.turn(speed, direction),
 			(interrupt) -> Robot.drive.tank(0, 0),
 			() -> Robot.drive.getAngle() >= angle,
