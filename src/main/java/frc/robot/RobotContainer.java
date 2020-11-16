@@ -129,25 +129,26 @@ public class RobotContainer {
 		CommandFactory.driveDistanceCommand(140, Direction.FORWARD)
 	);
 
-	public SequentialCommandGroup newAutoCommand() {
-		double[] dist = {10, -10, 10, -10};
-		double[] ang = {60, -60, 60, -60};
-		String[] type = {"drive", "turn","drive", "turn","drive", "turn","drive", "turn"};
-		SequentialCommandGroup commandGroup = new SequentialCommandGroup(CommandFactory.driveDistanceCommand(1, Direction.FORWARD));
+	private SequentialCommandGroup newAutoGroup = new SequentialCommandGroup(CommandFactory.driveDistanceCommand(0, Direction.FORWARD));
+	
+	private void addDirections() {
+		double[] dist = {10, 10};
+		double[] ang = {60};
+		String[] type = {"drive", "turn","drive"};
 		int distIterator = 0;
 		int angIterator = 0;
 		for (int i = 0; i < type.length; i++) {
 			String t = type[i];
 			if (t == "drive") {
-				commandGroup.addCommands(CommandFactory.driveDistanceCommand(dist[distIterator], Direction.FORWARD));
+				newAutoGroup.addCommands(CommandFactory.driveDistanceCommand(dist[distIterator], Direction.FORWARD));
 				distIterator++;
 			} else if (t == "turn") {
-				commandGroup.addCommands(CommandFactory.angleTurnCommand(0.35, ang[angIterator], Direction.RIGHT));
+				newAutoGroup.addCommands(CommandFactory.angleTurnCommand(0.35, ang[angIterator], Direction.RIGHT));
 				angIterator++;
 			}
 		}
-		return commandGroup;
 	}
+	
 
 	//creates a hashMap
 
@@ -251,12 +252,13 @@ public class RobotContainer {
 	 *
 	 * @return the command to run in autonomous
 	 */
-	public Command getAutonomousCommand(String key) {
+	public Command getAutonomousCommand() {
 		// An ExampleCommand will run in autonomous
-		Command command = this.commands.get(key);
-		if(command == null){
-			command = crossLineAuto;
-		}
-		return newAutoCommand();
+		// Command command = this.commands.get(key);
+		addDirections();
+		// if(command == null){
+			Command command = newAutoGroup;
+		// }
+		return command;
 	}
 }
