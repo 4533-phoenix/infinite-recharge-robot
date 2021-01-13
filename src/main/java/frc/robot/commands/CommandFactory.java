@@ -88,39 +88,5 @@ public class CommandFactory {
 			Robot.conveyor
 		);
 	}
-
-	public static Command hookUpCommand(){
-		return new InstantCommand(
-			() -> Robot.climber.hookUp(),
-			Robot.climber
-		);
-	}
-
-	public static Command hookDownCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.hookDown(),
-			Robot.climber
-		);
-	}
-
-	public static Command hookStopCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.hookStop(),
-			Robot.climber
-		);
-	}
-
-	public static Command climbCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.climb(),
-			Robot.climber
-		);
-	}
-
-	public static Command climbStopCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.climbStop(),
-			Robot.climber
-		);
-	}
 }
+
