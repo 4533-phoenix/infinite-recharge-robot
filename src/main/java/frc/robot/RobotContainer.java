@@ -60,83 +60,9 @@ public class RobotContainer {
 		Robot.conveyor
 	);
 
-	private SequentialCommandGroup crossLineAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(24, Direction.FORWARD)
-	);
-
-	private SequentialCommandGroup goalScoreTrenchAuto = new SequentialCommandGroup(
-		//new WaitCommand(5),
-		CommandFactory.driveDistanceCommand(136, Direction.BACKWARD),
-		new WaitCommand(1),
-		// CommandFactory.emptyConveyorCommand(),
-		CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT),
-		new ParallelDeadlineGroup(
-			CommandFactory.driveDistanceCommand(107.88, Direction.FORWARD),
-			CommandFactory.intakeInCommand()
-		)
-		// CommandFactory.angleTurnCommand(0.35, 38.33, Direction.RIGHT),
-		// new ParallelDeadlineGroup(
-		// 	CommandFactory.driveDistanceCommand(72, Direction.FORWARD),
-		// 	CommandFactory.intakeInCommand()
-		// )
-	);
-
-	private SequentialCommandGroup midScoreAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(33.67, Direction.BACKWARD),
-		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.RIGHT),
-		CommandFactory.driveDistanceCommand(74.953, Direction.BACKWARD),
-		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.LEFT),
-		CommandFactory.driveDistanceCommand(33, Direction.BACKWARD),
-		CommandFactory.emptyConveyorCommand(),
-		CommandFactory.driveDistanceCommand(33.67, Direction.FORWARD),
-		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.RIGHT),
-		CommandFactory.driveDistanceCommand(74.953, Direction.FORWARD),
-		CommandFactory.angleTurnCommand(0.35, 26.69, Direction.LEFT),
-		CommandFactory.driveDistanceCommand(52, Direction.FORWARD)
-		);
-
-	private SequentialCommandGroup homeTrenchPickupScoreAuto = new SequentialCommandGroup(
-		CommandFactory.driveDistanceCommand(24, Direction.FORWARD),
-		new WaitCommand(1),
-		new ParallelDeadlineGroup(
-			CommandFactory.driveDistanceCommand(134.88, Direction.FORWARD),
-			CommandFactory.intakeInCommand()
-		)
-		// CommandFactory.driveDistanceCommand(218.88, Direction.BACKWARD),
-		// CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT),
-		// CommandFactory.driveDistanceCommand(77.95, Direction.BACKWARD),
-		// CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT),
-		// CommandFactory.driveDistanceCommand(1.5, Direction.BACKWARD),
-		// CommandFactory.emptyConveyorCommand(),
-		// CommandFactory.driveDistanceCommand(1.5, Direction.FORWARD),
-		// CommandFactory.angleTurnCommand(0.30, 59.128, Direction.LEFT),
-		// CommandFactory.driveDistanceCommand(77.95, Direction.FORWARD),
-		// CommandFactory.angleTurnCommand(0.30, 59.128, Direction.RIGHT),
-		// CommandFactory.driveDistanceCommand(90, Direction.FORWARD)
-	);
-
-	private SequentialCommandGroup awayTrenchPickupScoreAuto = new SequentialCommandGroup(
-		new ParallelDeadlineGroup(
-			CommandFactory.driveDistanceCommand(111.11, Direction.FORWARD),
-			CommandFactory.intakeInCommand()
-		),
-		CommandFactory.driveDistanceCommand(111.11, Direction.BACKWARD),
-		CommandFactory.angleTurnCommand(0.35, 63.97, Direction.RIGHT),
-		CommandFactory.driveDistanceCommand(205.11, Direction.BACKWARD),
-		CommandFactory.angleTurnCommand(0.35, 63.97, Direction.LEFT),
-		CommandFactory.driveDistanceCommand(10.75, Direction.BACKWARD),
-		CommandFactory.emptyConveyorCommand(),
-		CommandFactory.driveDistanceCommand(140, Direction.FORWARD)
-	);
-
 	//creates a hashMap
 
 	private Map<String, Command> commands = Map.ofEntries(
-		Map.entry("trench_pickup_score", homeTrenchPickupScoreAuto),
-		Map.entry("cross_initiation_line", crossLineAuto),
-		Map.entry("score_trench", goalScoreTrenchAuto),
-		Map.entry("score_pickup_generator", midScoreAuto),
-		Map.entry("collect_trench_powercells", awayTrenchPickupScoreAuto)
 	);
 
 	/**
@@ -223,7 +149,6 @@ public class RobotContainer {
 		// An ExampleCommand will run in autonomous
 		Command command = this.commands.get(key);
 		if(command == null){
-			command = crossLineAuto;
 		}
 		return command;
 	}
