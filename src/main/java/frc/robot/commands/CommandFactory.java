@@ -61,32 +61,5 @@ public class CommandFactory {
 		);
 	}
 
-	public static Command conveyorInCommand() {
-		return new InstantCommand(
-			() -> Robot.conveyor.forward(),
-			Robot.conveyor
-		);
-	}
-
-	public static Command conveyorOutCommand() {
-		return new InstantCommand(
-			() -> Robot.conveyor.reverse(),
-			Robot.conveyor
-		);
-	}
-
-	public static Command emptyConveyorCommand() {
-		return new InstantCommand(
-			() -> Robot.conveyor.empty(),
-			Robot.conveyor
-		);
-	}
-
-	public static Command conveyorStopCommand(){
-		return new InstantCommand(
-			() -> Robot.conveyor.stop(),
-			Robot.conveyor
-		);
-	}
 }
 

@@ -41,25 +41,6 @@ public class RobotContainer {
 		Robot.drive
 	);
 
-	// Since the default command must never 'end' we will use a RunCommand as it
-	// does not have an 'end' condition by default.
-	private final Command defaultConveyorCommand = new RunCommand(
-		() -> {
-			// If a power cell is ready for the conveyor OR if the conveyor is
-			// currently ingesting a powercell, then we need continue stepping
-			// the conveyor forward. Otherwise, we need to ensure that the
-			// conveyor is not moving and that the step position is zero.
-			if (Robot.conveyor.ready() ||
-			   (Robot.conveyor.isActive() && !Robot.conveyor.isStepComplete())) {
-				Robot.conveyor.forward(0.75);
-			} else {
-				Robot.conveyor.stop();
-				Robot.conveyor.reset();
-			}
-		},
-		Robot.conveyor
-	);
-
 	//creates a hashMap
 
 	private Map<String, Command> commands = Map.ofEntries(
@@ -101,25 +82,9 @@ public class RobotContainer {
 		intakeOut.whileHeld(CommandFactory.intakeOutCommand());
 		intakeOut.whenReleased(CommandFactory.intakeStopCommand());
 
-		JoystickButton conveyorOut = new JoystickButton(rightStick, Constants.BUTTON_9);
-		conveyorOut.whileHeld(CommandFactory.conveyorOutCommand());
-		conveyorOut.whenReleased(CommandFactory.conveyorStopCommand());
-
 		JoystickButton intakeOut2 = new JoystickButton(rightStick, Constants.BUTTON_5);
 		intakeOut2.whileHeld(CommandFactory.intakeOutCommand());
 		intakeOut2.whenReleased(CommandFactory.intakeStopCommand());
-
-		JoystickButton conveyorOut2 = new JoystickButton(rightStick, Constants.BUTTON_3);
-		conveyorOut2.whileHeld(CommandFactory.conveyorOutCommand());
-		conveyorOut2.whenReleased(CommandFactory.conveyorStopCommand());
-
-		JoystickButton conveyorIn = new JoystickButton(rightStick, Constants.BUTTON_12);
-		conveyorIn.whileHeld(CommandFactory.conveyorInCommand());
-		conveyorIn.whenReleased(CommandFactory.conveyorStopCommand());
-
-		JoystickButton conveyorEmpty = new JoystickButton(leftStick, Constants.TRIGGER);
-		conveyorEmpty.whileHeld(CommandFactory.emptyConveyorCommand());
-		conveyorEmpty.whenReleased(CommandFactory.conveyorStopCommand());
 
 		JoystickButton turboButton = new JoystickButton(rightStick, Constants.THUMB_BUTTON);
 		turboButton.whenPressed(new InstantCommand(
@@ -137,7 +102,7 @@ public class RobotContainer {
 		CommandScheduler scheduler = CommandScheduler.getInstance();
 
 		scheduler.setDefaultCommand(Robot.drive, defaultDriveCommand);
-		scheduler.setDefaultCommand(Robot.conveyor, defaultConveyorCommand);
+
 	}
 
 	/**

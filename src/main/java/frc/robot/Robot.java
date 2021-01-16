@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.ConveyorSystem;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeSystem;
 
@@ -58,11 +57,6 @@ public class Robot extends TimedRobot {
 	 * The robot's intake subsystem.
 	 */
 	public final static IntakeSystem intake = new IntakeSystem();
-
-	/**
-	 * The robot's conveyor subsystem.
-	 */
-	public final static ConveyorSystem conveyor = new ConveyorSystem();
 
 	/**
 	 * This function is run when the robot is first started up and should be
