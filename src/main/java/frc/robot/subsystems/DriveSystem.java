@@ -28,7 +28,7 @@ public class DriveSystem extends SubsystemBase {
 	// Onboard IMU.
 	private AHRS navX;
 
-	public static double MAX_VELOCITY = 325;
+	private static final double MAX_VELOCITY = 325;
 	private static final double TURBO_VELOCITY = 400;
 	private static final double PEAK_OUTPUT = 1.0;
 	private boolean turbo = false;
@@ -41,7 +41,7 @@ public class DriveSystem extends SubsystemBase {
 	private static final double WHEEL_CIRCUMFERENCE_M = WHEEL_DIAMETER_M * Math.PI;
 	private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
 	private static final double TICKS_PER_METER = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE_M;
-	private static final double METERS_PER_PULSE = WHEEL_CIRCUMFERENCE_M / TICKS_PER_ROTATION;
+	private static final double METERS_PER_TICK = WHEEL_CIRCUMFERENCE_M / TICKS_PER_ROTATION;
 
 	// Velocity PID Gains and Feed Forward values.
 	//
@@ -332,12 +332,12 @@ public class DriveSystem extends SubsystemBase {
 		// meters per second.
 		//
 		// First we must convert the raw units in to meters. This is done by
-		// multiplying measured value by the value of METERS_PER_PULSE. The result
+		// multiplying measured value by the value of METERS_PER_TICK. The result
 		// of this will be the measured value in meters per 100ms. Since 1 s =
 		// 1000ms, we know that we need to multiply the value by 10, which will give
 		// us the meters per second value.
-		double left = this.leftMaster.getSelectedSensorVelocity() * METERS_PER_PULSE * 10;
-		double right = this.rightMaster.getSelectedSensorVelocity() * METERS_PER_PULSE * 10;
+		double left = this.leftMaster.getSelectedSensorVelocity() * METERS_PER_TICK * 1000;
+		double right = this.rightMaster.getSelectedSensorVelocity() * METERS_PER_TICK * 1000;
 		return new DifferentialDriveWheelSpeeds(left, right);
 	}
 
