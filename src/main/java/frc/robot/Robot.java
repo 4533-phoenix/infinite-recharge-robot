@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeSystem;
+import frc.robot.subsystems.ShooterSystem;
 
 public class Robot extends TimedRobot {
 	private Logger stateLogger = LogManager.getLogger("robot_state");
@@ -57,6 +58,11 @@ public class Robot extends TimedRobot {
 	 * The robot's intake subsystem.
 	 */
 	public final static IntakeSystem intake = new IntakeSystem();
+
+	/**
+	 * The robot's shooter subsystem.
+	 */
+	public final static ShooterSystem shooter = new ShooterSystem();
 
 	/**
 	 * This function is run when the robot is first started up and should be
