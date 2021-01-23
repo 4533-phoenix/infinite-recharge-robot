@@ -249,6 +249,68 @@ public class DriveSystem extends SubsystemBase {
 		this.rightMaster.set(ControlMode.Position, rightDist);
 	}
 
+	public void driveCircle(double speed, double angle, Direction direction, double radius) {
+		double innerCircumference = radius * 2 * Math.PI * (angle / 360);
+		double outerCircumference = (radius + 24) * 2 * Math.PI * (angle / 360);
+
+		double innerVelocity = -1 * (speed * (innerCircumference / outerCircumference)) * MAX_VELOCITY * 4096 / 600.0;
+		double outerVelocity = -1 * speed * MAX_VELOCITY * 4096 / 600.0;
+
+		
+		double leftDist, rightDist;
+		double leftVelocity, rightVelocity;
+		
+		if (direction == Direction.LEFT) {
+			leftDist = innerCircumference;
+			rightDist = outerCircumference;
+			
+			leftVelocity = innerVelocity;
+			rightVelocity = outerVelocity;
+		}
+		else if (direction == Direction.RIGHT) {
+			leftDist = outerCircumference;
+			rightDist = innerCircumference;
+			
+			leftVelocity = outerVelocity;
+			rightVelocity = innerVelocity;
+		}
+		else {
+			leftDist = 0;
+			rightDist = 0;
+			
+			leftVelocity = 0;
+			rightVelocity = 0;
+		}
+		System.out.println("Left: " + leftVelocity);
+		System.out.println("Right: " + rightVelocity);
+		
+		this.leftMaster.set(ControlMode.Velocity, leftVelocity);
+		this.rightMaster.set(ControlMode.Velocity, rightVelocity);
+	}
+
+	public boolean reachedCircle(double angle, double radius, Direction direction) {
+		double leftPos = this.leftMaster.getSelectedSensorPosition();
+		double rightPos = this.rightMaster.getSelectedSensorPosition();
+
+		double rightTarget, leftTarget;
+
+		if (direction == Direction.LEFT) {
+			leftTarget = radius * 2 * Math.PI * (angle / 360);
+			rightTarget = (radius + 24) * 2 * Math.PI * (angle / 360);
+		}
+		else if (direction == Direction.RIGHT) {
+			rightTarget = radius * 2 * Math.PI * (angle / 360);
+			leftTarget = (radius + 24) * 2 * Math.PI * (angle / 360);
+		}
+		else {
+			rightTarget = 0;
+			leftTarget = 0;
+		}
+
+		return (leftPos >= leftTarget) && (rightPos >= rightTarget);
+		
+	}
+
 	public double getPosition() {
 		return this.leftMaster.getSelectedSensorPosition() / TICKS_PER_INCH;
 	}

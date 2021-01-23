@@ -30,6 +30,16 @@ public class CommandFactory {
 		);
 	}
 
+	public static Command driveCircleCommand(double speed, double angle, Direction direction, double radius) {
+		return new FunctionalCommand(
+			() -> Robot.drive.resetPosition(),
+			() -> Robot.drive.driveCircle(speed, angle, direction, radius),
+			(interrupt) -> Robot.drive.tank(0,0),
+			() -> Robot.drive.reachedCircle(angle, radius, direction),
+			Robot.drive
+		);
+	}
+
 	public static Command angleTurnCommand(double speed, double angle, Direction direction) {
 		return new FunctionalCommand(
 			() -> Robot.drive.resetAngle(),

@@ -33,6 +33,11 @@ public class RobotContainer {
 		Robot.drive
 	);
 
+	private final Command driveCircleCommand = new RunCommand(
+		() -> Robot.drive.driveCircle(.5, 360, Direction.RIGHT, 48),
+		Robot.drive
+		);
+
 	private final Command invertDriveCommand = new RunCommand(
 		() -> Robot.drive.tank(
 			-this.leftStick.getRawAxis(1),
@@ -41,9 +46,19 @@ public class RobotContainer {
 		Robot.drive
 	);
 
+	private final Command circleDriveCommand = new SequentialCommandGroup(
+		CommandFactory.driveCircleCommand(0.8, 360, Direction.RIGHT, 36)
+	);
+
+	private final Command driveForwardCommand = new SequentialCommandGroup(
+		CommandFactory.driveDistanceCommand(72, Direction.FORWARD)
+	);
+
 	//creates a hashMap
 
 	private Map<String, Command> commands = Map.ofEntries(
+		Map.entry("driveCircleCommand", driveCircleCommand),
+		Map.entry("driveDistanceCommand", driveForwardCommand)
 	);
 
 	/**
@@ -114,6 +129,7 @@ public class RobotContainer {
 		// An ExampleCommand will run in autonomous
 		Command command = this.commands.get(key);
 		if(command == null){
+			command = this.driveForwardCommand;
 		}
 		return command;
 	}
