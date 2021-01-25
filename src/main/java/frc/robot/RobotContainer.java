@@ -47,7 +47,8 @@ public class RobotContainer {
 	);
 
 	private final Command circleDriveCommand = new SequentialCommandGroup(
-		CommandFactory.driveCircleCommand(0.8, 360, Direction.RIGHT, 36)
+		CommandFactory.driveCircleCommand(0.5, 360, Direction.RIGHT, 24),
+		CommandFactory.driveDistanceCommand(24, Direction.FORWARD)
 	);
 
 	private final Command driveForwardCommand = new SequentialCommandGroup(
@@ -57,7 +58,7 @@ public class RobotContainer {
 	//creates a hashMap
 
 	private Map<String, Command> commands = Map.ofEntries(
-		Map.entry("driveCircleCommand", driveCircleCommand),
+		Map.entry("driveCircleCommand", driveForwardCommand),
 		Map.entry("driveDistanceCommand", driveForwardCommand)
 	);
 

@@ -115,8 +115,8 @@ public class DriveSystem extends SubsystemBase {
 		this.leftMaster.setInverted(true);
 		this.leftSlave.setInverted(true);
 
-		this.leftMaster.setSensorPhase(true);
-		this.rightMaster.setSensorPhase(true);
+		this.leftMaster.setSensorPhase(false);
+		this.rightMaster.setSensorPhase(false);
 
 		this.leftMaster.configPeakOutputForward(PEAK_OUTPUT);
 		this.leftMaster.configPeakOutputReverse(-PEAK_OUTPUT);
@@ -254,7 +254,7 @@ public class DriveSystem extends SubsystemBase {
 		double outerCircumference = (radius + 24) * 2 * Math.PI * (angle / 360);
 
 		double innerVelocity = -1 * (speed * (innerCircumference / outerCircumference)) * MAX_VELOCITY * 4096 / 600.0;
-		double outerVelocity = -1 * speed * MAX_VELOCITY * 4096 / 600.0;
+		double outerVelocity = -1 * speed * MAX_VELOCITY * 4096 / 300.0;
 
 		
 		double leftDist, rightDist;
@@ -281,8 +281,6 @@ public class DriveSystem extends SubsystemBase {
 			leftVelocity = 0;
 			rightVelocity = 0;
 		}
-		System.out.println("Left: " + leftVelocity);
-		System.out.println("Right: " + rightVelocity);
 		
 		this.leftMaster.set(ControlMode.Velocity, leftVelocity);
 		this.rightMaster.set(ControlMode.Velocity, rightVelocity);
@@ -295,20 +293,25 @@ public class DriveSystem extends SubsystemBase {
 		double rightTarget, leftTarget;
 
 		if (direction == Direction.LEFT) {
-			leftTarget = radius * 2 * Math.PI * (angle / 360);
-			rightTarget = (radius + 24) * 2 * Math.PI * (angle / 360);
+			leftTarget = radius * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
+			rightTarget = (radius + 24) * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
 		}
 		else if (direction == Direction.RIGHT) {
-			rightTarget = radius * 2 * Math.PI * (angle / 360);
-			leftTarget = (radius + 24) * 2 * Math.PI * (angle / 360);
+			rightTarget = radius * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
+			leftTarget = (radius + 24) * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
 		}
 		else {
 			rightTarget = 0;
 			leftTarget = 0;
 		}
-
-		return (leftPos >= leftTarget) && (rightPos >= rightTarget);
 		
+		leftTarget *= 1.25;
+
+		System.out.println("Position: " + leftPos + "    " + rightPos);
+		System.out.println("Target: " + leftTarget + "    " + rightTarget);
+
+
+		return leftPos >= leftTarget;
 	}
 
 	public double getPosition() {
