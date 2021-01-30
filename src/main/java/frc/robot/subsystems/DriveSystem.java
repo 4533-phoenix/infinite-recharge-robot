@@ -253,8 +253,12 @@ public class DriveSystem extends SubsystemBase {
 		double innerCircumference = radius * 2 * Math.PI * (angle / 360);
 		double outerCircumference = (radius + 24) * 2 * Math.PI * (angle / 360);
 
-		double innerVelocity = -1 * (speed * (innerCircumference / outerCircumference)) * MAX_VELOCITY * 4096 / 600.0;
-		double outerVelocity = -1 * speed * MAX_VELOCITY * 4096 / 300.0;
+		/*double innerVelocity = -1 * (speed * (innerCircumference / outerCircumference)) * MAX_VELOCITY * 4096 / 600.0;
+		double outerVelocity = -1 * speed * MAX_VELOCITY * 4096 / 600.0;*/
+
+		//double outerVelocity = -1 * (speed * ((innerCircumference + outerCircumference) / innerCircumference)) * MAX_VELOCITY * 4096 / 600.0;
+		double innerVelocity = -1 * speed * MAX_VELOCITY * 4096 / 600.0;
+		double outerVelocity = (innerVelocity * outerCircumference) / innerCircumference;
 
 		
 		double leftDist, rightDist;
@@ -282,6 +286,8 @@ public class DriveSystem extends SubsystemBase {
 			rightVelocity = 0;
 		}
 		
+		System.out.println("Left Velocity: " + leftVelocity);
+		System.out.println("Right Velocity: " + rightVelocity);
 		this.leftMaster.set(ControlMode.Velocity, leftVelocity);
 		this.rightMaster.set(ControlMode.Velocity, rightVelocity);
 	}
@@ -293,25 +299,23 @@ public class DriveSystem extends SubsystemBase {
 		double rightTarget, leftTarget;
 
 		if (direction == Direction.LEFT) {
-			leftTarget = radius * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
-			rightTarget = (radius + 24) * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
+			leftTarget = radius * 4 * Math.PI * (angle / 360) * TICKS_PER_INCH;
+			rightTarget = (radius + 24) * 4 * Math.PI * (angle / 360) * TICKS_PER_INCH;
 		}
 		else if (direction == Direction.RIGHT) {
-			rightTarget = radius * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
-			leftTarget = (radius + 24) * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
+			rightTarget = radius * 4 * Math.PI * (angle / 360) * TICKS_PER_INCH;
+			leftTarget = (radius + 24) * 4 * Math.PI * (angle / 360) * TICKS_PER_INCH;
 		}
 		else {
 			rightTarget = 0;
 			leftTarget = 0;
 		}
-		
-		leftTarget *= 1.25;
 
 		System.out.println("Position: " + leftPos + "    " + rightPos);
 		System.out.println("Target: " + leftTarget + "    " + rightTarget);
 
 
-		return leftPos >= leftTarget;
+		return rightPos >= rightTarget;
 	}
 
 	public double getPosition() {
