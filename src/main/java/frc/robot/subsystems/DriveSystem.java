@@ -257,39 +257,39 @@ public class DriveSystem extends SubsystemBase {
 		double outerVelocity = -1 * speed * MAX_VELOCITY * 4096 / 600.0;*/
 
 		//double outerVelocity = -1 * (speed * ((innerCircumference + outerCircumference) / innerCircumference)) * MAX_VELOCITY * 4096 / 600.0;
-		double innerVelocity = -1 * speed * MAX_VELOCITY * 4096 / 600.0;
-		double outerVelocity = (innerVelocity * outerCircumference) / innerCircumference;
+		// double innerVelocity = -1 * speed * MAX_VELOCITY * 4096 / 600.0;
+		// double outerVelocity = (innerVelocity * outerCircumference) / innerCircumference;
 
 		
 		double leftDist, rightDist;
-		double leftVelocity, rightVelocity;
+		//double leftVelocity, rightVelocity;
 		
 		if (direction == Direction.LEFT) {
 			leftDist = innerCircumference;
 			rightDist = outerCircumference;
 			
-			leftVelocity = innerVelocity;
-			rightVelocity = outerVelocity;
+			// leftVelocity = innerVelocity;
+			// rightVelocity = outerVelocity;
 		}
 		else if (direction == Direction.RIGHT) {
 			leftDist = outerCircumference;
 			rightDist = innerCircumference;
 			
-			leftVelocity = outerVelocity;
-			rightVelocity = innerVelocity;
+			// leftVelocity = outerVelocity;
+			// rightVelocity = innerVelocity;
 		}
 		else {
 			leftDist = 0;
 			rightDist = 0;
 			
-			leftVelocity = 0;
-			rightVelocity = 0;
+			// leftVelocity = 0;
+			// rightVelocity = 0;
 		}
 		
-		System.out.println("Left Velocity: " + leftVelocity);
-		System.out.println("Right Velocity: " + rightVelocity);
-		this.leftMaster.set(ControlMode.Velocity, leftVelocity);
-		this.rightMaster.set(ControlMode.Velocity, rightVelocity);
+		// System.out.println("Left Velocity: " + leftVelocity);
+		// System.out.println("Right Velocity: " + rightVelocity);
+		this.leftMaster.set(ControlMode.Position, leftDist);
+		this.rightMaster.set(ControlMode.Position, rightDist);
 	}
 
 	public boolean reachedCircle(double angle, double radius, Direction direction) {
@@ -299,12 +299,12 @@ public class DriveSystem extends SubsystemBase {
 		double rightTarget, leftTarget;
 
 		if (direction == Direction.LEFT) {
-			leftTarget = radius * 4 * Math.PI * (angle / 360) * TICKS_PER_INCH;
-			rightTarget = (radius + 24) * 4 * Math.PI * (angle / 360) * TICKS_PER_INCH;
+			leftTarget = radius * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
+			rightTarget = (radius + 24) * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
 		}
 		else if (direction == Direction.RIGHT) {
-			rightTarget = radius * 4 * Math.PI * (angle / 360) * TICKS_PER_INCH;
-			leftTarget = (radius + 24) * 4 * Math.PI * (angle / 360) * TICKS_PER_INCH;
+			rightTarget = radius * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
+			leftTarget = (radius + 24) * 2 * Math.PI * (angle / 360) * TICKS_PER_INCH;
 		}
 		else {
 			rightTarget = 0;

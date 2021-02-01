@@ -129,18 +129,18 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		/*Robot.drive.setPIDF(
+		Robot.drive.setPIDF(
 			DriveSystem.POSITION_P,
 			DriveSystem.POSITION_I,
 			DriveSystem.POSITION_D,
 			DriveSystem.POSITION_FEED_FORWARD
-		);*/
-		Robot.drive.setPIDF(
-			DriveSystem.VELOCITY_P,
-			DriveSystem.VELOCITY_I,
-			DriveSystem.VELOCITY_D,
-			DriveSystem.VELOCITY_FEED_FORWARD
 		);
+		// Robot.drive.setPIDF(
+		// 	DriveSystem.VELOCITY_P,
+		// 	DriveSystem.VELOCITY_I,
+		// 	DriveSystem.VELOCITY_D,
+		// 	DriveSystem.VELOCITY_FEED_FORWARD
+		// );
 
 		Robot.drive.resetAngle();
 		this.robotLogger.info("reset drive system angle: {}", Robot.drive.getAngle());
