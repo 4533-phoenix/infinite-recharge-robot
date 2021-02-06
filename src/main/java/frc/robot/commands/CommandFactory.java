@@ -1,43 +1,12 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
 
 public class CommandFactory {
 
 	public CommandFactory() {
-	}
-
-	public static Command driveDistanceCommand(double distance, Direction direction) {
-		return new FunctionalCommand(
-			() -> Robot.drive.resetPosition(),
-			() -> Robot.drive.driveDistance(distance, direction),
-			(interrupt) -> Robot.drive.tank(0, 0),
-			() -> Robot.drive.reachedPosition(),
-			Robot.drive
-		);
-	}
-
-	public static Command driveCurveCommand(double left, double right, Direction direction) {
-		return new FunctionalCommand(
-			() -> Robot.drive.resetPosition(),
-			() -> Robot.drive.driveCurve(left, right, direction),
-			(interrupt) -> Robot.drive.tank(0, 0),
-			() -> Robot.drive.reachedCurve(left, right),
-			Robot.drive
-		);
-	}
-
-	public static Command angleTurnCommand(double speed, double angle, Direction direction) {
-		return new FunctionalCommand(
-			() -> Robot.drive.resetAngle(),
-			() -> Robot.drive.turn(speed, direction),
-			(interrupt) -> Robot.drive.tank(0, 0),
-			() -> Robot.drive.getAngle() >= angle,
-			Robot.drive
-		);
 	}
 
 	public static Command intakeInCommand() {
@@ -58,69 +27,6 @@ public class CommandFactory {
 		return new InstantCommand(
 			() -> Robot.intake.intakeStop(),
 			Robot.intake
-		);
-	}
-
-	public static Command conveyorInCommand() {
-		return new InstantCommand(
-			() -> Robot.conveyor.forward(),
-			Robot.conveyor
-		);
-	}
-
-	public static Command conveyorOutCommand() {
-		return new InstantCommand(
-			() -> Robot.conveyor.reverse(),
-			Robot.conveyor
-		);
-	}
-
-	public static Command emptyConveyorCommand() {
-		return new InstantCommand(
-			() -> Robot.conveyor.empty(),
-			Robot.conveyor
-		);
-	}
-
-	public static Command conveyorStopCommand(){
-		return new InstantCommand(
-			() -> Robot.conveyor.stop(),
-			Robot.conveyor
-		);
-	}
-
-	public static Command hookUpCommand(){
-		return new InstantCommand(
-			() -> Robot.climber.hookUp(),
-			Robot.climber
-		);
-	}
-
-	public static Command hookDownCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.hookDown(),
-			Robot.climber
-		);
-	}
-
-	public static Command hookStopCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.hookStop(),
-			Robot.climber
-		);
-	}
-
-	public static Command climbCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.climb(),
-			Robot.climber
-		);
-	}
-
-	public static Command climbStopCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.climbStop(),
-			Robot.climber
 		);
 	}
 }

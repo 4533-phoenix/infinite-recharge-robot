@@ -23,9 +23,6 @@ public class RobotState {
 	private long timestamp = 0;
 
 	@JsonProperty
-	private double[] current = new double[16];
-
-	@JsonProperty
 	private double totalCurrent = 0.0;
 
 	@JsonProperty
@@ -44,41 +41,25 @@ public class RobotState {
 	private double leftDistance = 0.0;
 
 	@JsonProperty
-	private boolean[] powerCells = new boolean[5];
-
-	@JsonProperty
 	private double pdpTemperature = 0.0;
 
-	public RobotState() {}
-
-	public RobotState withPDP(PowerDistributionPanel pdp) {
-		this.pdp = pdp;
-		return this;
-	}
-
-	public RobotState withDriveSystem(DriveSystem driveSystem) {
-		this.driveSystem = driveSystem;
-		return this;
-	}
-
-	public RobotState withIntakeSystem(IntakeSystem intakeSystem) {
-		this.intakeSystem = intakeSystem;
-		return this;
+	public RobotState() {
+		this.pdp = new PowerDistributionPanel();
+		this.driveSystem = Robot.drive;
+		this.intakeSystem = Robot.intake;
 	}
 
 	public void update() {
 		this.timestamp = System.currentTimeMillis();
 
+		// Power Distribution
 		if (this.pdp != null) {
-			for (int channel = 0; channel < 16; channel++) {
-				this.current[channel] = this.pdp.getCurrent(channel);
-			}
-
 			this.totalCurrent = this.pdp.getTotalCurrent();
 			this.voltage = this.pdp.getVoltage();
 			this.pdpTemperature = this.pdp.getTemperature();
 		}
 
+		// Drive System
 		if (this.driveSystem != null) {
 			DifferentialDriveWheelSpeeds wheelSpeeds = this.driveSystem.getWheelSpeeds();
 			this.rightSpeed = wheelSpeeds.rightMetersPerSecond;
@@ -88,6 +69,7 @@ public class RobotState {
 			this.leftDistance = this.driveSystem.getLeftDistance();
 		}
 
+		// Intake System
 		if (this.intakeSystem != null) {
 		}
 	}

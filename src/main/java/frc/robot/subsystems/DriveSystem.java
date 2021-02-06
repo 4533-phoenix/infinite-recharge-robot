@@ -1,21 +1,21 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
-import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.Direction;
-
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class DriveSystem extends SubsystemBase {
 
@@ -25,13 +25,15 @@ public class DriveSystem extends SubsystemBase {
 	private WPI_TalonSRX leftMaster;
 	private WPI_TalonSRX leftSlave;
 
+	private DifferentialDrive drive;
+
+	private DifferentialDriveOdometry odometry;
+
 	// Onboard IMU.
 	private AHRS navX;
 
 	public static double MAX_VELOCITY = 325;
-	private static final double TURBO_VELOCITY = 400;
 	private static final double PEAK_OUTPUT = 1.0;
-	private boolean turbo = false;
 
 	// Wheel specific constants.
 	private static final double TICKS_PER_ROTATION = 4096.0;
@@ -93,15 +95,6 @@ public class DriveSystem extends SubsystemBase {
 	/** Default timeout in milliseconds */
 	private static final int DEFAULT_TIMEOUT = 30;
 
-	private static double targetPosition = 0;
-	private static Direction targetDirection;
-
-	public enum DriveMode {
-		Normal, Inverted
-	}
-
-	private DriveMode driveMode = DriveMode.Normal;
-
 	public DriveSystem() {
 		// Initialize all of the drive systems motor controllers.
 		this.leftMaster = new WPI_TalonSRX(Constants.LEFT_MASTER_MOTOR);
@@ -140,26 +133,23 @@ public class DriveSystem extends SubsystemBase {
 
 		this.leftMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, DEFAULT_TIMEOUT);
 		this.rightMaster.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, DEFAULT_TIMEOUT);
-		
+
 		this.rightMaster.setNeutralMode(NeutralMode.Brake);
 		this.rightSlave.setNeutralMode(NeutralMode.Brake);
 		this.leftMaster.setNeutralMode(NeutralMode.Brake);
 		this.leftSlave.setNeutralMode(NeutralMode.Brake);
 
+		this.drive = new DifferentialDrive(this.leftMaster, this.rightMaster);
+
+		// Initializing with a 0 angle. This might need to be revisited in the
+		// case where we want to start the robot in a different orientation.
+		this.odometry = new DifferentialDriveOdometry(new Rotation2d());
+
 		// Initialize the NavX IMU sensor.
 		this.navX = new AHRS(SPI.Port.kMXP);
 	}
 
-	public void setDriveMode(DriveMode mode) {
-		this.driveMode = mode;
-	}
-
-	public void toggleDriveMode() {
-		if (this.driveMode == DriveMode.Normal) {
-			this.driveMode = DriveMode.Inverted;
-		} else {
-			this.driveMode = DriveMode.Normal;
-		}
+	public void tank(double left, double right) {
 	}
 
 	public void setPIDF(double p, double i, double d, double f) {
@@ -176,77 +166,9 @@ public class DriveSystem extends SubsystemBase {
 		this.rightMaster.config_kF(0, f, 100);
 	}
 
-	public SlotConfiguration[] getPID() {
-		SlotConfiguration[] slots = new SlotConfiguration[]{
-			new SlotConfiguration(),
-			new SlotConfiguration()
-		};
-
-		this.leftMaster.getSlotConfigs(slots[0], 0, 30);
-		this.rightMaster.getSlotConfigs(slots[1], 0, 30);
-
-		return slots;
-	}
-
 	public void resetPosition() {
 		this.rightMaster.setSelectedSensorPosition(0);
 		this.leftMaster.setSelectedSensorPosition(0);
-	}
-
-	public boolean reachedPosition() {
-		double leftPos = this.leftMaster.getSelectedSensorPosition();
-		double rightPos = this.rightMaster.getSelectedSensorPosition();
-
-		if (targetDirection == Direction.FORWARD) {
-			return (leftPos <= targetPosition) && (rightPos <= targetPosition);
-		} else if (targetDirection == Direction.BACKWARD) {
-			return (leftPos >= targetPosition) && (rightPos >= targetPosition);
-		} else {
-			return true;
-		}
-	}
-
-	public boolean reachedCurve(double targetL, double targetR) {
-		double leftPos = this.leftMaster.getSelectedSensorPosition();
-		double rightPos = this.rightMaster.getSelectedSensorPosition();
-
-		if (targetDirection == Direction.FORWARD) {
-			return (leftPos >= targetL) && (rightPos >= targetR);
-		} else if (targetDirection == Direction.BACKWARD) {
-			return (leftPos <= targetL) && (rightPos <= targetR);
-		} else {
-			return true;
-		}
-	}
-
-	public void driveDistance(double inches, Direction direction) {
-		targetDirection = direction;
-		if (direction == Direction.FORWARD) {
-			targetPosition = -1 * (inches * TICKS_PER_INCH);
-		} else if (direction == Direction.BACKWARD) {
-			targetPosition = inches * TICKS_PER_INCH;
-		} else {
-			targetPosition = 0;
-		}
-
-		this.leftMaster.set(ControlMode.Position, targetPosition);
-		this.rightMaster.set(ControlMode.Position, targetPosition);
-	}
-
-	public void driveCurve(double leftDist, double rightDist, Direction direction) {
-		targetDirection = direction;
-		if (direction == Direction.FORWARD) {
-			leftDist = -1 * (leftDist * TICKS_PER_INCH);
-			rightDist = -1 * (rightDist * TICKS_PER_INCH);
-		} else if (direction == Direction.BACKWARD) {
-			leftDist = leftDist * TICKS_PER_INCH;
-			rightDist = rightDist * TICKS_PER_INCH;
-		} else {
-			leftDist = 0;
-			rightDist = 0;
-		}
-		this.leftMaster.set(ControlMode.Position, leftDist);
-		this.rightMaster.set(ControlMode.Position, rightDist);
 	}
 
 	public double getPosition() {
@@ -261,67 +183,12 @@ public class DriveSystem extends SubsystemBase {
 		return this.rightMaster.getSelectedSensorPosition() / TICKS_PER_METER;
 	}
 
-	public void toggleTurbo() {
-		this.turbo = !this.turbo;
-	}
-	public void tank(double left, double right) {
-		double targetLeft;
-		double targetRight;
-
-		double targetVelocity = MAX_VELOCITY;
-
-		if (this.turbo) {
-			targetVelocity = TURBO_VELOCITY;
-		}
-
-		targetLeft = left * targetVelocity * 4096 / 600.0;
-		targetRight = right * targetVelocity * 4096 / 600.0;
-
-		if (this.driveMode == DriveMode.Inverted) {
-			double temp = targetLeft;
-			targetLeft = -targetRight;
-			targetRight = -temp;
-		}
-
-		this.leftMaster.set(ControlMode.Velocity, targetLeft);
-		this.rightMaster.set(ControlMode.Velocity, targetRight);
-	}
-
-	public void voltage(double left, double right) {
-		leftMaster.setVoltage(left * 12.0);
-		rightMaster.setVoltage(right * 12.0);
-		leftSlave.set(ControlMode.Follower, Constants.LEFT_MASTER_MOTOR);
-		rightSlave.set(ControlMode.Follower, Constants.RIGHT_MASTER_MOTOR);
-	}
-
-	public void percent(double left, double right) {
-		this.leftMaster.set(ControlMode.PercentOutput, left);
-		this.rightMaster.set(ControlMode.PercentOutput, right);
-		this.leftSlave.set(ControlMode.Follower, Constants.LEFT_MASTER_MOTOR);
-		this.rightSlave.set(ControlMode.Follower, Constants.RIGHT_MASTER_MOTOR);
-	}
-
 	public double getAngle() {
 		return Math.abs(navX.getAngle());
 	}
 
 	public void resetAngle() {
 		navX.reset();
-	}
-
-	public void turn(double speed, Direction direction) {
-		switch (direction) {
-		case LEFT:
-			this.tank(speed, -speed);
-			System.out.println("angle: " + getAngle());
-			break;
-		case RIGHT:
-			this.tank(-speed, speed);
-			System.out.println("angle: " + getAngle());
-			break;
-		default:
-			this.tank(0, 0);
-		}
 	}
 
 	public DifferentialDriveWheelSpeeds getWheelSpeeds() {
@@ -341,7 +208,29 @@ public class DriveSystem extends SubsystemBase {
 		return new DifferentialDriveWheelSpeeds(left, right);
 	}
 
+	public Pose2d getPose() {
+		return this.odometry.getPoseMeters();
+	}
+
+	public void resetOdometry(Pose2d pose) {
+		this.resetPosition();
+		this.odometry.resetPosition(pose, Rotation2d.fromDegrees(this.navX.getAngle()));
+	  }
+
+	public void tankDriveVolts(double leftVolts, double rightVolts) {
+		this.leftMaster.setVoltage(leftVolts);
+		this.rightMaster.setVoltage(-rightVolts);
+		this.drive.feed();
+	  }
+
 	@Override
 	public void periodic() {
+
+		// Update the robots odometry.
+		this.odometry.update(
+			Rotation2d.fromDegrees(this.navX.getAngle()),
+			this.getLeftDistance(),
+			this.getRightDistance()
+		);
 	}
 }

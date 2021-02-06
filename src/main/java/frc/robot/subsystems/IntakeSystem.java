@@ -10,7 +10,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class IntakeSystem extends SubsystemBase {
 
-	private final double INTAKE_MOTOR_PERCENT = 0.65;
+	private final double INTAKE_MOTOR_PERCENT = 0.5;
 
 	private WPI_TalonSRX intakeMotor;
 

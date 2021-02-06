@@ -1,32 +1,12 @@
 package frc.robot;
 
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.ClimbSystem;
-import frc.robot.subsystems.ConveyorSystem;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeSystem;
 
 public class Robot extends TimedRobot {
-	private Logger stateLogger = LogManager.getLogger("robot_state");
-	private Logger robotLogger = LogManager.getLogger("robot");
-
-	// TODO: this seems like it would be better encapsulated by the robot state
-	// updater.
-	private ObjectMapper mapper = new ObjectMapper();
-
 	/**
 	 * The robot's configured autonomous command.
 	 */
@@ -39,18 +19,6 @@ public class Robot extends TimedRobot {
 	private RobotContainer container = null;
 
 	/**
-	 * Tracks the current state of the robot.
-	 */
-	private RobotState robotState = null;
-
-	/**
-	 * Thread pool for handling interval based tasks that are outside of the
-	 * typical robot lifecyle. In other words, things that should not be on the
-	 * robot's main loop/thread.
-	 */
-	private ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(2);
-
-	/**
 	 * The robot's drive train subsystem.
 	 */
 	public final static DriveSystem drive = new DriveSystem();
@@ -61,16 +29,6 @@ public class Robot extends TimedRobot {
 	public final static IntakeSystem intake = new IntakeSystem();
 
 	/**
-	 * The robot's conveyor subsystem.
-	 */
-	public final static ConveyorSystem conveyor = new ConveyorSystem();
-
-	/**
-	 * The robot's climber subsystem.
-	 */
-	public final static ClimbSystem climber = new ClimbSystem();
-
-	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
@@ -79,38 +37,6 @@ public class Robot extends TimedRobot {
 		// Instantiate our RobotContainer.  This will perform all our button
 		// bindings, and put our autonomous chooser on the dashboard.
 		this.container = new RobotContainer();
-
-		// TODO: since subsystems are now static properties of the robot, do we
-		// really need to construct this object in this manner?
-		this.robotState = new RobotState()
-			.withPDP(new PowerDistributionPanel())
-			.withDriveSystem(Robot.drive)
-			.withIntakeSystem(Robot.intake);
-
-		// TODO: should this be refactored such that the runnable is defined
-		// elsewhere?
-		this.executor.scheduleAtFixedRate(
-			() -> {
-				this.robotState.update();
-				try {
-					String state = this.mapper.writeValueAsString(this.robotState);
-					this.stateLogger.info(state);
-				} catch (JsonProcessingException e) {
-					this.stateLogger.error(e.toString());
-				}
-			},
-			0,   // initial delay
-			100, // delay
-			TimeUnit.MILLISECONDS
-		);
-
-		SlotConfiguration[] slots = Robot.drive.getPID();
-
-		for (int i = 0; i < slots.length; i++) {
-			this.robotLogger.info("Slot: {} - P: {} I: {} D: {} F: {}",
-				i, slots[i].kP, slots[i].kI, slots[i].kD, slots[i].kF
-			);
-		}
 	}
 
 	@Override
@@ -143,8 +69,6 @@ public class Robot extends TimedRobot {
 		);
 
 		Robot.drive.resetAngle();
-		this.robotLogger.info("reset drive system angle: {}", Robot.drive.getAngle());
-
 		Robot.drive.resetPosition();
 
 		this.autoCommand = this.container.getAutonomousCommand("score_trench");
