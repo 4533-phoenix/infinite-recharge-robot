@@ -68,9 +68,9 @@ public class DriveSystem extends SubsystemBase {
 	// kS - the voltage needed to overcome the motor's static friction (V).
 	// kV - the voltage needed to maintain a given constant velocity (V * s/m).
 	// kA - the voltage needed to induce a given acceleration (V * s^2/m).
-	public static final double FEED_FORWARD_KS = 0.456;
-	public static final double FEED_FORWARD_KV = 0.145;
-	public static final double FEED_FORWARD_KA = 0.0227;
+	public static final double FEED_FORWARD_KS = 0.863;
+	public static final double FEED_FORWARD_KV = 2.5;
+	public static final double FEED_FORWARD_KA = 0.337;
 
 	public static final SimpleMotorFeedforward FEED_FORWARD = new SimpleMotorFeedforward(FEED_FORWARD_KV,
 			FEED_FORWARD_KV, FEED_FORWARD_KA);
@@ -79,7 +79,7 @@ public class DriveSystem extends SubsystemBase {
 	// process. We need to determine whether or not we want to keep them separate
 	// from the above PID and FF gains. Another consideration is whether or not
 	// we should track the left and right values separately.
-	public static final double kPVelocity = 0.00177;
+	public static final double kPVelocity = 2.38;
 	public static final double kDVelocity = 0.0;
 
 	public static final double kPPosition = 0.0;
@@ -108,7 +108,7 @@ public class DriveSystem extends SubsystemBase {
 		this.leftMaster.setInverted(true);
 		this.leftSlave.setInverted(true);
 
-		this.leftMaster.setSensorPhase(true);
+		this.leftMaster.setSensorPhase(false);
 		this.rightMaster.setSensorPhase(true);
 
 		this.leftMaster.configPeakOutputForward(PEAK_OUTPUT);
