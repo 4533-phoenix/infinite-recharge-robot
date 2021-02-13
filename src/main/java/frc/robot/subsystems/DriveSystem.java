@@ -360,8 +360,8 @@ public class DriveSystem extends SubsystemBase {
 		double targetLeft;
 		double targetRight;
 
-		targetLeft = left * (4096 / (.5*Math.PI));
-		targetRight = right * (4096 / (.5*Math.PI));
+		targetLeft = left * (4096 / (.5*Math.PI)) / 10;
+		targetRight = right * (4096 / (.5*Math.PI)) / 10;
 
 		this.leftMaster.set(ControlMode.Velocity, targetLeft);
 		this.rightMaster.set(ControlMode.Velocity, targetRight);
