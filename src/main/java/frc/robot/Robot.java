@@ -76,35 +76,35 @@ public class Robot extends TimedRobot {
 
 		// TODO: since subsystems are now static properties of the robot, do we
 		// really need to construct this object in this manner?
-		this.robotState = new RobotState()
-			.withPDP(new PowerDistributionPanel())
-			.withDriveSystem(Robot.drive)
-			.withIntakeSystem(Robot.intake);
+		// this.robotState = new RobotState()
+		// 	.withPDP(new PowerDistributionPanel())
+		// 	.withDriveSystem(Robot.drive)
+		// 	.withIntakeSystem(Robot.intake);
 
 		// TODO: should this be refactored such that the runnable is defined
 		// elsewhere?
-		this.executor.scheduleAtFixedRate(
-			() -> {
-				this.robotState.update();
-				try {
-					String state = this.mapper.writeValueAsString(this.robotState);
-					this.stateLogger.info(state);
-				} catch (JsonProcessingException e) {
-					this.stateLogger.error(e.toString());
-				}
-			},
-			0,   // initial delay
-			100, // delay
-			TimeUnit.MILLISECONDS
-		);
+		// this.executor.scheduleAtFixedRate(
+		// 	() -> {
+		// 		this.robotState.update();
+		// 		try {
+		// 			String state = this.mapper.writeValueAsString(this.robotState);
+		// 			this.stateLogger.info(state);
+		// 		} catch (JsonProcessingException e) {
+		// 			this.stateLogger.error(e.toString());
+		// 		}
+		// 	},
+		// 	0,   // initial delay
+		// 	100, // delay
+		// 	TimeUnit.MILLISECONDS
+		// );
 
-		SlotConfiguration[] slots = Robot.drive.getPID();
+		// SlotConfiguration[] slots = Robot.drive.getPID();
 
-		for (int i = 0; i < slots.length; i++) {
-			this.robotLogger.info("Slot: {} - P: {} I: {} D: {} F: {}",
-				i, slots[i].kP, slots[i].kI, slots[i].kD, slots[i].kF
-			);
-		}
+		// for (int i = 0; i < slots.length; i++) {
+		// 	this.robotLogger.info("Slot: {} - P: {} I: {} D: {} F: {}",
+		// 		i, slots[i].kP, slots[i].kI, slots[i].kD, slots[i].kF
+		// 	);
+		// }
 	}
 
 	@Override
