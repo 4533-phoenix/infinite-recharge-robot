@@ -356,6 +356,19 @@ public class DriveSystem extends SubsystemBase {
 		this.rightMaster.set(ControlMode.Velocity, targetRight);
 	}
 
+	public void tankVelocity(double left, double right) {
+		double targetLeft;
+		double targetRight;
+
+		double targetVelocity = MAX_VELOCITY;
+
+		targetLeft = left * targetVelocity * 4096 / 600.0;
+		targetRight = right * targetVelocity * 4096 / 600.0;
+
+		this.leftMaster.set(ControlMode.Velocity, targetLeft);
+		this.rightMaster.set(ControlMode.Velocity, targetRight);
+	}
+
 	public void voltage(double left, double right) {
 		leftMaster.setVoltage(left * 12.0);
 		rightMaster.setVoltage(right * 12.0);

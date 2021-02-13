@@ -127,10 +127,10 @@ public class RobotContainer {
 	 */
 	public Command getAutonomousCommand(String key) {
 		// An ExampleCommand will run in autonomous
-		Command command = this.commands.get(key);
-		if(command == null){
-			command = this.driveForwardCommand;
-		}
-		return command;
+		// Command command = this.commands.get(key);
+		// if(command == null){
+		// 	command = this.driveForwardCommand;
+		// }
+		return CommandFactory.autoCommand();
 	}
 }

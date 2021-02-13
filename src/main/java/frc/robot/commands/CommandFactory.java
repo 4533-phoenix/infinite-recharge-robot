@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
+import frc.robot.subsystems.Auto;
 
 public class CommandFactory {
 
@@ -16,6 +17,23 @@ public class CommandFactory {
 			() -> Robot.drive.driveDistance(distance, direction),
 			(interrupt) -> Robot.drive.tank(0, 0),
 			() -> Robot.drive.reachedPosition(),
+			Robot.drive
+		);
+	}
+
+	public static Command autoCommand(){
+		return new FunctionalCommand(
+			()-> {Auto.counter = 0;}, 
+			()-> {
+				double left = Auto.pathLeft[Auto.counter][0];
+				double right = Auto.pathRight[Auto.counter][0];
+				Robot.drive.tankVelocity(left, right);
+				Auto.counter++;
+			}, 
+			(interrupt)->Robot.drive.tank(0,0), 
+			()-> {
+				return Auto.counter > Auto.pathLeft.length;
+			}, 
 			Robot.drive
 		);
 	}
