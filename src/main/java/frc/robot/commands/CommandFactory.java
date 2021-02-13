@@ -32,7 +32,7 @@ public class CommandFactory {
 			}, 
 			(interrupt)->Robot.drive.tank(0,0), 
 			()-> {
-				return Auto.counter > Auto.pathLeft.length;
+				return Auto.counter >= Auto.pathLeft.length - 1;
 			}, 
 			Robot.drive
 		);
