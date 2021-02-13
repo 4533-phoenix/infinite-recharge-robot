@@ -362,8 +362,8 @@ public class DriveSystem extends SubsystemBase {
 
 		double targetVelocity = MAX_VELOCITY;
 
-		targetLeft = left * targetVelocity * 4096 / 600.0;
-		targetRight = right * targetVelocity * 4096 / 600.0;
+		targetLeft = left * (4096 / (.5*Math.PI)) / 100;
+		targetRight = right * (4096 / (.5*Math.PI)) / 100;
 
 		this.leftMaster.set(ControlMode.Velocity, targetLeft);
 		this.rightMaster.set(ControlMode.Velocity, targetRight);
