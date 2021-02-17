@@ -118,7 +118,7 @@ public class DriveSystem extends SubsystemBase {
 		this.leftMaster.setInverted(true);
 		this.leftSlave.setInverted(true);
 
-		this.leftMaster.setSensorPhase(false);
+		this.leftMaster.setSensorPhase(true);
 		this.rightMaster.setSensorPhase(false);
 
 		this.leftMaster.configPeakOutputForward(PEAK_OUTPUT);
