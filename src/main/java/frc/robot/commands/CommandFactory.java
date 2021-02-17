@@ -27,7 +27,7 @@ public class CommandFactory {
 			()-> {
 				double left = Auto.pathLeft[Auto.counter][0];
 				double right = Auto.pathRight[Auto.counter][0];
-				Robot.drive.tankVelocity(left, right);
+				Robot.drive.tankPosition(left, right);
 				Auto.counter++;
 			}, 
 			(interrupt)->Robot.drive.tank(0,0), 

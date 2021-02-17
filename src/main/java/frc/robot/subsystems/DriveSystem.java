@@ -37,10 +37,13 @@ public class DriveSystem extends SubsystemBase {
 	private static final double TICKS_PER_ROTATION = 4096.0;
 	private static final double WHEEL_DIAMETER = 6.0;
 	private static final double WHEEL_DIAMETER_M = 0.1524;
+	private static final double WHEEL_DIAMETER_FT = 0.5;
 	private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;
 	private static final double WHEEL_CIRCUMFERENCE_M = WHEEL_DIAMETER_M * Math.PI;
+	private static final double WHEEL_CIRCUMFERENCE_FT = WHEEL_DIAMETER_FT * Math.PI;
 	private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
 	private static final double TICKS_PER_METER = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE_M;
+	private static final double TICKS_PER_FOOT = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE_FT;
 	private static final double METERS_PER_TICK = WHEEL_CIRCUMFERENCE_M / TICKS_PER_ROTATION;
 
 	// Velocity PID Gains and Feed Forward values.
@@ -356,15 +359,15 @@ public class DriveSystem extends SubsystemBase {
 		this.rightMaster.set(ControlMode.Velocity, targetRight);
 	}
 
-	public void tankVelocity(double left, double right) {
+	public void tankPosition(double left, double right) {
 		double targetLeft;
 		double targetRight;
 
-		targetLeft = left * (4096 / (.5*Math.PI)) / 10;
-		targetRight = right * (4096 / (.5*Math.PI)) / 10;
+		targetLeft = left * TICKS_PER_FOOT;
+		targetRight = right * TICKS_PER_FOOT;
 
-		this.leftMaster.set(ControlMode.Velocity, targetLeft);
-		this.rightMaster.set(ControlMode.Velocity, targetRight);
+		this.leftMaster.set(ControlMode.Position, targetLeft);
+		this.rightMaster.set(ControlMode.Position, targetRight);
 	}
 
 	public void voltage(double left, double right) {
