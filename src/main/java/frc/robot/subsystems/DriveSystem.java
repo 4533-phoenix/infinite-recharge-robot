@@ -366,6 +366,8 @@ public class DriveSystem extends SubsystemBase {
 		targetLeft = left * TICKS_PER_FOOT;
 		targetRight = right * TICKS_PER_FOOT;
 
+		System.out.println(targetLeft + " : " + targetRight);
+
 		this.leftMaster.set(ControlMode.Position, targetLeft);
 		this.rightMaster.set(ControlMode.Position, targetRight);
 	}

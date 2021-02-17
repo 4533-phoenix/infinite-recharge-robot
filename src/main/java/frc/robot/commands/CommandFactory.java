@@ -23,7 +23,10 @@ public class CommandFactory {
 
 	public static Command autoCommand(){
 		return new FunctionalCommand(
-			()-> {Auto.counter = 0;}, 
+			()-> {
+				Robot.drive.resetPosition();
+				Auto.counter = 0;
+			}, 
 			()-> {
 				double left = Auto.pathLeft[Auto.counter][0];
 				double right = Auto.pathRight[Auto.counter][0];
