@@ -59,8 +59,8 @@ public class DriveSystem extends SubsystemBase {
 	//
 	// The following values should be used when driving the robot in "Position"
 	// mode.
-	public static final double POSITION_P = 0.055;
-	public static final double POSITION_I = 0.0;
+	public static final double POSITION_P = 0.1;
+	public static final double POSITION_I = 0.0001;
 	public static final double POSITION_D = 0.0;
 	public static final double POSITION_FEED_FORWARD = 0.0;
 
