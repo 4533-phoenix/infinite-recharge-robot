@@ -118,6 +118,9 @@ public class DriveSystem extends SubsystemBase {
 		this.leftMaster.setInverted(true);
 		this.leftSlave.setInverted(true);
 
+		this.rightMaster.setInverted(false);
+		this.rightSlave.setInverted(false);
+
 		this.leftMaster.setSensorPhase(true);
 		this.rightMaster.setSensorPhase(true);
 
@@ -363,10 +366,10 @@ public class DriveSystem extends SubsystemBase {
 		double targetLeft;
 		double targetRight;
 
-		targetLeft = left * TICKS_PER_FOOT;
-		targetRight = right * TICKS_PER_FOOT;
+		targetLeft = -left * TICKS_PER_FOOT;
+		targetRight = -right * TICKS_PER_FOOT;
 
-		System.out.println(targetLeft + " : " + this.leftMaster.getSelectedSensorPosition());
+		// System.out.println(targetRight + " : " + this.rightMaster.getSelectedSensorPosition());
 
 		this.leftMaster.set(ControlMode.Position, targetLeft);
 		this.rightMaster.set(ControlMode.Position, targetRight);
