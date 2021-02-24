@@ -131,6 +131,6 @@ public class RobotContainer {
 		// if(command == null){
 		// 	command = this.driveForwardCommand;
 		// }
-		return CommandFactory.autoCommand();
+		return CommandFactory.pathCommand(Robot.path);
 	}
 }

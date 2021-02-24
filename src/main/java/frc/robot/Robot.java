@@ -17,6 +17,10 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeSystem;
 import frc.robot.subsystems.ShooterSystem;
+import frc.robot.subsystems.Auto;
+import frc.robot.subsystems.Point;
+
+import java.util.List;
 
 public class Robot extends TimedRobot {
 	private Logger stateLogger = LogManager.getLogger("robot_state");
@@ -64,6 +68,8 @@ public class Robot extends TimedRobot {
 	 */
 	public final static ShooterSystem shooter = new ShooterSystem();
 
+
+	public static List<Point> path;
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -73,7 +79,8 @@ public class Robot extends TimedRobot {
 		// Instantiate our RobotContainer.  This will perform all our button
 		// bindings, and put our autonomous chooser on the dashboard.
 		this.container = new RobotContainer();
-
+		
+		this.path = Auto.readPath();
 		// TODO: since subsystems are now static properties of the robot, do we
 		// really need to construct this object in this manner?
 		// this.robotState = new RobotState()

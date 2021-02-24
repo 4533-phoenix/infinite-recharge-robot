@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.subsystems.Auto;
+import java.util.List;
+import frc.robot.subsystems.Point;
 
 public class CommandFactory {
 
@@ -21,21 +23,20 @@ public class CommandFactory {
 		);
 	}
 
-	public static Command autoCommand(){
+	public static Command pathCommand(List<Point> path){
 		return new FunctionalCommand(
 			()-> {
 				Robot.drive.resetPosition();
 				Auto.counter = 0;
 			}, 
 			()-> {
-				double left = Auto.pathLeft[Auto.counter][0];
-				double right = Auto.pathRight[Auto.counter][0];
-				Robot.drive.tankPosition(left, right);
+				Point p = path.get(Auto.counter);
+				Robot.drive.tankPosition(p.left, p.right);
 				Auto.counter++;
 			}, 
 			(interrupt)->Robot.drive.tank(0,0), 
 			()-> {
-				return Auto.counter >= Auto.pathLeft.length;
+				return Auto.counter >= path.size();
 			}, 
 			Robot.drive
 		);
