@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.ClimbSystem;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.IntakeSystem;
 import frc.robot.subsystems.ShooterSystem;
@@ -58,6 +59,11 @@ public class Robot extends TimedRobot {
 	 * The robot's intake subsystem.
 	 */
 	public final static IntakeSystem intake = new IntakeSystem();
+
+	/**
+	 * The robot's climber subsystem.
+	 */
+	public final static ClimbSystem climber = new ClimbSystem();
 
 	/**
 	 * The robot's shooter subsystem.

@@ -18,6 +18,7 @@ public final class Constants {
 	public static final int ELEVATOR_MOTOR = 8;
 	public static final int TURRET_WHEEL_MOTOR = 9;
 	public static final int TURRET_SWIVEL_MOTOR = 10;
+	public static final int WINCH_MOTOR = 11;
 
 	public static final int TRIGGER = 1;
 	public static final int THUMB_BUTTON = 2;
