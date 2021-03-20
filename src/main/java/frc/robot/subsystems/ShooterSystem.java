@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.can.SlotConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj.SPI;
@@ -27,9 +29,10 @@ public class ShooterSystem {
 
 	private final double TURRET_SWIVEL_MOTOR_PERCENT = 0.5;
 
-	private WPI_TalonSRX flyWheelMotor;
+	private WPI_TalonFX flywheelMotorRight;
+	private WPI_TalonFX flywheelMotorLeft;
 
-	private WPI_TalonSRX turretWheelMotor;
+	private WPI_VictorSPX turretWheelMotor;
 
 	private WPI_TalonSRX turretSwivelMotor;
 
@@ -37,15 +40,17 @@ public class ShooterSystem {
 
 	public ShooterSystem() {
 
-		this.flyWheelMotor = new WPI_TalonSRX(Constants.FLYWHEEL_MOTOR);
+		this.flywheelMotorRight = new WPI_TalonFX(Constants.FLYWHEEL_MOTOR_RIGHT);
+		this.flywheelMotorLeft = new WPI_TalonFX(Constants.FLYWHEEL_MOTOR_LEFT);
 
-		this.flyWheelMotor.setNeutralMode(NeutralMode.Brake);
+		this.flywheelMotorRight.setNeutralMode(NeutralMode.Brake);
+		this.flywheelMotorLeft.setNeutralMode(NeutralMode.Brake);
 
-		this.elevatorMotor = new WPI_TalonSRX(Constants.ELEVATOR_MOTOR);
+		//this.elevatorMotor = new WPI_TalonSRX(Constants.ELEVATOR_MOTOR);
 
-		this.elevatorMotor.setNeutralMode(NeutralMode.Brake);
+		//this.elevatorMotor.setNeutralMode(NeutralMode.Brake);
 
-		this.turretWheelMotor = new WPI_TalonSRX(Constants.TURRET_WHEEL_MOTOR);
+		this.turretWheelMotor = new WPI_VictorSPX(Constants.TURRET_WHEEL_MOTOR);
 
 		this.turretWheelMotor.setNeutralMode(NeutralMode.Brake);
 
@@ -57,13 +62,15 @@ public class ShooterSystem {
 
 	public void Shoot() {
 
-		this.flyWheelMotor.set(ControlMode.PercentOutput, FLYWHEEL_MOTOR_PERCENT);
+		this.flywheelMotorRight.set(ControlMode.PercentOutput, FLYWHEEL_MOTOR_PERCENT);
+		this.flywheelMotorLeft.set(ControlMode.PercentOutput, FLYWHEEL_MOTOR_PERCENT);
 
 	}
 
 	public void ShootStop() {
 
-		this.flyWheelMotor.set(ControlMode.PercentOutput, 0);
+		this.flywheelMotorRight.set(ControlMode.PercentOutput, 0);
+		this.flywheelMotorLeft.set(ControlMode.PercentOutput, 0);
 
 	}
 

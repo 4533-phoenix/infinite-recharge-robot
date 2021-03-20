@@ -26,10 +26,10 @@ public class ClimbSystem extends SubsystemBase {
   private final double CLIMB_PERCENT_OUTPUT = 0.5;
 
   public ClimbSystem() {
-    this.hookMotor = new WPI_TalonSRX(Constants.ELEVATOR_MOTOR);
+    //this.hookMotor = new WPI_TalonSRX(Constants.ELEVATOR_MOTOR);
 	this.climbMotor = new VictorSPX(Constants.WINCH_MOTOR);
 
-	this.hookMotor.setNeutralMode(NeutralMode.Brake);
+	//this.hookMotor.setNeutralMode(NeutralMode.Brake);
 	this.climbMotor.setNeutralMode(NeutralMode.Brake);
   }
 
