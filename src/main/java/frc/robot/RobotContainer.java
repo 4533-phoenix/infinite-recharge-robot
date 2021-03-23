@@ -101,17 +101,33 @@ public class RobotContainer {
 		intakeOut2.whileHeld(CommandFactory.intakeOutCommand());
 		intakeOut2.whenReleased(CommandFactory.intakeStopCommand());
 
-		JoystickButton hookUp = new JoystickButton(rightStick, Constants.BUTTON_6);
-		hookUp.whileHeld(CommandFactory.hookUpCommand());
-		hookUp.whenReleased(CommandFactory.hookStopCommand());
+		JoystickButton turretWheelIn = new JoystickButton(leftStick, Constants.THUMB_BUTTON);
+		turretWheelIn.whileHeld(CommandFactory.turretWheelInCommand());
+		turretWheelIn.whenReleased(CommandFactory.turretWheelStopCommand());
 
-		JoystickButton hookDown = new JoystickButton(rightStick, Constants.BUTTON_4);
-		hookDown.whileHeld(CommandFactory.hookDownCommand());
-		hookDown.whenReleased(CommandFactory.hookStopCommand());
+		JoystickButton turretWheelOut = new JoystickButton(leftStick, Constants.BUTTON_4);
+		turretWheelOut.whileHeld(CommandFactory.turretWheelOutCommand());
+		turretWheelOut.whenReleased(CommandFactory.turretWheelStopCommand());
 
-		JoystickButton climb = new JoystickButton(leftStick, Constants.BUTTON_6);
-		climb.whileHeld(CommandFactory.climbCommand());
-		climb.whenReleased(CommandFactory.climbStopCommand());
+		JoystickButton turretSwivelLeft = new JoystickButton(leftStick, Constants.BUTTON_11);
+		turretSwivelLeft.whileHeld(CommandFactory.turretSwivelLeftCommand());
+		turretSwivelLeft.whenReleased(CommandFactory.turretSwivelStopCommand());
+
+		JoystickButton turretSwivelRight = new JoystickButton(leftStick, Constants.BUTTON_12);
+		turretSwivelRight.whileHeld(CommandFactory.turretSwivelRightCommand());
+		turretSwivelRight.whenReleased(CommandFactory.turretSwivelStopCommand());
+
+		// JoystickButton hookUp = new JoystickButton(rightStick, Constants.BUTTON_6);
+		// hookUp.whileHeld(CommandFactory.hookUpCommand());
+		// hookUp.whenReleased(CommandFactory.hookStopCommand());
+
+		// JoystickButton hookDown = new JoystickButton(rightStick, Constants.BUTTON_4);
+		// hookDown.whileHeld(CommandFactory.hookDownCommand());
+		// hookDown.whenReleased(CommandFactory.hookStopCommand());
+
+		// JoystickButton climb = new JoystickButton(leftStick, Constants.BUTTON_6);
+		// climb.whileHeld(CommandFactory.climbCommand());
+		// climb.whenReleased(CommandFactory.climbStopCommand());
 
 		JoystickButton turboButton = new JoystickButton(rightStick, Constants.THUMB_BUTTON);
 		turboButton.whenPressed(new InstantCommand(

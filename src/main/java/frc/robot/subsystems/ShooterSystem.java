@@ -19,7 +19,7 @@ import frc.robot.commands.Direction;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 
-public class ShooterSystem {
+public class ShooterSystem extends SubsystemBase {
 	
 	private final double FLYWHEEL_MOTOR_PERCENT = 1;
 
@@ -27,7 +27,7 @@ public class ShooterSystem {
 
 	private final double TURRET_WHEEL_MOTOR_PERCENT = 0.5;
 
-	private final double TURRET_SWIVEL_MOTOR_PERCENT = 0.5;
+	private final double TURRET_SWIVEL_MOTOR_PERCENT = 0.1;
 
 	private WPI_TalonFX flywheelMotorRight;
 	private WPI_TalonFX flywheelMotorLeft;
@@ -52,6 +52,8 @@ public class ShooterSystem {
 
 		this.turretWheelMotor = new WPI_VictorSPX(Constants.TURRET_WHEEL_MOTOR);
 
+		this.turretWheelMotor.setInverted(true);
+
 		this.turretWheelMotor.setNeutralMode(NeutralMode.Brake);
 
 		this.turretSwivelMotor = new WPI_TalonSRX(Constants.TURRET_SWIVEL_MOTOR);
@@ -74,52 +76,28 @@ public class ShooterSystem {
 
 	}
 
-	public void ElevatorUp() {
-
-		this.elevatorMotor.set(ControlMode.PercentOutput, ELEVATOR_MOTOR_PERCENT);
-
-	}
-
-	public void ElevatorDown() {
-
-		this.elevatorMotor.set(ControlMode.PercentOutput, -ELEVATOR_MOTOR_PERCENT);
-
-	}
-
-	public void ElevatorStop() {
-
-		this.elevatorMotor.set(ControlMode.PercentOutput, 0);
-
-	}
-
-	public void turretWheelSpin() {
-
+	public void turretWheelIn() {
 		this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
+	}
 
+	public void turretWheelOut() {
+		this.turretWheelMotor.set(ControlMode.PercentOutput, -TURRET_WHEEL_MOTOR_PERCENT);
 	}
 
 	public void turretWheelStop() {
-
 		this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
-
 	}
 
 	public void turretSwivelLeft() {
-
-		this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_SWIVEL_MOTOR_PERCENT);
-
+		this.turretSwivelMotor.set(ControlMode.PercentOutput, TURRET_SWIVEL_MOTOR_PERCENT);
 	}
 
 	public void turretSwivelRight() {
-
-		this.turretWheelMotor.set(ControlMode.PercentOutput, -TURRET_SWIVEL_MOTOR_PERCENT);
-
+		this.turretSwivelMotor.set(ControlMode.PercentOutput, -TURRET_SWIVEL_MOTOR_PERCENT);
 	}
 
 	public void turretSwivelStop() {
-
 		this.turretSwivelMotor.set(ControlMode.PercentOutput, 0);
-
 	}
 
 }

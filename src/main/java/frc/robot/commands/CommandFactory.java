@@ -71,6 +71,48 @@ public class CommandFactory {
 		);
 	}
 
+	public static Command turretWheelInCommand() {
+		return new InstantCommand(
+			() -> Robot.shooter.turretWheelIn(),
+			Robot.shooter
+		);
+	}
+
+	public static Command turretWheelOutCommand() {
+		return new InstantCommand(
+			() -> Robot.shooter.turretWheelOut(),
+			Robot.shooter
+		);
+	}
+
+	public static Command turretWheelStopCommand() {
+		return new InstantCommand(
+			() -> Robot.shooter.turretWheelStop(),
+			Robot.shooter
+		);
+	}
+
+	public static Command turretSwivelLeftCommand() {
+		return new InstantCommand(
+			() -> Robot.shooter.turretSwivelLeft(),
+			Robot.shooter
+		);
+	}
+
+	public static Command turretSwivelRightCommand() {
+		return new InstantCommand(
+			() -> Robot.shooter.turretSwivelRight(),
+			Robot.shooter
+		);
+	}
+
+	public static Command turretSwivelStopCommand() {
+		return new InstantCommand(
+			() -> Robot.shooter.turretSwivelStop(),
+			Robot.shooter
+		);
+	}
+
 	public static Command hookUpCommand(){
 		return new InstantCommand(
 			() -> Robot.climber.hookUp(),
