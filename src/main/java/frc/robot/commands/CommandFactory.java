@@ -92,6 +92,27 @@ public class CommandFactory {
 		);
 	}
 
+	public static Command flywheelOutCommand() {
+		return new InstantCommand(
+			() -> Robot.shooter.flywheelOut(),
+			Robot.shooter
+		);
+	}
+
+	public static Command flywheelInCommand() {
+		return new InstantCommand(
+			() -> Robot.shooter.flywheelIn(),
+			Robot.shooter
+		);
+	}
+
+	public static Command flywheelStopCommand() {
+		return new InstantCommand(
+			() -> Robot.shooter.flywheelStop(),
+			Robot.shooter
+		);
+	}
+
 	public static Command turretSwivelLeftCommand() {
 		return new InstantCommand(
 			() -> Robot.shooter.turretSwivelLeft(),

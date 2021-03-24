@@ -21,7 +21,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class ShooterSystem extends SubsystemBase {
 	
-	private final double FLYWHEEL_MOTOR_PERCENT = 1;
+	private final double FLYWHEEL_MOTOR_PERCENT = 0.75;
 
 	private final double ELEVATOR_MOTOR_PERCENT = 0.5;
 
@@ -60,20 +60,23 @@ public class ShooterSystem extends SubsystemBase {
 
 		this.turretSwivelMotor.setNeutralMode(NeutralMode.Brake);
 
+		this.flywheelMotorRight.setInverted(true);
+
 	}
 
-	public void Shoot() {
-
+	public void flywheelOut() {
 		this.flywheelMotorRight.set(ControlMode.PercentOutput, FLYWHEEL_MOTOR_PERCENT);
 		this.flywheelMotorLeft.set(ControlMode.PercentOutput, FLYWHEEL_MOTOR_PERCENT);
-
 	}
 
-	public void ShootStop() {
+	public void flywheelIn() {
+		this.flywheelMotorRight.set(ControlMode.PercentOutput, -FLYWHEEL_MOTOR_PERCENT);
+		this.flywheelMotorLeft.set(ControlMode.PercentOutput, -FLYWHEEL_MOTOR_PERCENT);
+	}
 
+	public void flywheelStop() {
 		this.flywheelMotorRight.set(ControlMode.PercentOutput, 0);
 		this.flywheelMotorLeft.set(ControlMode.PercentOutput, 0);
-
 	}
 
 	public void turretWheelIn() {
