@@ -9,6 +9,9 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.ConnectionInfo;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
@@ -38,6 +41,8 @@ public class ShooterSystem extends SubsystemBase {
 
 	private WPI_TalonSRX elevatorMotor;
 
+	private NetworkTableInstance inst;
+
 	public ShooterSystem() {
 
 		this.flywheelMotorRight = new WPI_TalonFX(Constants.FLYWHEEL_MOTOR_RIGHT);
@@ -60,8 +65,17 @@ public class ShooterSystem extends SubsystemBase {
 
 		this.turretSwivelMotor.setNeutralMode(NeutralMode.Brake);
 
-		this.flywheelMotorRight.setInverted(true);
+		this.turretSwivelMotor.setInverted(true);
 
+		this.flywheelMotorLeft.setInverted(true);
+
+		this.inst = NetworkTableInstance.getDefault();//.getTable("limelight");
+		
+		ConnectionInfo[] arr = this.inst.getConnections();
+
+		for(ConnectionInfo curr : arr) {
+			System.out.println(curr.remote_id + " " + curr.remote_ip);
+		}
 	}
 
 	public void flywheelOut() {
@@ -103,4 +117,13 @@ public class ShooterSystem extends SubsystemBase {
 		this.turretSwivelMotor.set(ControlMode.PercentOutput, 0);
 	}
 
+	@Override
+	public void periodic() {
+		// double targetOffsetAngle_Horizontal = table.getEntry("tx").getDouble(0);
+		// double targetOffsetAngle_Vertical = table.getEntry("ty").getDouble(0);
+		// double targetArea = table.getEntry("ta").getDouble(0);
+		// double targetSkew = table.getEntry("ts").getDouble(0);
+
+		//System.out.println(targetOffsetAngle_Horizontal);
+	}
 }
