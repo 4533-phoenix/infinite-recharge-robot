@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 
 public class CommandFactory {
@@ -47,6 +48,30 @@ public class CommandFactory {
 			(interrupt) -> Robot.drive.tank(0, 0),
 			() -> Robot.drive.getAngle() >= angle,
 			Robot.drive
+		);
+	}
+
+	public static Command slalomAutoCommand() {
+		return new SequentialCommandGroup(
+			driveDistanceCommand(30,Direction.FORWARD),
+			angleTurnCommand(0.5, 45, Direction.LEFT),
+			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.5, 45, Direction.RIGHT),
+			driveDistanceCommand(120, Direction.FORWARD),
+			angleTurnCommand(0.5, 45, Direction.RIGHT),
+			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.5, 90, Direction.LEFT),
+			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.5, 90, Direction.LEFT),
+			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.5, 90, Direction.LEFT),
+			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.5, 45, Direction.LEFT),
+			driveDistanceCommand(120, Direction.FORWARD),
+			angleTurnCommand(0.5, 45, Direction.RIGHT),
+			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.5, 45, Direction.LEFT),
+			driveDistanceCommand(30, Direction.FORWARD)
 		);
 	}
 
@@ -134,40 +159,40 @@ public class CommandFactory {
 		);
 	}
 
-	public static Command hookUpCommand(){
-		return new InstantCommand(
-			() -> Robot.climber.hookUp(),
-			Robot.climber
-		);
-	}
+	// public static Command hookUpCommand(){
+	// 	return new InstantCommand(
+	// 		() -> Robot.climber.hookUp(),
+	// 		Robot.climber
+	// 	);
+	// }
 
-	public static Command hookDownCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.hookDown(),
-			Robot.climber
-		);
-	}
+	// public static Command hookDownCommand() {
+	// 	return new InstantCommand(
+	// 		() -> Robot.climber.hookDown(),
+	// 		Robot.climber
+	// 	);
+	// }
 
-	public static Command hookStopCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.hookStop(),
-			Robot.climber
-		);
-	}
+	// public static Command hookStopCommand() {
+	// 	return new InstantCommand(
+	// 		() -> Robot.climber.hookStop(),
+	// 		Robot.climber
+	// 	);
+	// }
 
-	public static Command climbCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.climb(),
-			Robot.climber
-		);
-	}
+	// public static Command climbCommand() {
+	// 	return new InstantCommand(
+	// 		() -> Robot.climber.climb(),
+	// 		Robot.climber
+	// 	);
+	// }
 
-	public static Command climbStopCommand() {
-		return new InstantCommand(
-			() -> Robot.climber.climbStop(),
-			Robot.climber
-		);
-	}
+	// public static Command climbStopCommand() {
+	// 	return new InstantCommand(
+	// 		() -> Robot.climber.climbStop(),
+	// 		Robot.climber
+	// 	);
+	// }
 
 }
 
