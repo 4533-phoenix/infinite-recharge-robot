@@ -56,13 +56,12 @@ public class DriveSystem extends SubsystemBase {
 	//
 	// The following values should be used when driving the robot in "Position"
 	// mode.
-	public static final double POSITION_P = 0.055;
+	public static final double POSITION_P = 0.06;
 	public static final double POSITION_I = 0.0;
 	public static final double POSITION_D = 0.0;
 	public static final double POSITION_FEED_FORWARD = 0.0;
 
 	// Feed Forward Gains
-	//
 	// kS - the voltage needed to overcome the motor's static friction (V).
 	// kV - the voltage needed to maintain a given constant velocity (V * s/m).
 	// kA - the voltage needed to induce a given acceleration (V * s^2/m).
@@ -115,8 +114,8 @@ public class DriveSystem extends SubsystemBase {
 		this.leftMaster.setInverted(true);
 		this.leftSlave.setInverted(true);
 
-		this.leftMaster.setSensorPhase(false);
-		this.rightMaster.setSensorPhase(false);
+		this.leftMaster.setSensorPhase(true);
+		this.rightMaster.setSensorPhase(true);
 
 		this.leftMaster.configPeakOutputForward(PEAK_OUTPUT);
 		this.leftMaster.configPeakOutputReverse(-PEAK_OUTPUT);
@@ -197,7 +196,9 @@ public class DriveSystem extends SubsystemBase {
 		double leftPos = this.leftMaster.getSelectedSensorPosition();
 		double rightPos = this.rightMaster.getSelectedSensorPosition();
 
+		System.out.println("Left: " + leftPos + " Right: " + rightPos);
 		if (targetDirection == Direction.FORWARD) {
+			System.out.printf("%f : %f : %f\n", leftPos, rightPos, targetPosition);
 			return (leftPos <= targetPosition) && (rightPos <= targetPosition);
 		} else if (targetDirection == Direction.BACKWARD) {
 			return (leftPos >= targetPosition) && (rightPos >= targetPosition);
@@ -222,7 +223,7 @@ public class DriveSystem extends SubsystemBase {
 	public void driveDistance(double inches, Direction direction) {
 		targetDirection = direction;
 		if (direction == Direction.FORWARD) {
-			targetPosition = -1 * (inches * TICKS_PER_INCH);
+			targetPosition = -1 * inches * TICKS_PER_INCH;
 		} else if (direction == Direction.BACKWARD) {
 			targetPosition = inches * TICKS_PER_INCH;
 		} else {
@@ -371,7 +372,9 @@ public class DriveSystem extends SubsystemBase {
 	}
 
 	public double getAngle() {
-		return Math.abs(navX.getAngle());
+		double angle = Math.abs(navX.getAngle());
+		System.out.println(angle);
+		return angle;
 	}
 
 	public void resetAngle() {
@@ -381,15 +384,13 @@ public class DriveSystem extends SubsystemBase {
 	public void turn(double speed, Direction direction) {
 		switch (direction) {
 		case LEFT:
-			this.tank(speed, -speed);
-			System.out.println("angle: " + getAngle());
+			this.voltage(speed, -speed);
 			break;
 		case RIGHT:
-			this.tank(-speed, speed);
-			System.out.println("angle: " + getAngle());
+			this.voltage(-speed, speed);
 			break;
 		default:
-			this.tank(0, 0);
+			this.voltage(0, 0);
 		}
 	}
 

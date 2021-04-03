@@ -51,26 +51,34 @@ public class CommandFactory {
 		);
 	}
 
+	public static Command testAutoCommand() {
+		return new SequentialCommandGroup(
+			driveDistanceCommand(60,Direction.FORWARD),
+			angleTurnCommand(0.2, 180, Direction.RIGHT),
+			driveDistanceCommand(60,Direction.FORWARD)
+		);
+	}
+
 	public static Command slalomAutoCommand() {
 		return new SequentialCommandGroup(
 			driveDistanceCommand(30,Direction.FORWARD),
-			angleTurnCommand(0.5, 45, Direction.LEFT),
+			angleTurnCommand(0.2, 45, Direction.LEFT),
 			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
-			angleTurnCommand(0.5, 45, Direction.RIGHT),
+			angleTurnCommand(0.2, 45, Direction.RIGHT),
 			driveDistanceCommand(120, Direction.FORWARD),
-			angleTurnCommand(0.5, 45, Direction.RIGHT),
+			angleTurnCommand(0.2, 45, Direction.RIGHT),
 			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
-			angleTurnCommand(0.5, 90, Direction.LEFT),
+			angleTurnCommand(0.2, 90, Direction.LEFT),
 			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
-			angleTurnCommand(0.5, 90, Direction.LEFT),
+			angleTurnCommand(0.2, 90, Direction.LEFT),
 			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
-			angleTurnCommand(0.5, 90, Direction.LEFT),
+			angleTurnCommand(0.2, 90, Direction.LEFT),
 			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
-			angleTurnCommand(0.5, 45, Direction.LEFT),
+			angleTurnCommand(0.2, 45, Direction.RIGHT),
 			driveDistanceCommand(120, Direction.FORWARD),
-			angleTurnCommand(0.5, 45, Direction.RIGHT),
+			angleTurnCommand(0.2, 45, Direction.RIGHT),
 			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
-			angleTurnCommand(0.5, 45, Direction.LEFT),
+			angleTurnCommand(0.2, 45, Direction.LEFT),
 			driveDistanceCommand(30, Direction.FORWARD)
 		);
 	}
