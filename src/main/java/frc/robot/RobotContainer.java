@@ -59,10 +59,12 @@ public class RobotContainer {
 	);
 
 	private final Command slalomCommand = CommandFactory.slalomAutoCommand();
+	private final Command barrelCommand = CommandFactory.barrelAutoCommand();
 
 	//creates a hashMap
 
 	private Map<String, Command> commands = Map.ofEntries(
+		Map.entry("barrel", barrelCommand),
 		Map.entry("slalom", slalomCommand)
 	);
 
@@ -106,7 +108,7 @@ public class RobotContainer {
 		intakeOut2.whileHeld(CommandFactory.intakeOutCommand());
 		intakeOut2.whenReleased(CommandFactory.intakeStopCommand());
 
-		JoystickButton turretWheelIn = new JoystickButton(leftStick, Constants.THUMB_BUTTON);
+		JoystickButton turretWheelIn = new JoystickButton(rightStick, Constants.BUTTON_3);
 		turretWheelIn.whileHeld(CommandFactory.turretWheelInCommand());
 		turretWheelIn.whenReleased(CommandFactory.turretWheelStopCommand());
 

@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -62,24 +63,51 @@ public class CommandFactory {
 	public static Command slalomAutoCommand() {
 		return new SequentialCommandGroup(
 			driveDistanceCommand(30,Direction.FORWARD),
+			angleTurnCommand(0.2, 22.5, Direction.LEFT),
+			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.1, 22.5, Direction.RIGHT),
+			driveDistanceCommand(105, Direction.FORWARD),
+			angleTurnCommand(0.2, 22.5, Direction.RIGHT),
+			driveDistanceCommand(80, Direction.FORWARD),
+			angleTurnCommand(0.2, 37.5, Direction.LEFT),
+			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.2, 60, Direction.LEFT),
+			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
 			angleTurnCommand(0.2, 45, Direction.LEFT),
-			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
-			angleTurnCommand(0.2, 45, Direction.RIGHT),
+			driveDistanceCommand(50, Direction.FORWARD),
+			angleTurnCommand(0.2, 85, Direction.LEFT),
+			driveDistanceCommand(80,Direction.FORWARD),
+			angleTurnCommand(0.2, 20, Direction.RIGHT),
 			driveDistanceCommand(120, Direction.FORWARD),
-			angleTurnCommand(0.2, 45, Direction.RIGHT),
+			angleTurnCommand(0.2, 30, Direction.RIGHT),
 			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.2, 22.5, Direction.LEFT),
+			driveDistanceCommand(20, Direction.FORWARD)
+		);
+	}
+
+	public static Command barrelAutoCommand() {
+		return new SequentialCommandGroup(
+			driveDistanceCommand(100, Direction.FORWARD),
+			angleTurnCommand(0.2, 60, Direction.RIGHT),
+			driveDistanceCommand(Math.sqrt(1300),Direction.FORWARD),
+			angleTurnCommand(0.2,90,Direction.RIGHT),
+			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.2,90,Direction.RIGHT),
+			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.2,115,Direction.RIGHT),
+			driveDistanceCommand(Math.sqrt(26100),Direction.FORWARD),
 			angleTurnCommand(0.2, 90, Direction.LEFT),
 			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
 			angleTurnCommand(0.2, 90, Direction.LEFT),
 			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
 			angleTurnCommand(0.2, 90, Direction.LEFT),
-			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
-			angleTurnCommand(0.2, 45, Direction.RIGHT),
-			driveDistanceCommand(120, Direction.FORWARD),
-			angleTurnCommand(0.2, 45, Direction.RIGHT),
-			driveDistanceCommand(60 * Math.sqrt(2), Direction.FORWARD),
-			angleTurnCommand(0.2, 45, Direction.LEFT),
-			driveDistanceCommand(30, Direction.FORWARD)
+			driveDistanceCommand(120 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.2, 90, Direction.LEFT),
+			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.2, 90, Direction.LEFT),
+			driveDistanceCommand(30 * Math.sqrt(2), Direction.FORWARD),
+			angleTurnCommand(0.2, 45, Direction.LEFT)
 		);
 	}
 

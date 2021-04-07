@@ -153,7 +153,7 @@ public class Robot extends TimedRobot {
 
 		Robot.drive.resetPosition();
 
-		this.autoCommand = this.container.getAutonomousCommand("adfgadh");
+		this.autoCommand = this.container.getAutonomousCommand("slalom");
 
 		// schedule the autonomous command (example)
 		if (this.autoCommand != null) {
