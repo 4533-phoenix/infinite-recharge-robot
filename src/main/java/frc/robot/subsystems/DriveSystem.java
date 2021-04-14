@@ -334,6 +334,48 @@ public class DriveSystem extends SubsystemBase {
 	public void toggleTurbo() {
 		this.turbo = !this.turbo;
 	}
+
+	public void arcade(double vertical, double turn) {
+		double targetLeft;
+		double targetRight;
+
+		double leftPercent;
+		double rightPercent;
+
+		double targetVelocity = MAX_VELOCITY;
+
+		if (this.turbo) {
+			targetVelocity = TURBO_VELOCITY;
+		}
+
+		if (vertical + turn > 1) {
+			leftPercent = 1;
+		}
+		else if (vertical + turn < -1) {
+			leftPercent = -1;
+		}
+		else {
+			leftPercent = vertical + turn;
+		}
+
+		if (vertical - turn > 1) {
+			rightPercent = 1;
+		}
+		else if (vertical - turn < -1) {
+			rightPercent = -1;
+		}
+		else {
+			rightPercent = vertical - turn;
+		}
+
+
+		targetLeft = leftPercent * targetVelocity * 4096 / 600.0 * -1;
+		targetRight = rightPercent * targetVelocity * 4096 / 600.0 * -1;
+
+		this.leftMaster.set(ControlMode.Velocity, targetLeft);
+		this.rightMaster.set(ControlMode.Velocity, targetRight);
+	}
+
 	public void tank(double left, double right) {
 		double targetLeft;
 		double targetRight;

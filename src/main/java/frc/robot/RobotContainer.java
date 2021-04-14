@@ -26,9 +26,9 @@ public class RobotContainer {
 
 	// Initialize the drive command
 	private final Command defaultDriveCommand = new RunCommand(
-		() -> Robot.drive.tank(
+		() -> Robot.drive.arcade(
 			this.leftStick.getRawAxis(1),
-			this.rightStick.getRawAxis(1)
+			this.rightStick.getRawAxis(0)
 		),
 		Robot.drive
 	);
