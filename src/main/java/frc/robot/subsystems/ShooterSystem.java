@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.ResourceBundle.Control;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
@@ -41,7 +43,9 @@ public class ShooterSystem extends SubsystemBase {
 
 	private WPI_TalonSRX elevatorMotor;
 
-	private NetworkTableInstance inst;
+	private NetworkTable inst;
+
+	private double targetOffsetAngle_Horizontal;
 
 	public ShooterSystem() {
 
@@ -69,13 +73,13 @@ public class ShooterSystem extends SubsystemBase {
 
 		this.flywheelMotorLeft.setInverted(true);
 
-		this.inst = NetworkTableInstance.getDefault();//.getTable("limelight");
+		this.inst = NetworkTableInstance.getDefault().getTable("limelight");
 		
-		ConnectionInfo[] arr = this.inst.getConnections();
+		// ConnectionInfo[] arr = this.inst.getConnections();
 
-		for(ConnectionInfo curr : arr) {
-			System.out.println(curr.remote_id + " " + curr.remote_ip);
-		}
+		// for(ConnectionInfo curr : arr) {
+		// 	System.out.println(curr.remote_id + " " + curr.remote_ip);
+		// }
 	}
 
 	public void flywheelOut() {
@@ -91,6 +95,10 @@ public class ShooterSystem extends SubsystemBase {
 	public void flywheelStop() {
 		this.flywheelMotorRight.set(ControlMode.PercentOutput, 0);
 		this.flywheelMotorLeft.set(ControlMode.PercentOutput, 0);
+	}
+
+	public void word() {
+		System.out.println("test2");
 	}
 
 	public void turretWheelIn() {
@@ -117,13 +125,32 @@ public class ShooterSystem extends SubsystemBase {
 		this.turretSwivelMotor.set(ControlMode.PercentOutput, 0);
 	}
 
+	public void autoTurretSwivel() {
+		// System.out.println("test");
+		if (targetOffsetAngle_Horizontal > 2) {
+			while (targetOffsetAngle_Horizontal > 2) {
+				this.turretSwivelMotor.set(ControlMode.PercentOutput, -TURRET_SWIVEL_MOTOR_PERCENT);
+			}
+		} else if (targetOffsetAngle_Horizontal < -2) {
+			while (targetOffsetAngle_Horizontal < -2) {
+				this.turretSwivelMotor.set(ControlMode.PercentOutput, TURRET_SWIVEL_MOTOR_PERCENT);
+			}
+		}
+
+		this.turretSwivelStop();
+	}
+
+	public boolean turretReachedPosition() {
+		return targetOffsetAngle_Horizontal < -2 || targetOffsetAngle_Horizontal > 2;
+	}
+
 	@Override
 	public void periodic() {
-		// double targetOffsetAngle_Horizontal = table.getEntry("tx").getDouble(0);
-		// double targetOffsetAngle_Vertical = table.getEntry("ty").getDouble(0);
-		// double targetArea = table.getEntry("ta").getDouble(0);
-		// double targetSkew = table.getEntry("ts").getDouble(0);
+		targetOffsetAngle_Horizontal = inst.getEntry("tx").getDouble(0);
+		double targetOffsetAngle_Vertical = inst.getEntry("ty").getDouble(0);
+		double targetArea = inst.getEntry("ta").getDouble(0);
+		double targetSkew = inst.getEntry("ts").getDouble(0);
 
-		//System.out.println(targetOffsetAngle_Horizontal);
+		System.out.println(targetOffsetAngle_Horizontal);
 	}
 }

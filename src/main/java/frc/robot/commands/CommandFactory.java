@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
 
@@ -19,6 +20,16 @@ public class CommandFactory {
 			(interrupt) -> Robot.drive.tank(0, 0),
 			() -> Robot.drive.reachedPosition(),
 			Robot.drive
+		);
+	}
+
+	public static Command turretSwivelAuto() {
+		return new FunctionalCommand(
+			() -> Robot.shooter.word(),
+			() -> Robot.shooter.autoTurretSwivel(),
+			(interrupt) -> Robot.shooter.turretSwivelStop(),
+			() -> Robot.shooter.turretReachedPosition(),
+			Robot.shooter
 		);
 	}
 

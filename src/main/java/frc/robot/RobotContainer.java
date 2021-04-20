@@ -124,11 +124,15 @@ public class RobotContainer {
 		flywheelOut.whileHeld(CommandFactory.flywheelOutCommand());
 		flywheelOut.whenReleased(CommandFactory.flywheelStopCommand());
 
-		JoystickButton turretSwivelLeft = new JoystickButton(leftStick, Constants.BUTTON_11);
+		JoystickButton turretSwivel = new JoystickButton(leftStick, Constants.BUTTON_12);
+		turretSwivel.whileHeld(CommandFactory.turretSwivelAuto());
+		turretSwivel.whenReleased(CommandFactory.turretSwivelStopCommand());
+		
+		JoystickButton turretSwivelLeft = new JoystickButton(leftStick, Constants.BUTTON_9);
 		turretSwivelLeft.whileHeld(CommandFactory.turretSwivelLeftCommand());
 		turretSwivelLeft.whenReleased(CommandFactory.turretSwivelStopCommand());
 
-		JoystickButton turretSwivelRight = new JoystickButton(leftStick, Constants.BUTTON_12);
+		JoystickButton turretSwivelRight = new JoystickButton(leftStick, Constants.BUTTON_10);
 		turretSwivelRight.whileHeld(CommandFactory.turretSwivelRightCommand());
 		turretSwivelRight.whenReleased(CommandFactory.turretSwivelStopCommand());
 
