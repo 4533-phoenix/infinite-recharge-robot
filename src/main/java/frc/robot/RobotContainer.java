@@ -144,7 +144,7 @@ public class RobotContainer {
 		// hookDown.whileHeld(CommandFactory.hookDownCommand());
 		// hookDown.whenReleased(CommandFactory.hookStopCommand());
 
-		// JoystickButton climb = new JoystickButton(leftStick, Constants.BUTTON_6);
+		// JoystickButton climb = new JoystickButton(leftStick, Constants.BUTTON_7);
 		// climb.whileHeld(CommandFactory.climbCommand());
 		// climb.whenReleased(CommandFactory.climbStopCommand());
 
