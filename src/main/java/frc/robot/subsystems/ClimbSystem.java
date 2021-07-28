@@ -21,13 +21,13 @@ public class ClimbSystem extends SubsystemBase {
    * Creates a new ClimbSystem.
    */
   private WPI_TalonSRX hookMotor;
-  private VictorSPX climbMotor;
+  private WPI_TalonSRX climbMotor;
   private final double HOOK_PERCENT_OUTPUT = 0.5;
   private final double CLIMB_PERCENT_OUTPUT = 0.5;
 
   public ClimbSystem() {
     this.hookMotor = new WPI_TalonSRX(Constants.ELEVATOR_MOTOR);
-	this.climbMotor = new VictorSPX(Constants.WINCH_MOTOR);
+	this.climbMotor = new WPI_TalonSRX(Constants.WINCH_MOTOR);
 
 	this.hookMotor.setNeutralMode(NeutralMode.Brake);
 	this.climbMotor.setNeutralMode(NeutralMode.Brake);
