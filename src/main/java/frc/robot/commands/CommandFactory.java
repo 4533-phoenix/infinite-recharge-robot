@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.WaitCommand;
+import edu.wpi.first.wpilibj.command.TimedCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -20,6 +21,22 @@ public class CommandFactory {
 			(interrupt) -> Robot.drive.tank(0, 0),
 			() -> Robot.drive.reachedPosition(),
 			Robot.drive
+		);
+	}
+
+	public static Command shootBallCommand() {
+		return new FunctionalCommand(
+			() -> Robot.shooter.word(), 
+			() -> Robot.shooter.flywheelAndIntakeOut(),
+			(interrupt) -> Robot.shooter.flywheelAndIntakeStop(),
+			() -> Robot.shooter.flywheelReachedPosition(3),
+			Robot.shooter
+		);
+	}
+
+	public static Command driveOffLineCommand() {
+		return new SequentialCommandGroup(
+			driveDistanceCommand(24, Direction.BACKWARD)
 		);
 	}
 
@@ -63,11 +80,27 @@ public class CommandFactory {
 		);
 	}
 
+	public static Command runFlywheelCommand() {
+		return new InstantCommand(
+			() -> Robot.shooter.flywheelOut(),
+			Robot.shooter
+		);
+	}
+
 	public static Command testAutoCommand() {
 		return new SequentialCommandGroup(
 			driveDistanceCommand(60,Direction.FORWARD),
 			angleTurnCommand(0.2, 180, Direction.RIGHT),
 			driveDistanceCommand(60,Direction.FORWARD)
+		);
+	}
+
+	public static Command driveShootAutoCommand() {
+		return new SequentialCommandGroup(
+			runFlywheelCommand(),
+			//waitFlyTimed(),
+			shootBallCommand(),
+			driveDistanceCommand(24,Direction.BACKWARD)
 		);
 	}
 

@@ -96,6 +96,23 @@ public class ShooterSystem extends SubsystemBase {
 		this.flywheelMotorRight.set(ControlMode.PercentOutput, 0);
 		this.flywheelMotorLeft.set(ControlMode.PercentOutput, 0);
 	}
+	
+	public void flywheelAndIntakeOut() {
+		this.flywheelMotorRight.set(ControlMode.PercentOutput, FLYWHEEL_MOTOR_PERCENT);
+		this.flywheelMotorLeft.set(ControlMode.PercentOutput, FLYWHEEL_MOTOR_PERCENT);
+		this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
+	}
+
+	public void flywheelAndIntakeStop() {
+		this.flywheelMotorRight.set(ControlMode.PercentOutput, 0);
+		this.flywheelMotorLeft.set(ControlMode.PercentOutput, 0);
+		this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
+	}
+
+	public boolean flywheelReachedPosition(int balls) {
+		double targetPosition = (balls * 10 + 5) * DriveSystem.TICKS_PER_ROTATION;
+		return flywheelMotorRight.getSelectedSensorPosition() >= targetPosition;
+	}
 
 	public void word() {
 		System.out.println("test2");

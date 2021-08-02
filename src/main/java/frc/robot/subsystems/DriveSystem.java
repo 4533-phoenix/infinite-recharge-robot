@@ -34,7 +34,7 @@ public class DriveSystem extends SubsystemBase {
 	private boolean turbo = false;
 
 	// Wheel specific constants.
-	private static final double TICKS_PER_ROTATION = 4096.0;
+	public static final double TICKS_PER_ROTATION = 4096.0;
 	private static final double WHEEL_DIAMETER = 6.0;
 	private static final double WHEEL_DIAMETER_M = 0.1524;
 	private static final double WHEEL_CIRCUMFERENCE = WHEEL_DIAMETER * Math.PI;

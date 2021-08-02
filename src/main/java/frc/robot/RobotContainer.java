@@ -60,12 +60,13 @@ public class RobotContainer {
 
 	private final Command slalomCommand = CommandFactory.slalomAutoCommand();
 	private final Command barrelCommand = CommandFactory.barrelAutoCommand();
+	private final Command offLineCommand = CommandFactory.driveOffLineCommand();
+	private final Command ballShootCommand = CommandFactory.driveShootAutoCommand();
 
 	//creates a hashMap
 
 	private Map<String, Command> commands = Map.ofEntries(
-		Map.entry("barrel", barrelCommand),
-		Map.entry("slalom", slalomCommand)
+		Map.entry("shootBall",ballShootCommand)
 	);
 
 	/**
@@ -176,7 +177,7 @@ public class RobotContainer {
 		// An ExampleCommand will run in autonomous
 		Command command = this.commands.get(key);
 		if(command == null){
-			command = this.driveForwardCommand;
+			command = this.ballShootCommand;
 		}
 		return command;
 	}
