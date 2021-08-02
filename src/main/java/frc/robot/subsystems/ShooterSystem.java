@@ -109,6 +109,12 @@ public class ShooterSystem extends SubsystemBase {
 		this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
 	}
 
+	public void flywheelAndIntakeResetPosition() {
+		this.flywheelMotorRight.setSelectedSensorPosition(0);
+		this.flywheelMotorLeft.setSelectedSensorPosition(0);
+		this.turretWheelMotor.setSelectedSensorPosition(0);
+	}
+
 	public boolean flywheelReachedPosition(int balls) {
 		double targetPosition = (balls * 10 + 5) * DriveSystem.TICKS_PER_ROTATION;
 		return flywheelMotorRight.getSelectedSensorPosition() >= targetPosition;

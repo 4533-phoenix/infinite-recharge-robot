@@ -1,8 +1,7 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.WaitCommand;
-import edu.wpi.first.wpilibj.command.TimedCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -26,7 +25,7 @@ public class CommandFactory {
 
 	public static Command shootBallCommand() {
 		return new FunctionalCommand(
-			() -> Robot.shooter.word(), 
+			() -> Robot.shooter.flywheelAndIntakeResetPosition(), 
 			() -> Robot.shooter.flywheelAndIntakeOut(),
 			(interrupt) -> Robot.shooter.flywheelAndIntakeStop(),
 			() -> Robot.shooter.flywheelReachedPosition(3),
@@ -95,12 +94,16 @@ public class CommandFactory {
 		);
 	}
 
+	public static Command waitFlyTimed() {
+		return new WaitCommand(3);
+	}
+
 	public static Command driveShootAutoCommand() {
 		return new SequentialCommandGroup(
 			runFlywheelCommand(),
-			//waitFlyTimed(),
+			waitFlyTimed(),
 			shootBallCommand(),
-			driveDistanceCommand(24,Direction.BACKWARD)
+			driveDistanceCommand(24, Direction.BACKWARD)
 		);
 	}
 
