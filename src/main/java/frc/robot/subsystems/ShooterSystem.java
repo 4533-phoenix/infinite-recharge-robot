@@ -125,7 +125,13 @@ public class ShooterSystem extends SubsystemBase {
 	}
 
 	public void turretWheelIn() {
-		this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
+		// since both flywheel motors should be at the same position, we only need to check one flywheel motor's position
+		if (flywheelMotorRight.getSelectedSensorPosition() >= 4096 * 3) {
+			this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
+		}
+		else {
+			this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
+		}
 	}
 
 	public void turretWheelOut() {
