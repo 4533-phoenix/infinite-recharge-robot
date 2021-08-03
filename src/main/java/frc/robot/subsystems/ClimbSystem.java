@@ -22,7 +22,7 @@ public class ClimbSystem extends SubsystemBase {
    */
   private WPI_TalonSRX hookMotor;
   private WPI_TalonSRX climbMotor;
-  private final double HOOK_PERCENT_OUTPUT = 0.5;
+  private final double HOOK_PERCENT_OUTPUT = 0.9;
   private final double CLIMB_PERCENT_OUTPUT = 0.5;
 
   public ClimbSystem() {
