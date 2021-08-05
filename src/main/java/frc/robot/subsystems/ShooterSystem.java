@@ -47,6 +47,9 @@ public class ShooterSystem extends SubsystemBase {
 
 	private double targetOffsetAngle_Horizontal;
 
+	private double flywheelRPM;
+	private double elapsedTime;
+
 	public ShooterSystem() {
 
 		this.flywheelMotorRight = new WPI_TalonFX(Constants.FLYWHEEL_MOTOR_RIGHT);
@@ -126,12 +129,14 @@ public class ShooterSystem extends SubsystemBase {
 
 	public void turretWheelIn() {
 		// since both flywheel motors should be at the same position, we only need to check one flywheel motor's position
-		if (flywheelMotorRight.getSelectedSensorPosition() >= 4096 * 3) {
-			this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
-		}
-		else {
-			this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
-		}
+		// if (flywheelMotorRight.getSelectedSensorPosition() >= 4096 * 3) {
+		// 	this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
+		// }
+		// else {
+		// 	this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
+		// }
+
+		this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
 	}
 
 	public void turretWheelOut() {
@@ -180,6 +185,25 @@ public class ShooterSystem extends SubsystemBase {
 		double targetArea = inst.getEntry("ta").getDouble(0);
 		double targetSkew = inst.getEntry("ts").getDouble(0);
 
-		System.out.println(targetOffsetAngle_Horizontal);
+		// periodic runs every 20 ms
+		elapsedTime += 20;
+		
+		flywheelRPM = ((flywheelMotorRight.getSelectedSensorPosition() / 4096.0) / elapsedTime) * 3000;
+		
+		if (flywheelRPM <= 0.0) {
+			flywheelRPM = 0.0;
+		}
+
+		System.out.println("Flywheel RPM: " + flywheelRPM);
+		System.out.println("Elapsed Time: " + elapsedTime + "s");
+
+		// double test = flywheelMotorRight.get();
+
+		// System.out.println("Motor Speed: " + test);
+		// if (flywheelMotorRight.get() == 0) {
+		// 	flywheelMotorRight.setSelectedSensorPosition(0);
+		// }
+
+		// System.out.println(targetOffsetAngle_Horizontal);
 	}
 }

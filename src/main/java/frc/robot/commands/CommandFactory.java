@@ -187,6 +187,10 @@ public class CommandFactory {
 		);
 	}
 
+	// public static Command flywheelRPMCheckDelay() {
+	// 	return new WaitCommand(0.02);
+	// }
+
 	public static Command turretWheelOutCommand() {
 		return new InstantCommand(
 			() -> Robot.shooter.turretWheelOut(),
@@ -267,6 +271,13 @@ public class CommandFactory {
 	public static Command climbCommand() {
 		return new InstantCommand(
 			() -> Robot.climber.climb(),
+			Robot.climber
+		);
+	}
+
+	public static Command climbDownCommand() {
+		return new InstantCommand(
+			() -> Robot.climber.climbDown(),
 			Robot.climber
 		);
 	}
