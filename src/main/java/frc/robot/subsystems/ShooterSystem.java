@@ -194,6 +194,7 @@ public class ShooterSystem extends SubsystemBase {
 			elapsedTime = 0;
 			currFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
 			flywheelRPM = (currFlywheelRotations - startFlywheelRotations) * 600;
+			startFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
 		}
 
 		if (flywheelRPM <= 0.0) {
