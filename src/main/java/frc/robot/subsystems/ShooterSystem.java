@@ -193,19 +193,18 @@ public class ShooterSystem extends SubsystemBase {
 		if (elapsedTime == 100) {
 			elapsedTime = 0;
 			currFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
-			flywheelRPM = (currFlywheelRotations - startFlywheelRotations) * 600;
+
+			if (currFlywheelRotations <= startFlywheelRotations) {
+				flywheelRPM = 0.0;
+			}
+			else {
+				flywheelRPM = (currFlywheelRotations - startFlywheelRotations) * 600;
+			}
+			
 			startFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
 		}
 
-		if (flywheelRPM <= 0.0) {
-			flywheelRPM = 0.0;
-		}
-
 		System.out.println("Flywheel RPM: " + flywheelRPM);
-
-		// double test = flywheelMotorRight.get();
-
-		
 
 		// System.out.println(targetOffsetAngle_Horizontal);
 	}
