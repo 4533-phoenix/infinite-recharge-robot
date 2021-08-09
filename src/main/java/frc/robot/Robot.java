@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
 	// concept still doesn't sit well. It would be ideal if we could determine a
 	// better approach and take that instead. This is a just a note to remind us
 	// to consider it as we move forward.
-	private RobotContainer container = null;
+	public static RobotContainer container = null;
 
 	/**
 	 * Tracks the current state of the robot.
