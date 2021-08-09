@@ -47,13 +47,12 @@ public class ShooterSystem extends SubsystemBase {
 
 	private double targetOffsetAngle_Horizontal;
 
-	private double startFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
-	private double currFlywheelRotations;
-	private double flywheelRPM;
-	private double elapsedTime;
+	// private double startFlywheelRotations;
+	// private double currFlywheelRotations;
+	// private double flywheelRPM;
+	// private double elapsedTime;
 
 	public ShooterSystem() {
-
 		this.flywheelMotorRight = new WPI_TalonFX(Constants.FLYWHEEL_MOTOR_RIGHT);
 		this.flywheelMotorLeft = new WPI_TalonFX(Constants.FLYWHEEL_MOTOR_LEFT);
 
@@ -85,6 +84,8 @@ public class ShooterSystem extends SubsystemBase {
 		// for(ConnectionInfo curr : arr) {
 		// 	System.out.println(curr.remote_id + " " + curr.remote_ip);
 		// }
+
+		// startFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition();
 	}
 
 	public void flywheelOut() {
@@ -121,7 +122,7 @@ public class ShooterSystem extends SubsystemBase {
 	}
 
 	public boolean flywheelReachedPosition(int balls) {
-		double targetPosition = (balls * 10 + 5) * DriveSystem.TICKS_PER_ROTATION;
+		double targetPosition = (balls * 30) * DriveSystem.TICKS_PER_ROTATION;
 		return flywheelMotorRight.getSelectedSensorPosition() >= targetPosition;
 	}
 
@@ -188,16 +189,16 @@ public class ShooterSystem extends SubsystemBase {
 		double targetSkew = inst.getEntry("ts").getDouble(0);
 
 		// periodic runs every 20 ms
-		elapsedTime += 20;
+		// elapsedTime += 20;
 		
-		if (elapsedTime == 100) {
-			elapsedTime = 0;
-			currFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
-			flywheelRPM = (currFlywheelRotations - startFlywheelRotations) * 600;
-			startFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
-		}
+		// if (elapsedTime == 100) {
+		// 	elapsedTime = 0;
+		// 	currFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
+		// 	flywheelRPM = (currFlywheelRotations - startFlywheelRotations) * 600;
+		// 	startFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
+		// }
 
-		System.out.println("Flywheel RPM: " + flywheelRPM);
+		// System.out.println("Flywheel RPM: " + flywheelRPM);
 
 		// System.out.println(targetOffsetAngle_Horizontal);
 	}

@@ -104,7 +104,7 @@ public class CommandFactory {
 			runFlywheelCommand(),
 			waitFlyTimed(),
 			shootBallCommand(),
-			driveDistanceCommand(24, Direction.BACKWARD)
+			driveDistanceCommand(60, Direction.BACKWARD)
 		);
 	}
 
