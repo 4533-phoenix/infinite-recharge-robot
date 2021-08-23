@@ -104,7 +104,7 @@ public class CommandFactory {
 			runFlywheelCommand(),
 			waitFlyTimed(),
 			shootBallCommand(),
-			driveDistanceCommand(60, Robot.container.autoCheckJoystickThrottle())
+			driveDistanceCommand(60, Direction.BACKWARD)
 		);
 	}
 

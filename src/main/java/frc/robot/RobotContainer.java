@@ -171,18 +171,6 @@ public class RobotContainer {
 
 	}
 
-	public Direction autoCheckJoystickThrottle() {
-		if (leftStick.getThrottle() > 0) {
-			return Direction.FORWARD;
-		}
-		else if (leftStick.getThrottle() <= 0) {
-			return Direction.BACKWARD;
-		}
-		else {
-			return Direction.BACKWARD;
-		}
-	}
-
 	/**
 	 * Use this to pass the autonomous command to the main {@link Robot} class.
 	 *
