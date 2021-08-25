@@ -33,4 +33,18 @@ public final class Constants {
 	public static final int BUTTON_10 = 10;
 	public static final int BUTTON_11 = 11;
 	public static final int BUTTON_12 = 12;
+
+	//controller buttons and ports
+	public static final int DRIVER_CONTROLLER = 0;
+
+	public static final int BUTTON_TRIANGLE = 1;
+	public static final int BUTTON_CIRCLE = 2;
+	public static final int BUTTON_X = 3;
+	public static final int BUTTON_SQUARE = 4;
+	public static final int BUTTON_LB = 5;
+	public static final int BUTTON_RB = 6;
+	public static final int BUTTON_LT = 7;
+	public static final int BUTTON_RT = 8;
+	public static final int BUTTON_SELECT = 9;
+	public static final int BUTTON_START = 10;
 }

@@ -23,6 +23,7 @@ public class ClimbSystem extends SubsystemBase {
   private WPI_TalonSRX hookMotor;
   private WPI_TalonSRX climbMotor;
   private final double HOOK_PERCENT_OUTPUT = 0.9;
+  private final double HOOK_DOWN_PERCENT_OUTPUT = 0.4;
   private final double CLIMB_PERCENT_OUTPUT = 0.5;
 
   public ClimbSystem() {
@@ -37,7 +38,7 @@ public class ClimbSystem extends SubsystemBase {
     this.hookMotor.set(ControlMode.PercentOutput, HOOK_PERCENT_OUTPUT);
   }
   public void hookDown(){
-    this.hookMotor.set(ControlMode.PercentOutput, -HOOK_PERCENT_OUTPUT);
+    this.hookMotor.set(ControlMode.PercentOutput, -HOOK_DOWN_PERCENT_OUTPUT);
   }
 
   public void hookStop() {
@@ -46,6 +47,10 @@ public class ClimbSystem extends SubsystemBase {
 
   public void climb(){
     this.climbMotor.set(ControlMode.PercentOutput, -CLIMB_PERCENT_OUTPUT);
+  }
+
+  public void climbDown() {
+	this.climbMotor.set(ControlMode.PercentOutput, CLIMB_PERCENT_OUTPUT);
   }
 
   public void climbStop(){
