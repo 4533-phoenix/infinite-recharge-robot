@@ -28,8 +28,8 @@ public class DriveSystem extends SubsystemBase {
 	// Onboard IMU.
 	private AHRS navX;
 
-	private static final double MAX_VELOCITY = 325;
-	private static final double TURBO_VELOCITY = 400;
+	private static final double MAX_VELOCITY = 400;
+	private static final double TURBO_VELOCITY = 475;
 	private static final double PEAK_OUTPUT = 1.0;
 	private boolean turbo = false;
 

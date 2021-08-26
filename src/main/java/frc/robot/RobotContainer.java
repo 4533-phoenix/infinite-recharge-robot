@@ -148,16 +148,16 @@ public class RobotContainer {
 		// climb.whileHeld(CommandFactory.climbCommand());
 		// climb.whenReleased(CommandFactory.climbStopCommand());
 
-		// JoystickButton turboButton = new JoystickButton(controller, Constants.THUMB_BUTTON);
-		// turboButton.whenPressed(new InstantCommand(
-		// 	()-> Robot.drive.toggleTurbo(),
-		// 	Robot.drive)
-		// );
+		JoystickButton turboButton = new JoystickButton(controller, Constants.BUTTON_LT);
+		turboButton.whenPressed(new InstantCommand(
+			()-> Robot.drive.toggleTurbo(),
+			Robot.drive)
+		);
 
-		// turboButton.whenReleased(new InstantCommand(
-		// 	()-> Robot.drive.toggleTurbo(),
-		// 	Robot.drive)
-		// );
+		turboButton.whenReleased(new InstantCommand(
+			()-> Robot.drive.toggleTurbo(),
+			Robot.drive)
+		);
 	}
 
 	private void configureDefaultCommands() {
