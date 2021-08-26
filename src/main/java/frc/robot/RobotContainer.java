@@ -199,6 +199,14 @@ public class RobotContainer {
 		scheduler.schedule(triggerCommands);
 	}
 
+	public void periodic() {
+		CommandScheduler scheduler = CommandScheduler.getInstance();
+
+		if (!scheduler.isScheduled(triggerCommands)) {
+			scheduler.schedule(triggerCommands);
+			System.out.println("Trigger Commands Re-scheduled!");
+		}
+	}
 	/**
 	 * Use this to pass the autonomous command to the main {@link Robot} class.
 	 *
