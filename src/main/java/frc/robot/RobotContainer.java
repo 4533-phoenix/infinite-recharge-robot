@@ -149,12 +149,15 @@ public class RobotContainer {
 		climb.whileHeld(CommandFactory.climbCommand());
 		climb.whenReleased(CommandFactory.climbStopCommand());
 
+		JoystickButton climbDown = new JoystickButton(leftStick, Constants.BUTTON_8);
+		climbDown.whileHeld(CommandFactory.climbDownCommand());
+		climbDown.whenReleased(CommandFactory.climbStopCommand());
+
 		JoystickButton turboButton = new JoystickButton(rightStick, Constants.THUMB_BUTTON);
 		turboButton.whenPressed(new InstantCommand(
 			()-> Robot.drive.toggleTurbo(),
 			Robot.drive)
 		);
-
 		turboButton.whenReleased(new InstantCommand(
 			()-> Robot.drive.toggleTurbo(),
 			Robot.drive)

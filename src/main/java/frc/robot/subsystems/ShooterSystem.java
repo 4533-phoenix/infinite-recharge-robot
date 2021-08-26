@@ -47,8 +47,12 @@ public class ShooterSystem extends SubsystemBase {
 
 	private double targetOffsetAngle_Horizontal;
 
-	public ShooterSystem() {
+	// private double startFlywheelRotations;
+	// private double currFlywheelRotations;
+	// private double flywheelRPM;
+	// private double elapsedTime;
 
+	public ShooterSystem() {
 		this.flywheelMotorRight = new WPI_TalonFX(Constants.FLYWHEEL_MOTOR_RIGHT);
 		this.flywheelMotorLeft = new WPI_TalonFX(Constants.FLYWHEEL_MOTOR_LEFT);
 
@@ -80,6 +84,8 @@ public class ShooterSystem extends SubsystemBase {
 		// for(ConnectionInfo curr : arr) {
 		// 	System.out.println(curr.remote_id + " " + curr.remote_ip);
 		// }
+
+		// startFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition();
 	}
 
 	public void flywheelOut() {
@@ -109,8 +115,14 @@ public class ShooterSystem extends SubsystemBase {
 		this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
 	}
 
+	public void flywheelAndIntakeResetPosition() {
+		this.flywheelMotorRight.setSelectedSensorPosition(0);
+		this.flywheelMotorLeft.setSelectedSensorPosition(0);
+		this.turretWheelMotor.setSelectedSensorPosition(0);
+	}
+
 	public boolean flywheelReachedPosition(int balls) {
-		double targetPosition = (balls * 10 + 5) * DriveSystem.TICKS_PER_ROTATION;
+		double targetPosition = (balls * 30) * DriveSystem.TICKS_PER_ROTATION;
 		return flywheelMotorRight.getSelectedSensorPosition() >= targetPosition;
 	}
 
@@ -119,6 +131,14 @@ public class ShooterSystem extends SubsystemBase {
 	}
 
 	public void turretWheelIn() {
+		// since both flywheel motors should be at the same position, we only need to check one flywheel motor's position
+		// if (flywheelMotorRight.getSelectedSensorPosition() >= 4096 * 3) {
+		// 	this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
+		// }
+		// else {
+		// 	this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
+		// }
+
 		this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
 	}
 
@@ -168,6 +188,18 @@ public class ShooterSystem extends SubsystemBase {
 		double targetArea = inst.getEntry("ta").getDouble(0);
 		double targetSkew = inst.getEntry("ts").getDouble(0);
 
-		System.out.println(targetOffsetAngle_Horizontal);
+		// periodic runs every 20 ms
+		// elapsedTime += 20;
+		
+		// if (elapsedTime == 100) {
+		// 	elapsedTime = 0;
+		// 	currFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
+		// 	flywheelRPM = (currFlywheelRotations - startFlywheelRotations) * 600;
+		// 	startFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
+		// }
+
+		// System.out.println("Flywheel RPM: " + flywheelRPM);
+
+		// System.out.println(targetOffsetAngle_Horizontal);
 	}
 }

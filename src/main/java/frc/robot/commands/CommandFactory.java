@@ -1,13 +1,13 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.WaitCommand;
-import edu.wpi.first.wpilibj.command.TimedCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Robot;
+import frc.robot.subsystems.ShooterSystem;
 
 public class CommandFactory {
 
@@ -26,7 +26,7 @@ public class CommandFactory {
 
 	public static Command shootBallCommand() {
 		return new FunctionalCommand(
-			() -> Robot.shooter.word(), 
+			() -> Robot.shooter.flywheelAndIntakeResetPosition(), 
 			() -> Robot.shooter.flywheelAndIntakeOut(),
 			(interrupt) -> Robot.shooter.flywheelAndIntakeStop(),
 			() -> Robot.shooter.flywheelReachedPosition(3),
@@ -95,12 +95,16 @@ public class CommandFactory {
 		);
 	}
 
+	public static Command waitFlyTimed() {
+		return new WaitCommand(3);
+	}
+
 	public static Command driveShootAutoCommand() {
 		return new SequentialCommandGroup(
 			runFlywheelCommand(),
-			//waitFlyTimed(),
+			waitFlyTimed(),
 			shootBallCommand(),
-			driveDistanceCommand(24,Direction.BACKWARD)
+			driveDistanceCommand(60, Direction.BACKWARD)
 		);
 	}
 
@@ -183,6 +187,10 @@ public class CommandFactory {
 		);
 	}
 
+	// public static Command flywheelRPMCheckDelay() {
+	// 	return new WaitCommand(0.02);
+	// }
+
 	public static Command turretWheelOutCommand() {
 		return new InstantCommand(
 			() -> Robot.shooter.turretWheelOut(),
@@ -263,6 +271,13 @@ public class CommandFactory {
 	public static Command climbCommand() {
 		return new InstantCommand(
 			() -> Robot.climber.climb(),
+			Robot.climber
+		);
+	}
+
+	public static Command climbDownCommand() {
+		return new InstantCommand(
+			() -> Robot.climber.climbDown(),
 			Robot.climber
 		);
 	}
