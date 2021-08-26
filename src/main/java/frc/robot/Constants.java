@@ -34,17 +34,23 @@ public final class Constants {
 	public static final int BUTTON_11 = 11;
 	public static final int BUTTON_12 = 12;
 
-	//controller buttons and ports
+	// controller buttons and ports
 	public static final int DRIVER_CONTROLLER = 0;
 
-	public static final int BUTTON_TRIANGLE = 1;
-	public static final int BUTTON_CIRCLE = 2;
+	public static final int BUTTON_A = 1;
+	public static final int BUTTON_B = 2;
 	public static final int BUTTON_X = 3;
-	public static final int BUTTON_SQUARE = 4;
+	public static final int BUTTON_Y = 4;
 	public static final int BUTTON_LB = 5;
 	public static final int BUTTON_RB = 6;
-	public static final int BUTTON_LT = 7;
-	public static final int BUTTON_RT = 8;
-	public static final int BUTTON_SELECT = 9;
-	public static final int BUTTON_START = 10;
+	// the logitech controller's triggers are analog, not digital
+	// public static final int BUTTON_LT = 7;
+	// public static final int BUTTON_RT = 8;
+	public static final int BUTTON_BACK = 7;
+	public static final int BUTTON_START = 8;
+
+	public static final int LEFT_STICK_AXIS = 1;
+	public static final int RIGHT_STICK_AXIS = 5;
+	public static final int LEFT_TRIGGER_AXIS = 2;
+	public static final int RIGHT_TRIGGER_AXIS = 3;
 }

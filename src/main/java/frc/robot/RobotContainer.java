@@ -26,11 +26,23 @@ public class RobotContainer {
 	// Initialize the drive command
 	private final Command defaultDriveCommand = new RunCommand(
 		() -> Robot.drive.tank(
-			this.controller.getRawAxis(1),
-			this.controller.getRawAxis(3)
+			this.controller.getRawAxis(Constants.LEFT_STICK_AXIS),
+			this.controller.getRawAxis(Constants.RIGHT_STICK_AXIS)
 		),
 		Robot.drive
 	);
+
+	private final Command triggerFlywheelOutCommand = new RunCommand(
+		() -> triggerFlywheelOut(),
+		Robot.shooter
+	);
+
+	private final Command triggerTurboCommand = new RunCommand(
+		() -> triggerTurbo(),
+		Robot.drive
+	);
+
+	Command[] triggerCommands = {triggerFlywheelOutCommand, triggerTurboCommand};
 
 	private final Command driveCircleCommand = new RunCommand(
 		() -> Robot.drive.driveCircle(.5, 360, Direction.RIGHT, 48),
@@ -39,8 +51,8 @@ public class RobotContainer {
 
 	private final Command invertDriveCommand = new RunCommand(
 		() -> Robot.drive.tank(
-			-this.controller.getRawAxis(1),
-			-this.controller.getRawAxis(3)
+			-this.controller.getRawAxis(Constants.LEFT_STICK_AXIS),
+			-this.controller.getRawAxis(Constants.RIGHT_STICK_AXIS)
 		),
 		Robot.drive
 	);
@@ -112,7 +124,7 @@ public class RobotContainer {
 		turretWheelIn.whileHeld(CommandFactory.turretWheelInCommand());
 		turretWheelIn.whenReleased(CommandFactory.turretWheelStopCommand());
 
-		JoystickButton turretWheelOut = new JoystickButton(controller, Constants.BUTTON_CIRCLE);
+		JoystickButton turretWheelOut = new JoystickButton(controller, Constants.BUTTON_B);
 		turretWheelOut.whileHeld(CommandFactory.turretWheelOutCommand());
 		turretWheelOut.whenReleased(CommandFactory.turretWheelStopCommand());
 
@@ -120,9 +132,10 @@ public class RobotContainer {
 		//flywheelIn.whileHeld(CommandFactory.flywheelInCommand());
 		//flywheelIn.whenReleased(CommandFactory.flywheelStopCommand());
 
-		JoystickButton flywheelOut = new JoystickButton(controller, Constants.BUTTON_RT);
-		flywheelOut.whileHeld(CommandFactory.flywheelOutCommand());
-		flywheelOut.whenReleased(CommandFactory.flywheelStopCommand());
+		// old code for the flywheel out button
+		// JoystickButton flywheelOut = new JoystickButton(controller, BUTTON_RT;
+		// flywheelOut.whileHeld(CommandFactory.flywheelOutCommand());
+		// flywheelOut.whenReleased(CommandFactory.flywheelStopCommand());
 
 		// JoystickButton turretSwivel = new JoystickButton(controller, Constants.BUTTON_12);
 		// turretSwivel.whileHeld(CommandFactory.turretSwivelAuto());
@@ -148,23 +161,42 @@ public class RobotContainer {
 		// climb.whileHeld(CommandFactory.climbCommand());
 		// climb.whenReleased(CommandFactory.climbStopCommand());
 
-		JoystickButton turboButton = new JoystickButton(controller, Constants.BUTTON_LT);
-		turboButton.whenPressed(new InstantCommand(
-			()-> Robot.drive.toggleTurbo(),
-			Robot.drive)
-		);
+		// old code for the turbo button
+		// JoystickButton turboButton = new JoystickButton(controller, BUTTON_LT);
+		// turboButton.whenPressed(new InstantCommand(
+		// 	()-> Robot.drive.toggleTurbo(),
+		// 	Robot.drive)
+		// );
 
-		turboButton.whenReleased(new InstantCommand(
-			()-> Robot.drive.toggleTurbo(),
-			Robot.drive)
-		);
+		// turboButton.whenReleased(new InstantCommand(
+		// 	()-> Robot.drive.toggleTurbo(),
+		// 	Robot.drive)
+		// );
+	}
+
+	private void triggerFlywheelOut() {
+		if (controller.getRawAxis(Constants.RIGHT_TRIGGER_AXIS) > 0) {
+			Robot.shooter.flywheelOut();
+		}
+		else {
+			Robot.shooter.flywheelStop();
+		}
+	}
+
+	private void triggerTurbo() {
+		if (controller.getRawAxis(Constants.LEFT_TRIGGER_AXIS) > 0) {
+			Robot.drive.setTurbo(true);
+		}
+		else {
+			Robot.drive.setTurbo(false);
+		}
 	}
 
 	private void configureDefaultCommands() {
 		CommandScheduler scheduler = CommandScheduler.getInstance();
 
 		scheduler.setDefaultCommand(Robot.drive, defaultDriveCommand);
-
+		scheduler.schedule(triggerCommands);
 	}
 
 	/**
