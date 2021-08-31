@@ -18,7 +18,7 @@ import frc.robot.commands.Direction;
 
 public class RobotContainer {
 	// Initialize the driver controls
-	private Joystick controller = new Joystick(Constants.DRIVER_CONTROLLER);
+	public Joystick controller = new Joystick(Constants.DRIVER_CONTROLLER);
 
 	//Initialize second driver controls
 	private Joystick second = new Joystick(Constants.SECOND_DRIVER_JOYSTICK);
@@ -33,16 +33,11 @@ public class RobotContainer {
 	);
 
 	private final Command triggerFlywheelOutCommand = new RunCommand(
-		() -> triggerFlywheelOut(),
+		() -> Robot.shooter.triggerFlywheelOut(controller),
 		Robot.shooter
 	);
 
-	private final Command triggerTurboCommand = new RunCommand(
-		() -> triggerTurbo(),
-		Robot.drive
-	);
-
-	Command[] triggerCommands = {triggerFlywheelOutCommand, triggerTurboCommand};
+	// Command[] triggerCommands = {triggerFlywheelOutCommand, triggerTurboCommand};
 
 	private final Command driveCircleCommand = new RunCommand(
 		() -> Robot.drive.driveCircle(.5, 360, Direction.RIGHT, 48),
@@ -174,39 +169,17 @@ public class RobotContainer {
 		// );
 	}
 
-	private void triggerFlywheelOut() {
-		if (controller.getRawAxis(Constants.RIGHT_TRIGGER_AXIS) > 0) {
-			Robot.shooter.flywheelOut();
-		}
-		else {
-			Robot.shooter.flywheelStop();
-		}
-	}
+	
 
-	private void triggerTurbo() {
-		if (controller.getRawAxis(Constants.LEFT_TRIGGER_AXIS) > 0) {
-			Robot.drive.setTurbo(true);
-		}
-		else {
-			Robot.drive.setTurbo(false);
-		}
-	}
+	
 
 	private void configureDefaultCommands() {
 		CommandScheduler scheduler = CommandScheduler.getInstance();
 
 		scheduler.setDefaultCommand(Robot.drive, defaultDriveCommand);
-		scheduler.schedule(triggerCommands);
+		scheduler.setDefaultCommand(Robot.shooter, triggerFlywheelOutCommand);
 	}
 
-	public void periodic() {
-		CommandScheduler scheduler = CommandScheduler.getInstance();
-
-		if (!scheduler.isScheduled(triggerCommands)) {
-			scheduler.schedule(triggerCommands);
-			System.out.println("Trigger Commands Re-scheduled!");
-		}
-	}
 	/**
 	 * Use this to pass the autonomous command to the main {@link Robot} class.
 	 *

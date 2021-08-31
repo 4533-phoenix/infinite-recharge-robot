@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Joystick;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
@@ -11,8 +12,10 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.commands.CommandFactory;
 import frc.robot.commands.Direction;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -394,6 +397,15 @@ public class DriveSystem extends SubsystemBase {
 		navX.reset();
 	}
 
+	public void triggerTurbo(Joystick controller) {
+		if (controller.getRawAxis(Constants.LEFT_TRIGGER_AXIS) > 0) {
+			setTurbo(true);
+		}
+		else {
+			setTurbo(false);
+		}
+	}
+
 	public void turn(double speed, Direction direction) {
 		switch (direction) {
 		case LEFT:
@@ -426,5 +438,7 @@ public class DriveSystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+		CommandScheduler scheduler = CommandScheduler.getInstance();
+		scheduler.schedule(CommandFactory.triggerTurboCommand);
 	}
 }

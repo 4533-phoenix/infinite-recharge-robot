@@ -34,6 +34,11 @@ public class CommandFactory {
 		);
 	}
 
+	public static Command triggerTurboCommand = new RunCommand(
+		() -> Robot.drive.triggerTurbo(Robot.container.controller),
+		Robot.drive
+	);
+
 	public static Command driveOffLineCommand() {
 		return new SequentialCommandGroup(
 			driveDistanceCommand(24, Direction.BACKWARD)
