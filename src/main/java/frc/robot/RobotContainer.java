@@ -196,17 +196,11 @@ public class RobotContainer {
 		CommandScheduler scheduler = CommandScheduler.getInstance();
 
 		scheduler.setDefaultCommand(Robot.drive, defaultDriveCommand);
+		scheduler.setDefaultCommand(Robot.shooter, triggerFlywheelOutCommand);
+		scheduler.setDefaultCommand(Robot.intake, triggerTurboCommand);
 		scheduler.schedule(triggerCommands);
 	}
 
-	public void periodic() {
-		CommandScheduler scheduler = CommandScheduler.getInstance();
-
-		if (!scheduler.isScheduled(triggerCommands)) {
-			scheduler.schedule(triggerCommands);
-			System.out.println("Trigger Commands Re-scheduled!");
-		}
-	}
 	/**
 	 * Use this to pass the autonomous command to the main {@link Robot} class.
 	 *
