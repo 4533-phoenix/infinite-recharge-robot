@@ -186,6 +186,7 @@ public class RobotContainer {
 	private void triggerTurbo() {
 		if (controller.getRawAxis(Constants.LEFT_TRIGGER_AXIS) > 0) {
 			Robot.drive.setTurbo(true);
+			System.out.println("It WORKED!!!");
 		}
 		else {
 			Robot.drive.setTurbo(false);
@@ -197,7 +198,9 @@ public class RobotContainer {
 
 		scheduler.setDefaultCommand(Robot.drive, defaultDriveCommand);
 		scheduler.setDefaultCommand(Robot.shooter, triggerFlywheelOutCommand);
-		// scheduler.addButton(Runnable);
+		scheduler.addButton(
+			() -> triggerTurbo()
+		);
 	}
 
 	/**
