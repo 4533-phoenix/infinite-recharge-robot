@@ -36,7 +36,7 @@ public class Robot extends TimedRobot {
 	// concept still doesn't sit well. It would be ideal if we could determine a
 	// better approach and take that instead. This is a just a note to remind us
 	// to consider it as we move forward.
-	public final static RobotContainer container = new RobotContainer();
+	private RobotContainer container = null;
 
 	/**
 	 * Tracks the current state of the robot.
@@ -78,7 +78,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		// Instantiate our RobotContainer.  This will perform all our button
 		// bindings, and put our autonomous chooser on the dashboard.
-		// this.container = new RobotContainer();
+		this.container = new RobotContainer();
 
 		// TODO: since subsystems are now static properties of the robot, do we
 		// really need to construct this object in this manner?

@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import java.util.ResourceBundle.Control;
 
-import edu.wpi.first.wpilibj.Joystick;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.FollowerType;
@@ -21,7 +20,6 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.commands.CommandFactory;
 import frc.robot.commands.Direction;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -144,15 +142,6 @@ public class ShooterSystem extends SubsystemBase {
 		this.turretSwivelMotor.set(ControlMode.PercentOutput, 0);
 	}
 
-	public void triggerFlywheelOut(Joystick controller) {
-		if (controller.getRawAxis(Constants.RIGHT_TRIGGER_AXIS) > 0) {
-			flywheelOut();
-		}
-		else {
-			flywheelStop();
-		}
-	}
-
 	public void autoTurretSwivel() {
 		// System.out.println("test");
 		if (targetOffsetAngle_Horizontal > 2) {
@@ -179,6 +168,6 @@ public class ShooterSystem extends SubsystemBase {
 		double targetArea = inst.getEntry("ta").getDouble(0);
 		double targetSkew = inst.getEntry("ts").getDouble(0);
 
-		// System.out.println(targetOffsetAngle_Horizontal);
+		System.out.println(targetOffsetAngle_Horizontal);
 	}
 }
