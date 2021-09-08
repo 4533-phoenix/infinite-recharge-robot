@@ -37,12 +37,12 @@ public class RobotContainer {
 		Robot.shooter
 	);
 
-	private final Command triggerTurboCommand = new RunCommand(
-		() -> triggerTurbo(),
-		Robot.drive
-	);
+	// private final Command triggerTurboCommand = new RunCommand(
+	// 	() -> triggerTurbo(),
+	// 	Robot.drive
+	// );
 
-	Command[] triggerCommands = {triggerFlywheelOutCommand, triggerTurboCommand};
+	// Command[] triggerCommands = {triggerFlywheelOutCommand, triggerTurboCommand};
 
 	private final Command driveCircleCommand = new RunCommand(
 		() -> Robot.drive.driveCircle(.5, 360, Direction.RIGHT, 48),
@@ -162,11 +162,11 @@ public class RobotContainer {
 		// climb.whenReleased(CommandFactory.climbStopCommand());
 
 		// old code for the turbo button
-		// JoystickButton turboButton = new JoystickButton(controller, BUTTON_LT);
-		// turboButton.whenPressed(new InstantCommand(
-		// 	()-> Robot.drive.toggleTurbo(),
-		// 	Robot.drive)
-		// );
+		JoystickButton turboButton = new JoystickButton(controller, Constants.BUTTON_START);
+		turboButton.whenPressed(new InstantCommand(
+			()-> Robot.drive.toggleTurbo(),
+			Robot.drive)
+		);
 
 		// turboButton.whenReleased(new InstantCommand(
 		// 	()-> Robot.drive.toggleTurbo(),
@@ -197,7 +197,7 @@ public class RobotContainer {
 
 		scheduler.setDefaultCommand(Robot.drive, defaultDriveCommand);
 		scheduler.setDefaultCommand(Robot.shooter, triggerFlywheelOutCommand);
-		scheduler.setDefaultCommand(Robot.intake, triggerTurboCommand);
+		// scheduler.addButton(Runnable);
 	}
 
 	/**

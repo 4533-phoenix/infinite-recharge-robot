@@ -48,6 +48,7 @@ public final class Constants {
 	// public static final int BUTTON_RT = 8;
 	public static final int BUTTON_BACK = 7;
 	public static final int BUTTON_START = 8;
+	public static final int BUTTON_LEFT_TRIGGER = 9;
 
 	public static final int LEFT_STICK_AXIS = 1;
 	public static final int RIGHT_STICK_AXIS = 5;
