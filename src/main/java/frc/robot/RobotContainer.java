@@ -100,7 +100,7 @@ public class RobotContainer {
 	 * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
 	 */
 	private void configureButtonBindings() {
-		JoystickButton invertButton = new JoystickButton(controller, Constants.BUTTON_START);
+		JoystickButton invertButton = new JoystickButton(controller, Constants.BUTTON_BACK);
 		invertButton.whenPressed(new InstantCommand(
 			()-> Robot.drive.toggleDriveMode(),
 			Robot.drive)
