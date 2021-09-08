@@ -198,7 +198,6 @@ public class RobotContainer {
 		scheduler.setDefaultCommand(Robot.drive, defaultDriveCommand);
 		scheduler.setDefaultCommand(Robot.shooter, triggerFlywheelOutCommand);
 		scheduler.setDefaultCommand(Robot.intake, triggerTurboCommand);
-		scheduler.schedule(triggerCommands);
 	}
 
 	/**
