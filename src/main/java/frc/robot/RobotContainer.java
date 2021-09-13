@@ -144,6 +144,10 @@ public class RobotContainer {
 		JoystickButton hook_down = new JoystickButton(controller, Constants.BUTTON_A);
 		hook_down.whileHeld(CommandFactory.hookDownCommand());
 		hook_down.whenReleased(CommandFactory.hookStopCommand());
+		
+		JoystickButton hookup = new JoystickButton(controller, Constants.BUTTON_Y);
+		hookup.whileHeld(CommandFactory.hookUpCommand());
+		hookup.whenReleased(CommandFactory.hookStopCommand());
 	}
 
 	private void triggerFlywheelOut() {
