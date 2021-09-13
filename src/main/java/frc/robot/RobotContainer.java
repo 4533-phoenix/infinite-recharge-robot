@@ -37,13 +37,6 @@ public class RobotContainer {
 		Robot.shooter
 	);
 
-	// private final Command triggerTurboCommand = new RunCommand(
-	// 	() -> triggerTurbo(),
-	// 	Robot.drive
-	// );
-
-	// Command[] triggerCommands = {triggerFlywheelOutCommand, triggerTurboCommand};
-
 	private final Command driveCircleCommand = new RunCommand(
 		() -> Robot.drive.driveCircle(.5, 360, Direction.RIGHT, 48),
 		Robot.drive
@@ -132,11 +125,6 @@ public class RobotContainer {
 		//flywheelIn.whileHeld(CommandFactory.flywheelInCommand());
 		//flywheelIn.whenReleased(CommandFactory.flywheelStopCommand());
 
-		// old code for the flywheel out button
-		// JoystickButton flywheelOut = new JoystickButton(controller, BUTTON_RT;
-		// flywheelOut.whileHeld(CommandFactory.flywheelOutCommand());
-		// flywheelOut.whenReleased(CommandFactory.flywheelStopCommand());
-
 		// JoystickButton turretSwivel = new JoystickButton(controller, Constants.BUTTON_12);
 		// turretSwivel.whileHeld(CommandFactory.turretSwivelAuto());
 		// turretSwivel.whenReleased(CommandFactory.turretSwivelStopCommand());
@@ -160,18 +148,6 @@ public class RobotContainer {
 		// JoystickButton climb = new JoystickButton(controller, Constants.BUTTON_7);
 		// climb.whileHeld(CommandFactory.climbCommand());
 		// climb.whenReleased(CommandFactory.climbStopCommand());
-
-		// old code for the turbo button
-		JoystickButton turboButton = new JoystickButton(controller, Constants.BUTTON_START);
-		turboButton.whenPressed(new InstantCommand(
-			()-> Robot.drive.toggleTurbo(),
-			Robot.drive)
-		);
-
-		// turboButton.whenReleased(new InstantCommand(
-		// 	()-> Robot.drive.toggleTurbo(),
-		// 	Robot.drive)
-		// );
 	}
 
 	private void triggerFlywheelOut() {
@@ -186,7 +162,6 @@ public class RobotContainer {
 	private void triggerTurbo() {
 		if (controller.getRawAxis(Constants.LEFT_TRIGGER_AXIS) > 0) {
 			Robot.drive.setTurbo(true);
-			System.out.println("It WORKED!!!");
 		}
 		else {
 			Robot.drive.setTurbo(false);

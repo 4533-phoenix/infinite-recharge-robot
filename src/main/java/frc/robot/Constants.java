@@ -6,7 +6,6 @@ public final class Constants {
 	public static final int RIGHT_SLAVE_MOTOR = 1;
 	public static final int LEFT_SLAVE_MOTOR = 3;
 
-	// Joystick port constants
 	public static final int DRIVER_JOYSTICK_LEFT = 0;
 	public static final int DRIVER_JOYSTICK_RIGHT = 1;
 	public static final int SECOND_DRIVER_JOYSTICK = 2;
@@ -21,20 +20,7 @@ public final class Constants {
 	public static final int WINCH_MOTOR = 8;
 	public static final int ELEVATOR_MOTOR = 4;
 
-	public static final int TRIGGER = 1;
-	public static final int THUMB_BUTTON = 2;
-	public static final int BUTTON_3 = 3;
-	public static final int BUTTON_4 = 4;
-	public static final int BUTTON_5 = 5;
-	public static final int BUTTON_6 = 6;
-	public static final int BUTTON_7 = 7;
-	public static final int BUTTON_8 = 8;
-	public static final int BUTTON_9 = 9;
-	public static final int BUTTON_10 = 10;
-	public static final int BUTTON_11 = 11;
-	public static final int BUTTON_12 = 12;
-
-	// controller buttons and ports
+	// logitech controller buttons and ports
 	public static final int DRIVER_CONTROLLER = 0;
 
 	public static final int BUTTON_A = 1;
@@ -43,13 +29,12 @@ public final class Constants {
 	public static final int BUTTON_Y = 4;
 	public static final int BUTTON_LB = 5;
 	public static final int BUTTON_RB = 6;
-	// the logitech controller's triggers are analog, not digital
-	// public static final int BUTTON_LT = 7;
-	// public static final int BUTTON_RT = 8;
+	
 	public static final int BUTTON_BACK = 7;
 	public static final int BUTTON_START = 8;
 	public static final int BUTTON_LEFT_TRIGGER = 9;
 
+	// the logitech controller's triggers are analog axis, not digital
 	public static final int LEFT_STICK_AXIS = 1;
 	public static final int RIGHT_STICK_AXIS = 5;
 	public static final int LEFT_TRIGGER_AXIS = 2;
