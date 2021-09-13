@@ -137,17 +137,9 @@ public class RobotContainer {
 		// turretSwivelRight.whileHeld(CommandFactory.turretSwivelRightCommand());
 		// turretSwivelRight.whenReleased(CommandFactory.turretSwivelStopCommand());
 
-		// JoystickButton hookUp = new JoystickButton(controller, Constants.BUTTON_6);
-		// hookUp.whileHeld(CommandFactory.hookUpCommand());
-		// hookUp.whenReleased(CommandFactory.hookStopCommand());
-
-		// JoystickButton hookDown = new JoystickButton(controller, Constants.BUTTON_4);
-		// hookDown.whileHeld(CommandFactory.hookDownCommand());
-		// hookDown.whenReleased(CommandFactory.hookStopCommand());
-
-		// JoystickButton climb = new JoystickButton(controller, Constants.BUTTON_7);
-		// climb.whileHeld(CommandFactory.climbCommand());
-		// climb.whenReleased(CommandFactory.climbStopCommand());
+		JoystickButton climb = new JoystickButton(controller, Constants.BUTTON_START);
+		climb.whileHeld(CommandFactory.climbCommand());
+		climb.whenReleased(CommandFactory.climbStopCommand());
 	}
 
 	private void triggerFlywheelOut() {
