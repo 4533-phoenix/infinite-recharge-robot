@@ -143,14 +143,6 @@ public class RobotContainer {
 
 		JoystickButton autoTurretSwivel = new JoystickButton(controller, Constants.RIGHT_STICK_PRESS_DOWN);
 		autoTurretSwivel.whenPressed(CommandFactory.turretSwivelAuto());
-
-		JoystickButton hook_down = new JoystickButton(controller, Constants.BUTTON_A);
-		hook_down.whileHeld(CommandFactory.hookDownCommand());
-		hook_down.whenReleased(CommandFactory.hookStopCommand());
-
-		JoystickButton hookup = new JoystickButton(controller, Constants.BUTTON_Y);
-		hookup.whileHeld(CommandFactory.hookUpCommand());
-		hookup.whenReleased(CommandFactory.hookStopCommand());
 	}
 
 	private void triggerFlywheelOut() {
@@ -165,11 +157,9 @@ public class RobotContainer {
 	private void triggerTurbo() {
 		if (controller.getRawAxis(Constants.LEFT_TRIGGER_AXIS) > 0) {
 			Robot.drive.setTurbo(true);
-			System.out.println(controller.getPOV());
 		}
 		else {
 			Robot.drive.setTurbo(false);
-			System.out.println(controller.getPOV());
 		}
 	}
 

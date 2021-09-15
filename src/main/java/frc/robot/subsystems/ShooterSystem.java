@@ -160,6 +160,6 @@ public class ShooterSystem extends SubsystemBase {
 		double targetArea = inst.getEntry("ta").getDouble(0);
 		double targetSkew = inst.getEntry("ts").getDouble(0);
 
-		// System.out.println(targetOffsetAngle_Horizontal);
+		System.out.println(targetOffsetAngle_Horizontal);
 	}
 }
