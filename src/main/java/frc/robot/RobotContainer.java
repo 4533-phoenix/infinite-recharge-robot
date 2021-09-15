@@ -144,7 +144,7 @@ public class RobotContainer {
 		JoystickButton hook_down = new JoystickButton(controller, Constants.BUTTON_A);
 		hook_down.whileHeld(CommandFactory.hookDownCommand());
 		hook_down.whenReleased(CommandFactory.hookStopCommand());
-		
+
 		JoystickButton hookup = new JoystickButton(controller, Constants.BUTTON_Y);
 		hookup.whileHeld(CommandFactory.hookUpCommand());
 		hookup.whenReleased(CommandFactory.hookStopCommand());
@@ -162,9 +162,28 @@ public class RobotContainer {
 	private void triggerTurbo() {
 		if (controller.getRawAxis(Constants.LEFT_TRIGGER_AXIS) > 0) {
 			Robot.drive.setTurbo(true);
+			System.out.println(controller.getPOV());
 		}
 		else {
 			Robot.drive.setTurbo(false);
+			System.out.println(controller.getPOV());
+		}
+	}
+
+	private void hookUp() {
+		if (controller.getPOV() == 0) {
+			Robot.climber.hookUp();
+		}
+		else {
+			Robot.climber.hookStop();
+		}
+	}
+
+	private void hookDown() {
+		if (controller.getPOV() == 180) {
+			Robot.climber.hookDown();
+		} else {
+			Robot.climber.hookStop();
 		}
 	}
 
@@ -193,6 +212,12 @@ public class RobotContainer {
 		scheduler.setDefaultCommand(Robot.shooter, triggerFlywheelOutCommand);
 		scheduler.addButton(
 			() -> triggerTurbo()
+		);
+		scheduler.addButton(
+			() -> hookUp()
+		);
+		scheduler.addButton(
+			() -> hookDown()
 		);
 		scheduler.addButton(
 			() -> turretSwivelLeft()
