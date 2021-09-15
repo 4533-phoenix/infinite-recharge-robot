@@ -28,8 +28,6 @@ public class ShooterSystem extends SubsystemBase {
 	
 	private final double FLYWHEEL_MOTOR_PERCENT = 0.75;
 
-	private final double ELEVATOR_MOTOR_PERCENT = 0.5;
-
 	private final double TURRET_WHEEL_MOTOR_PERCENT = 0.5;
 
 	private final double TURRET_SWIVEL_MOTOR_PERCENT = 0.1;
@@ -40,8 +38,6 @@ public class ShooterSystem extends SubsystemBase {
 	private WPI_VictorSPX turretWheelMotor;
 
 	private WPI_TalonSRX turretSwivelMotor;
-
-	private WPI_TalonSRX elevatorMotor;
 
 	private NetworkTable inst;
 
@@ -58,10 +54,6 @@ public class ShooterSystem extends SubsystemBase {
 
 		this.flywheelMotorRight.setNeutralMode(NeutralMode.Brake);
 		this.flywheelMotorLeft.setNeutralMode(NeutralMode.Brake);
-
-		//this.elevatorMotor = new WPI_TalonSRX(Constants.ELEVATOR_MOTOR);
-
-		//this.elevatorMotor.setNeutralMode(NeutralMode.Brake);
 
 		this.turretWheelMotor = new WPI_VictorSPX(Constants.TURRET_WHEEL_MOTOR);
 
@@ -178,7 +170,7 @@ public class ShooterSystem extends SubsystemBase {
 	}
 
 	public boolean turretReachedPosition() {
-		return targetOffsetAngle_Horizontal < -2 || targetOffsetAngle_Horizontal > 2;
+		return targetOffsetAngle_Horizontal > -2 && targetOffsetAngle_Horizontal < 2;
 	}
 
 	@Override

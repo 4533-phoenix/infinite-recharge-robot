@@ -28,8 +28,8 @@ public class DriveSystem extends SubsystemBase {
 	// Onboard IMU.
 	private AHRS navX;
 
-	private static final double MAX_VELOCITY = 325;
-	private static final double TURBO_VELOCITY = 400;
+	private static final double MAX_VELOCITY = 400;
+	private static final double TURBO_VELOCITY = 475;
 	private static final double PEAK_OUTPUT = 1.0;
 	private boolean turbo = false;
 
@@ -334,6 +334,19 @@ public class DriveSystem extends SubsystemBase {
 	public void toggleTurbo() {
 		this.turbo = !this.turbo;
 	}
+
+	public void setTurbo(boolean isTriggerPressed) {
+		if (isTriggerPressed) {
+			this.turbo = true;
+		}
+		else if (!isTriggerPressed) {
+			this.turbo = false;
+		}
+		else {
+			this.turbo = false;
+		}
+	}
+	
 	public void tank(double left, double right) {
 		double targetLeft;
 		double targetRight;
@@ -413,5 +426,6 @@ public class DriveSystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
+		
 	}
 }
