@@ -157,16 +157,11 @@ public class ShooterSystem extends SubsystemBase {
 	public void autoTurretSwivel() {
 		// System.out.println("test");
 		if (targetOffsetAngle_Horizontal > 2) {
-			while (targetOffsetAngle_Horizontal > 2) {
-				this.turretSwivelMotor.set(ControlMode.PercentOutput, -TURRET_SWIVEL_MOTOR_PERCENT);
-			}
-		} else if (targetOffsetAngle_Horizontal < -2) {
-			while (targetOffsetAngle_Horizontal < -2) {
-				this.turretSwivelMotor.set(ControlMode.PercentOutput, TURRET_SWIVEL_MOTOR_PERCENT);
-			}
+			this.turretSwivelMotor.set(ControlMode.PercentOutput, -TURRET_SWIVEL_MOTOR_PERCENT);
+		} 
+		else if (targetOffsetAngle_Horizontal < -2) {
+			this.turretSwivelMotor.set(ControlMode.PercentOutput, TURRET_SWIVEL_MOTOR_PERCENT);
 		}
-
-		this.turretSwivelStop();
 	}
 
 	public boolean turretReachedPosition() {
@@ -192,6 +187,6 @@ public class ShooterSystem extends SubsystemBase {
 
 		// System.out.println("Flywheel RPM: " + flywheelRPM);
 
-		// System.out.println(targetOffsetAngle_Horizontal);
+		System.out.println(targetOffsetAngle_Horizontal);
 	}
 }
