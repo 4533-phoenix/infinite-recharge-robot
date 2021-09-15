@@ -144,7 +144,7 @@ public class RobotContainer {
 		JoystickButton hook_down = new JoystickButton(controller, Constants.BUTTON_A);
 		hook_down.whileHeld(CommandFactory.hookDownCommand());
 		hook_down.whenReleased(CommandFactory.hookStopCommand());
-		
+
 		JoystickButton hookup = new JoystickButton(controller, Constants.BUTTON_Y);
 		hookup.whileHeld(CommandFactory.hookUpCommand());
 		hookup.whenReleased(CommandFactory.hookStopCommand());
@@ -168,6 +168,14 @@ public class RobotContainer {
 		}
 	}
 
+	private void hookDown() {
+		if (controller.getPOV() == 180) {
+			Robot.climber.hookDown();
+		} else {
+			Robot.climber.hookStop();
+		}
+	}
+
 	private void configureDefaultCommands() {
 		CommandScheduler scheduler = CommandScheduler.getInstance();
 
@@ -175,6 +183,9 @@ public class RobotContainer {
 		scheduler.setDefaultCommand(Robot.shooter, triggerFlywheelOutCommand);
 		scheduler.addButton(
 			() -> triggerTurbo()
+		);
+		scheduler.addButton(
+			() -> hookDown()
 		);
 	}
 
