@@ -170,34 +170,23 @@ public class RobotContainer {
 		}
 	}
 
-	private void hookUp() {
+	private void hook() {
 		if (controller.getPOV() == 0) {
 			Robot.climber.hookUp();
 		}
+		else if (controller.getPOV() == 180) {
+			Robot.climber.hookDown();
+		}
 		else {
 			Robot.climber.hookStop();
 		}
 	}
 
-	private void hookDown() {
-		if (controller.getPOV() == 180) {
-			Robot.climber.hookDown();
-		} else {
-			Robot.climber.hookStop();
-		}
-	}
-
-	private void turretSwivelLeft() {
+	private void turretSwivel() {
 		if (controller.getPOV() == 270) {
 			Robot.shooter.turretSwivelLeft();
 		}
-		else {
-			Robot.shooter.turretSwivelStop();
-		}
-	}
-
-	private void turretSwivelRight() {
-		if (controller.getPOV() == 90) {
+		else if (controller.getPOV() == 90) {
 			Robot.shooter.turretSwivelRight();
 		}
 		else {
@@ -214,16 +203,10 @@ public class RobotContainer {
 			() -> triggerTurbo()
 		);
 		scheduler.addButton(
-			() -> hookUp()
+			() -> hook()
 		);
 		scheduler.addButton(
-			() -> hookDown()
-		);
-		scheduler.addButton(
-			() -> turretSwivelLeft()
-		);
-		scheduler.addButton(
-			() -> turretSwivelRight()
+			() -> turretSwivel()
 		);
 	}
 
