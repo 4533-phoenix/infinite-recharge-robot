@@ -141,6 +141,9 @@ public class RobotContainer {
 		climb.whileHeld(CommandFactory.climbCommand());
 		climb.whenReleased(CommandFactory.climbStopCommand());
 
+		JoystickButton autoTurretSwivel = new JoystickButton(controller, Constants.RIGHT_STICK_PRESS_DOWN);
+		autoTurretSwivel.whenPressed(CommandFactory.turretSwivelAuto());
+
 		JoystickButton hook_down = new JoystickButton(controller, Constants.BUTTON_A);
 		hook_down.whileHeld(CommandFactory.hookDownCommand());
 		hook_down.whenReleased(CommandFactory.hookStopCommand());
