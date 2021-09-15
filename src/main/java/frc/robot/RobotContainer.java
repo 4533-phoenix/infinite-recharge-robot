@@ -168,6 +168,24 @@ public class RobotContainer {
 		}
 	}
 
+	private void turretSwivelLeft() {
+		if (controller.getPOV() == 270) {
+			Robot.shooter.turretSwivelLeft();
+		}
+		else {
+			Robot.shooter.turretSwivelStop();
+		}
+	}
+
+	private void turretSwivelRight() {
+		if (controller.getPOV() == 90) {
+			Robot.shooter.turretSwivelRight();
+		}
+		else {
+			Robot.shooter.turretSwivelStop();
+		}
+	}
+
 	private void configureDefaultCommands() {
 		CommandScheduler scheduler = CommandScheduler.getInstance();
 
@@ -175,6 +193,12 @@ public class RobotContainer {
 		scheduler.setDefaultCommand(Robot.shooter, triggerFlywheelOutCommand);
 		scheduler.addButton(
 			() -> triggerTurbo()
+		);
+		scheduler.addButton(
+			() -> turretSwivelLeft()
+		);
+		scheduler.addButton(
+			() -> turretSwivelRight()
 		);
 	}
 
