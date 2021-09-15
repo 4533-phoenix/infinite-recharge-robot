@@ -149,7 +149,6 @@ public class ShooterSystem extends SubsystemBase {
 		this.turretSwivelStop();
 	}
 
-	// will produce error, let's say offset is greater than 2, will still be greater than -2, must change in future
 	public boolean turretReachedPosition() {
 		return targetOffsetAngle_Horizontal > -2 && targetOffsetAngle_Horizontal < 2;
 	}
@@ -161,6 +160,6 @@ public class ShooterSystem extends SubsystemBase {
 		double targetArea = inst.getEntry("ta").getDouble(0);
 		double targetSkew = inst.getEntry("ts").getDouble(0);
 
-		System.out.println(targetOffsetAngle_Horizontal);
+		// System.out.println(targetOffsetAngle_Horizontal);
 	}
 }

@@ -162,9 +162,20 @@ public class RobotContainer {
 	private void triggerTurbo() {
 		if (controller.getRawAxis(Constants.LEFT_TRIGGER_AXIS) > 0) {
 			Robot.drive.setTurbo(true);
+			System.out.println(controller.getPOV());
 		}
 		else {
 			Robot.drive.setTurbo(false);
+			System.out.println(controller.getPOV());
+		}
+	}
+
+	private void hookUp() {
+		if (controller.getPOV() == 0) {
+			Robot.climber.hookUp();
+		}
+		else {
+			Robot.climber.hookStop();
 		}
 	}
 
@@ -175,6 +186,9 @@ public class RobotContainer {
 		scheduler.setDefaultCommand(Robot.shooter, triggerFlywheelOutCommand);
 		scheduler.addButton(
 			() -> triggerTurbo()
+		);
+		scheduler.addButton(
+			() -> hookUp()
 		);
 	}
 
