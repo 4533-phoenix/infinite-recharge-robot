@@ -141,7 +141,7 @@ public class RobotContainer {
 		// turretSwivelRight.whileHeld(CommandFactory.turretSwivelRightCommand());
 		// turretSwivelRight.whenReleased(CommandFactory.turretSwivelStopCommand());
 
-		JoystickButton climb = new JoystickButton(controller, Constants.BUTTON_START);
+		JoystickButton climb = new JoystickButton(secondController, Constants.BUTTON_START);
 		climb.whileHeld(CommandFactory.climbCommand());
 		climb.whenReleased(CommandFactory.climbStopCommand());
 
@@ -168,10 +168,10 @@ public class RobotContainer {
 	}
 
 	private void hook() {
-		if (controller.getPOV() == 0) {
+		if (secondController.getPOV() == 0) {
 			Robot.climber.hookUp();
 		}
-		else if (controller.getPOV() == 180) {
+		else if (secondController.getPOV() == 180) {
 			Robot.climber.hookDown();
 		}
 		else {
