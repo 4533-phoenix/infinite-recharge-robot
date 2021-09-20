@@ -42,11 +42,15 @@ public class ShooterSystem extends SubsystemBase {
 	private NetworkTable inst;
 
 	private double targetOffsetAngle_Horizontal;
+	private double targetOffsetAngle_Vertical;
+	private double targetArea;
+	private double targetSkew;
+	private double[] camtran;
 
-	// private double startFlywheelRotations;
-	// private double currFlywheelRotations;
-	// private double flywheelRPM;
-	// private double elapsedTime;
+	private double startFlywheelRotations = 0;
+	private double currFlywheelRotations = 0;
+	private double flywheelRPM = 0;
+	private double elapsedTime = 0;
 
 	public ShooterSystem() {
 		this.flywheelMotorRight = new WPI_TalonFX(Constants.FLYWHEEL_MOTOR_RIGHT);
@@ -77,7 +81,7 @@ public class ShooterSystem extends SubsystemBase {
 		// 	System.out.println(curr.remote_id + " " + curr.remote_ip);
 		// }
 
-		// startFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition();
+		startFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition();
 	}
 
 	public void flywheelOut() {
@@ -124,14 +128,12 @@ public class ShooterSystem extends SubsystemBase {
 
 	public void turretWheelIn() {
 		// since both flywheel motors should be at the same position, we only need to check one flywheel motor's position
-		// if (flywheelMotorRight.getSelectedSensorPosition() >= 4096 * 3) {
-		// 	this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
-		// }
-		// else {
-		// 	this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
-		// }
-
-		this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
+		if (flywheelRPM >= 2350.0) {
+			this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
+		}
+		else {
+			this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
+		}
 	}
 
 	public void turretWheelOut() {
@@ -171,22 +173,26 @@ public class ShooterSystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 		targetOffsetAngle_Horizontal = inst.getEntry("tx").getDouble(0);
-		double targetOffsetAngle_Vertical = inst.getEntry("ty").getDouble(0);
-		double targetArea = inst.getEntry("ta").getDouble(0);
-		double targetSkew = inst.getEntry("ts").getDouble(0);
+		targetOffsetAngle_Vertical = inst.getEntry("ty").getDouble(0);
+		targetArea = inst.getEntry("ta").getDouble(0);
+		targetSkew = inst.getEntry("ts").getDouble(0);
+		camtran = inst.getEntry("camtran").getDoubleArray(camtran);
 
-		// periodic runs every 20 ms
-		// elapsedTime += 20;
 		
-		// if (elapsedTime == 100) {
-		// 	elapsedTime = 0;
-		// 	currFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
-		// 	flywheelRPM = (currFlywheelRotations - startFlywheelRotations) * 600;
-		// 	startFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0;
-		// }
+		// periodic runs every 20 ms
+		elapsedTime += 20;
+		
+		if (elapsedTime == 100) {
+			elapsedTime = 0;
+			currFlywheelRotations = flywheelMotorRight.getSelectedSensorPosition() / 4096.0; // 4096.0 is ticks per rotation
+			flywheelRPM = (currFlywheelRotations - startFlywheelRotations) * 600; // multiplying by 600 to get to minutes
+			startFlywheelRotations = currFlywheelRotations;
+		}
 
 		// System.out.println("Flywheel RPM: " + flywheelRPM);
+		// prints out the angle of the camera to the target
+		System.out.println("Pitch: " + camtran[5]);
 
-		System.out.println(targetOffsetAngle_Horizontal);
+		// System.out.println(targetOffsetAngle_Horizontal);
 	}
 }
