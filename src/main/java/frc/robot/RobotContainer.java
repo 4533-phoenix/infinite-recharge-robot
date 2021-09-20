@@ -21,7 +21,7 @@ public class RobotContainer {
 	private Joystick controller = new Joystick(Constants.DRIVER_CONTROLLER);
 
 	//Initialize second driver controls
-	private Joystick second = new Joystick(Constants.SECOND_DRIVER_JOYSTICK);
+	private Joystick secondController = new Joystick(Constants.SECOND_DRIVER_CONTROLLER);
 
 	// Initialize the drive command
 	private final Command defaultDriveCommand = new RunCommand(
@@ -105,19 +105,23 @@ public class RobotContainer {
 		intakeIn.whileHeld(CommandFactory.intakeInCommand());
 		intakeIn.whenReleased(CommandFactory.intakeStopCommand());
 
+		JoystickButton intakeIn2 = new JoystickButton(secondController, Constants.BUTTON_RB);
+		intakeIn2.whileHeld(CommandFactory.intakeInCommand());
+		intakeIn2.whenReleased(CommandFactory.intakeStopCommand());
+
 		JoystickButton intakeOut = new JoystickButton(controller, Constants.BUTTON_LB);
 		intakeOut.whileHeld(CommandFactory.intakeOutCommand());
 		intakeOut.whenReleased(CommandFactory.intakeStopCommand());
 
-		// JoystickButton intakeOut2 = new JoystickButton(rightStick, Constants.BUTTON_5);
-		// intakeOut2.whileHeld(CommandFactory.intakeOutCommand());
-		// intakeOut2.whenReleased(CommandFactory.intakeStopCommand());
+		JoystickButton intakeOut2 = new JoystickButton(secondController, Constants.BUTTON_LB);
+		intakeOut2.whileHeld(CommandFactory.intakeOutCommand());
+		intakeOut2.whenReleased(CommandFactory.intakeStopCommand());
 
-		JoystickButton turretWheelIn = new JoystickButton(controller, Constants.BUTTON_X);
+		JoystickButton turretWheelIn = new JoystickButton(secondController, Constants.BUTTON_X);
 		turretWheelIn.whileHeld(CommandFactory.turretWheelInCommand());
 		turretWheelIn.whenReleased(CommandFactory.turretWheelStopCommand());
 
-		JoystickButton turretWheelOut = new JoystickButton(controller, Constants.BUTTON_B);
+		JoystickButton turretWheelOut = new JoystickButton(secondController, Constants.BUTTON_B);
 		turretWheelOut.whileHeld(CommandFactory.turretWheelOutCommand());
 		turretWheelOut.whenReleased(CommandFactory.turretWheelStopCommand());
 
@@ -141,12 +145,12 @@ public class RobotContainer {
 		climb.whileHeld(CommandFactory.climbCommand());
 		climb.whenReleased(CommandFactory.climbStopCommand());
 
-		JoystickButton autoTurretSwivel = new JoystickButton(controller, Constants.RIGHT_STICK_PRESS_DOWN);
+		JoystickButton autoTurretSwivel = new JoystickButton(secondController, Constants.RIGHT_STICK_PRESS_DOWN);
 		autoTurretSwivel.whenPressed(CommandFactory.turretSwivelAuto());
 	}
 
 	private void triggerFlywheelOut() {
-		if (controller.getRawAxis(Constants.RIGHT_TRIGGER_AXIS) > 0) {
+		if (secondController.getRawAxis(Constants.RIGHT_TRIGGER_AXIS) > 0) {
 			Robot.shooter.flywheelOut();
 		}
 		else {
@@ -176,10 +180,10 @@ public class RobotContainer {
 	}
 
 	private void turretSwivel() {
-		if (controller.getPOV() == 270) {
+		if (secondController.getPOV() == 270) {
 			Robot.shooter.turretSwivelLeft();
 		}
-		else if (controller.getPOV() == 90) {
+		else if (secondController.getPOV() == 90) {
 			Robot.shooter.turretSwivelRight();
 		}
 		else {
