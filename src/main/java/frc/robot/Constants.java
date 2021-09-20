@@ -22,6 +22,7 @@ public final class Constants {
 
 	// logitech controller buttons and ports
 	public static final int DRIVER_CONTROLLER = 0;
+	public static final int SECOND_DRIVER_CONTROLLER = 1;
 
 	public static final int BUTTON_A = 1;
 	public static final int BUTTON_B = 2;
