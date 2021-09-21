@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import java.util.ResourceBundle.Control;
+import static java.lang.Math.tan;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -46,6 +47,12 @@ public class ShooterSystem extends SubsystemBase {
 	private double targetArea;
 	private double targetSkew;
 	private double[] camtran;
+
+	private double cameraHeight = 0;
+	private double goalHeight = 0;
+	private double cameraMountingAngle = 0;
+	private double cameraTargetAngle = 0;
+	private double distance = 0;
 
 	private double startFlywheelRotations = 0;
 	private double currFlywheelRotations = 0;
@@ -178,6 +185,7 @@ public class ShooterSystem extends SubsystemBase {
 		targetSkew = inst.getEntry("ts").getDouble(0);
 		camtran = inst.getEntry("camtran").getDoubleArray(camtran);
 
+		distance = (goalHeight - cameraHeight) / tan((cameraMountingAngle + cameraTargetAngle));
 		
 		// periodic runs every 20 ms
 		elapsedTime += 20;
@@ -191,7 +199,7 @@ public class ShooterSystem extends SubsystemBase {
 
 		// System.out.println("Flywheel RPM: " + flywheelRPM);
 		// prints out the angle of the camera to the target
-		System.out.println("Pitch: " + camtran[5]);
+		// System.out.println("Length " + camtran[0]);
 
 		// System.out.println(targetOffsetAngle_Horizontal);
 	}
