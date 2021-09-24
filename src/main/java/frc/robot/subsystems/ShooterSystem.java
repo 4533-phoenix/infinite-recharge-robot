@@ -2,6 +2,9 @@ package frc.robot.subsystems;
 
 import java.util.ResourceBundle.Control;
 import static java.lang.Math.tan;
+import static java.lang.Math.cos;
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -50,13 +53,20 @@ public class ShooterSystem extends SubsystemBase {
 
 	private double cameraHeight = 0;
 	private double goalHeight = 0;
+	private double distance = 0;
 	private double cameraMountingAngle = 0;
 	private double cameraTargetAngle = 0;
-	private double distance = 0;
+	private double launchAngle = 0;
+	private double verticalPosition = goalHeight - cameraHeight;
+	private double horizontalPosition = 0;
+	private double initialVelocity = 0;
+	private final double GRAVITY_ACCELERATION = 9.8;
+	
 
 	private double startFlywheelRotations = 0;
 	private double currFlywheelRotations = 0;
 	private double flywheelRPM = 0;
+	private double idealFlywheelRPM = 0;
 	private double elapsedTime = 0;
 
 	public ShooterSystem() {
@@ -135,7 +145,7 @@ public class ShooterSystem extends SubsystemBase {
 
 	public void turretWheelIn() {
 		// since both flywheel motors should be at the same position, we only need to check one flywheel motor's position
-		if (flywheelRPM >= 2350.0) {
+		if (flywheelRPM >= 0.95 * idealFlywheelRPM) {
 			this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
 		}
 		else {
@@ -165,16 +175,16 @@ public class ShooterSystem extends SubsystemBase {
 
 	public void autoTurretSwivel() {
 		// System.out.println("test");
-		if (targetOffsetAngle_Horizontal > 2) {
+		if (targetOffsetAngle_Horizontal > 1) {
 			this.turretSwivelMotor.set(ControlMode.PercentOutput, -TURRET_SWIVEL_MOTOR_PERCENT);
 		} 
-		else if (targetOffsetAngle_Horizontal < -2) {
+		else if (targetOffsetAngle_Horizontal < -1) {
 			this.turretSwivelMotor.set(ControlMode.PercentOutput, TURRET_SWIVEL_MOTOR_PERCENT);
 		}
 	}
 
 	public boolean turretReachedPosition() {
-		return targetOffsetAngle_Horizontal > -2 && targetOffsetAngle_Horizontal < 2;
+		return targetOffsetAngle_Horizontal > -1 && targetOffsetAngle_Horizontal < 1;
 	}
 
 	@Override
@@ -183,10 +193,14 @@ public class ShooterSystem extends SubsystemBase {
 		targetOffsetAngle_Vertical = inst.getEntry("ty").getDouble(0);
 		targetArea = inst.getEntry("ta").getDouble(0);
 		targetSkew = inst.getEntry("ts").getDouble(0);
-		camtran = inst.getEntry("camtran").getDoubleArray(camtran);
-
-		distance = (goalHeight - cameraHeight) / tan((cameraMountingAngle + cameraTargetAngle));
 		
+		distance = (goalHeight - cameraHeight) / tan((cameraMountingAngle + cameraTargetAngle));
+		horizontalPosition = distance;
+
+		initialVelocity = sqrt((GRAVITY_ACCELERATION * pow(horizontalPosition, 2)) / ((2 * pow(cos(launchAngle), 2)) * ((-1 * verticalPosition) + (horizontalPosition * tan(launchAngle)))));
+		
+		// idealFlywheelRPM = 0;
+
 		// periodic runs every 20 ms
 		elapsedTime += 20;
 		
@@ -197,10 +211,9 @@ public class ShooterSystem extends SubsystemBase {
 			startFlywheelRotations = currFlywheelRotations;
 		}
 
-		// System.out.println("Flywheel RPM: " + flywheelRPM);
-		// prints out the angle of the camera to the target
-		// System.out.println("Length " + camtran[0]);
+		System.out.println("Vertical Offset: " + targetOffsetAngle_Vertical);
 
-		// System.out.println(targetOffsetAngle_Horizontal);
+		System.out.println("Flywheel RPM: " + flywheelRPM);
+		// prints out the angle of the camera to the target		
 	}
 }
