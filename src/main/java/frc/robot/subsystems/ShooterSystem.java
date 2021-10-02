@@ -1,10 +1,7 @@
 package frc.robot.subsystems;
 
 import java.util.ResourceBundle.Control;
-import static java.lang.Math.tan;
-import static java.lang.Math.cos;
-import static java.lang.Math.pow;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -49,14 +46,13 @@ public class ShooterSystem extends SubsystemBase {
 	private double targetOffsetAngle_Vertical;
 	private double targetArea;
 	private double targetSkew;
-	private double[] camtran;
+	private double[] camtran = {0};
 
-	private double cameraHeight = 0;
-	private double goalHeight = 0;
-	private double distance = 0;
-	private double cameraMountingAngle = 0;
+	private double cameraHeight = 1.75; //height is in feet
+	private double goalHeight = 8.25; // height is in feet
+	private double cameraMountingAngle = (Math.PI / 180) * 26.5;
 	private double cameraTargetAngle = 0;
-	private double launchAngle = 0;
+	private double launchAngle = (Math.PI / 180) * 26.5;
 	private double verticalPosition = goalHeight - cameraHeight;
 	private double horizontalPosition = 0;
 	private double initialVelocity = 0;
@@ -193,9 +189,11 @@ public class ShooterSystem extends SubsystemBase {
 		targetOffsetAngle_Vertical = inst.getEntry("ty").getDouble(0);
 		targetArea = inst.getEntry("ta").getDouble(0);
 		targetSkew = inst.getEntry("ts").getDouble(0);
+		camtran = inst.getEntry("camtran").getDoubleArray(camtran);
+
+		cameraTargetAngle = (Math.PI / 180) * targetOffsetAngle_Vertical;
 		
-		distance = (goalHeight - cameraHeight) / tan((cameraMountingAngle + cameraTargetAngle));
-		horizontalPosition = distance;
+		horizontalPosition = verticalPosition / tan((cameraMountingAngle + cameraTargetAngle)); // horizontalPosition is distance from the goal
 
 		initialVelocity = sqrt((GRAVITY_ACCELERATION * pow(horizontalPosition, 2)) / ((2 * pow(cos(launchAngle), 2)) * ((-1 * verticalPosition) + (horizontalPosition * tan(launchAngle)))));
 		
@@ -211,9 +209,14 @@ public class ShooterSystem extends SubsystemBase {
 			startFlywheelRotations = currFlywheelRotations;
 		}
 
-		System.out.println("Vertical Offset: " + targetOffsetAngle_Vertical);
+		// System.out.println("Angle: " + (cameraMountingAngle + cameraTargetAngle));
 
-		System.out.println("Flywheel RPM: " + flywheelRPM);
+		System.out.println("Distance in Feet: " + horizontalPosition);
+
+		// System.out.println(tan((cameraMountingAngle + cameraTargetAngle)));
+
+		// System.out.println("Initial Velocity: " + initialVelocity);
+		// System.out.println("Flywheel RPM: " + flywheelRPM);
 		// prints out the angle of the camera to the target		
 	}
 }
