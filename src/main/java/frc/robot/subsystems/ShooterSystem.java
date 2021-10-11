@@ -27,7 +27,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class ShooterSystem extends SubsystemBase {
 	
-	private final double FLYWHEEL_MOTOR_PERCENT = 0.75;
+	private double flywheelMotorPercent = 0;
 
 	private final double TURRET_WHEEL_MOTOR_PERCENT = 0.5;
 
@@ -56,8 +56,9 @@ public class ShooterSystem extends SubsystemBase {
 	private double verticalPosition = goalHeight - cameraHeight;
 	private double horizontalPosition = 0;
 	private double initialVelocity = 0;
-	private final double GRAVITY_ACCELERATION = 9.8;
-	
+	private final double GRAVITY_ACCELERATION =  32.17;
+	private final double FLYWHEEL_RADIUS = 1.0 / 3.0 / 2.0;
+	private final double MAX_FLYWHEEL_RPM = 3220.0;
 
 	private double startFlywheelRotations = 0;
 	private double currFlywheelRotations = 0;
@@ -98,13 +99,13 @@ public class ShooterSystem extends SubsystemBase {
 	}
 
 	public void flywheelOut() {
-		this.flywheelMotorRight.set(ControlMode.PercentOutput, FLYWHEEL_MOTOR_PERCENT);
-		this.flywheelMotorLeft.set(ControlMode.PercentOutput, FLYWHEEL_MOTOR_PERCENT);
+		this.flywheelMotorRight.set(ControlMode.PercentOutput, flywheelMotorPercent);
+		this.flywheelMotorLeft.set(ControlMode.PercentOutput, flywheelMotorPercent);
 	}
 
 	public void flywheelIn() {
-		this.flywheelMotorRight.set(ControlMode.PercentOutput, -FLYWHEEL_MOTOR_PERCENT);
-		this.flywheelMotorLeft.set(ControlMode.PercentOutput, -FLYWHEEL_MOTOR_PERCENT);
+		this.flywheelMotorRight.set(ControlMode.PercentOutput, -flywheelMotorPercent);
+		this.flywheelMotorLeft.set(ControlMode.PercentOutput, -flywheelMotorPercent);
 	}
 
 	public void flywheelStop() {
@@ -113,8 +114,8 @@ public class ShooterSystem extends SubsystemBase {
 	}
 	
 	public void flywheelAndIntakeOut() {
-		this.flywheelMotorRight.set(ControlMode.PercentOutput, FLYWHEEL_MOTOR_PERCENT);
-		this.flywheelMotorLeft.set(ControlMode.PercentOutput, FLYWHEEL_MOTOR_PERCENT);
+		this.flywheelMotorRight.set(ControlMode.PercentOutput, flywheelMotorPercent);
+		this.flywheelMotorLeft.set(ControlMode.PercentOutput, flywheelMotorPercent);
 		this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
 	}
 
@@ -195,9 +196,11 @@ public class ShooterSystem extends SubsystemBase {
 		
 		horizontalPosition = verticalPosition / tan((cameraMountingAngle + cameraTargetAngle)); // horizontalPosition is distance from the goal
 
-		initialVelocity = sqrt((GRAVITY_ACCELERATION * pow(horizontalPosition, 2)) / ((2 * pow(cos(launchAngle), 2)) * ((-1 * verticalPosition) + (horizontalPosition * tan(launchAngle)))));
-		
-		// idealFlywheelRPM = 0;
+		initialVelocity = sqrt(abs((GRAVITY_ACCELERATION * pow(horizontalPosition, 2)) / ((2 * pow(cos(launchAngle), 2)) * ((-1 * verticalPosition) + (horizontalPosition * tan(launchAngle))))));
+
+		idealFlywheelRPM = initialVelocity / 6;
+
+		flywheelMotorPercent = idealFlywheelRPM * 1000 / MAX_FLYWHEEL_RPM;
 
 		// periodic runs every 20 ms
 		elapsedTime += 20;
@@ -209,14 +212,12 @@ public class ShooterSystem extends SubsystemBase {
 			startFlywheelRotations = currFlywheelRotations;
 		}
 
-		// System.out.println("Angle: " + (cameraMountingAngle + cameraTargetAngle));
-
-		System.out.println("Distance in Feet: " + horizontalPosition);
-
-		// System.out.println(tan((cameraMountingAngle + cameraTargetAngle)));
+		// System.out.println("Distance in Feet: " + horizontalPosition);
 
 		// System.out.println("Initial Velocity: " + initialVelocity);
-		// System.out.println("Flywheel RPM: " + flywheelRPM);
-		// prints out the angle of the camera to the target		
+
+		System.out.println("Ideal Flywheel RPM: " + idealFlywheelRPM);
+		
+		System.out.println("Flywheel Motor Percent: " + flywheelMotorPercent);
 	}
 }
