@@ -57,13 +57,14 @@ public class ShooterSystem extends SubsystemBase {
 	private double horizontalPosition = 0;
 	private double initialVelocity = 0;
 	private final double GRAVITY_ACCELERATION =  32.17;
-	private final double FLYWHEEL_RADIUS = 1.0 / 3.0 / 2.0;
+	private final double FLYWHEEL_DIAMETER = 1.0 / 3.0;
 	private final double MAX_FLYWHEEL_RPM = 3220.0;
 
 	private double startFlywheelRotations = 0;
 	private double currFlywheelRotations = 0;
 	private double flywheelRPM = 0;
 	private double idealFlywheelRPM = 0;
+	private double idealFlywheelRPM2 = 0;
 	private double elapsedTime = 0;
 
 	public ShooterSystem() {
@@ -142,12 +143,13 @@ public class ShooterSystem extends SubsystemBase {
 
 	public void turretWheelIn() {
 		// since both flywheel motors should be at the same position, we only need to check one flywheel motor's position
-		if (flywheelRPM >= 0.95 * idealFlywheelRPM) {
-			this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
-		}
-		else {
-			this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
-		}
+		// if (flywheelRPM >= 0.95 * idealFlywheelRPM) {
+		// 	this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
+		// }
+		// else {
+		// 	this.turretWheelMotor.set(ControlMode.PercentOutput, 0);
+		// }
+		this.turretWheelMotor.set(ControlMode.PercentOutput, TURRET_WHEEL_MOTOR_PERCENT);
 	}
 
 	public void turretWheelOut() {
@@ -192,15 +194,16 @@ public class ShooterSystem extends SubsystemBase {
 		targetSkew = inst.getEntry("ts").getDouble(0);
 		camtran = inst.getEntry("camtran").getDoubleArray(camtran);
 
-		cameraTargetAngle = (Math.PI / 180) * targetOffsetAngle_Vertical;
+		cameraTargetAngle = (Math.PI / 180.0) * targetOffsetAngle_Vertical;
 		
 		horizontalPosition = verticalPosition / tan((cameraMountingAngle + cameraTargetAngle)); // horizontalPosition is distance from the goal
 
 		initialVelocity = sqrt(abs((GRAVITY_ACCELERATION * pow(horizontalPosition, 2)) / ((2 * pow(cos(launchAngle), 2)) * ((-1 * verticalPosition) + (horizontalPosition * tan(launchAngle))))));
 
-		idealFlywheelRPM = initialVelocity / 6;
+		idealFlywheelRPM = (60 * initialVelocity) / (Math.PI * FLYWHEEL_DIAMETER);
+		idealFlywheelRPM2 = initialVelocity / (0.10472 * (FLYWHEEL_DIAMETER / 2.0));
 
-		flywheelMotorPercent = idealFlywheelRPM * 1000 / MAX_FLYWHEEL_RPM;
+		flywheelMotorPercent = idealFlywheelRPM / MAX_FLYWHEEL_RPM;
 
 		// periodic runs every 20 ms
 		elapsedTime += 20;
@@ -217,6 +220,8 @@ public class ShooterSystem extends SubsystemBase {
 		// System.out.println("Initial Velocity: " + initialVelocity);
 
 		System.out.println("Ideal Flywheel RPM: " + idealFlywheelRPM);
+
+		System.out.println("2nd Ideal Flywheel RPM: " + idealFlywheelRPM2);
 		
 		System.out.println("Flywheel Motor Percent: " + flywheelMotorPercent);
 	}
