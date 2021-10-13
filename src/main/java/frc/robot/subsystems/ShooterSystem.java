@@ -27,7 +27,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 public class ShooterSystem extends SubsystemBase {
 	
-	private double flywheelMotorPercent = 0;
+	private double flywheelMotorPercent = 0.7;
 
 	private final double TURRET_WHEEL_MOTOR_PERCENT = 0.5;
 
@@ -192,15 +192,15 @@ public class ShooterSystem extends SubsystemBase {
 		targetSkew = inst.getEntry("ts").getDouble(0);
 		camtran = inst.getEntry("camtran").getDoubleArray(camtran);
 
-		cameraTargetAngle = (Math.PI / 180) * targetOffsetAngle_Vertical;
+		cameraTargetAngle = (Math.PI / 180.0) * targetOffsetAngle_Vertical;
 		
-		horizontalPosition = verticalPosition / tan((cameraMountingAngle + cameraTargetAngle)); // horizontalPosition is distance from the goal
+		horizontalPosition = 2 * verticalPosition / tan(cameraMountingAngle + cameraTargetAngle); // horizontalPosition is distance from the goal
 
 		initialVelocity = sqrt(abs((GRAVITY_ACCELERATION * pow(horizontalPosition, 2)) / ((2 * pow(cos(launchAngle), 2)) * ((-1 * verticalPosition) + (horizontalPosition * tan(launchAngle))))));
 
-		idealFlywheelRPM = initialVelocity / 6;
+		idealFlywheelRPM = (180.0 * initialVelocity) / Math.PI ;
 
-		flywheelMotorPercent = idealFlywheelRPM * 1000 / MAX_FLYWHEEL_RPM;
+		//flywheelMotorPercent = idealFlywheelRPM * 1000 / MAX_FLYWHEEL_RPM;
 
 		// periodic runs every 20 ms
 		elapsedTime += 20;
